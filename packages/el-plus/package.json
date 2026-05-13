@@ -1,0 +1,52 @@
+{
+  "name": "@fizz/el-plus",
+  "type": "module",
+  "version": "0.0.1",
+  "description": "Element Plus transparent wrapper with unified fe-* class prefix",
+  "sideEffects": [
+    "**/*.css",
+    "**/*.scss",
+    "dist/styles/*"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs"
+    },
+    "./styles": {
+      "types": "./dist/styles/index.d.ts",
+      "default": "./dist/styles/index.css"
+    },
+    "./styles/scss": {
+      "types": "./dist/styles/index.d.ts",
+      "default": "./dist/styles/index.scss"
+    }
+  },
+  "main": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "style": "./dist/styles/index.css",
+  "files": ["dist"],
+  "scripts": {
+    "build": "vue-tsc --noEmit && vite build && pnpm build:styles",
+    "build:styles": "node scripts/build-styles.mjs",
+    "check:coverage": "node scripts/element-plus-coverage.mjs",
+    "typecheck:consumer": "pnpm build && vue-tsc --noEmit -p tsconfig.consumer.json && node scripts/assert-public-dts.mjs",
+    "typecheck": "vue-tsc --noEmit",
+    "lint:package": "publint ."
+  },
+  "peerDependencies": {
+    "element-plus": ">=2.0.0",
+    "vue": ">=3.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "@vitejs/plugin-vue": "catalog:",
+    "element-plus": "catalog:",
+    "publint": "catalog:",
+    "sass": "catalog:",
+    "vite": "catalog:",
+    "vite-plugin-dts": "catalog:",
+    "vue": "catalog:",
+    "vue-tsc": "catalog:"
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "name": "@fizz/el-kit",
+  "type": "module",
+  "version": "0.0.1",
+  "description": "Headless composables and typed logic layer built on @fizz/el-plus",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs"
+    }
+  },
+  "main": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "files": ["dist"],
+  "scripts": {
+    "build": "vue-tsc --noEmit && vite build",
+    "typecheck": "vue-tsc --noEmit",
+    "lint:package": "publint ."
+  },
+  "peerDependencies": {
+    "@fizz/el-plus": ">=0.0.1",
+    "element-plus": ">=2.0.0",
+    "vue": ">=3.0.0"
+  },
+  "devDependencies": {
+    "@fizz/el-plus": "workspace:*",
+    "@types/node": "catalog:",
+    "@vitejs/plugin-vue": "catalog:",
+    "element-plus": "catalog:",
+    "publint": "catalog:",
+    "vite": "catalog:",
+    "vite-plugin-dts": "catalog:",
+    "vue": "catalog:",
+    "vue-tsc": "catalog:"
+  }
+}

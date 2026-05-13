@@ -1,0 +1,17 @@
+html:root {
+  --fe-color-primary: #0f766e;
+  --fe-color-primary-light-3: #5eead4;
+  --fe-color-primary-light-5: #99f6e4;
+  --fe-color-primary-light-7: #ccfbf1;
+  --fe-color-primary-light-9: #f0fdfa;
+  --fe-color-primary-dark-2: #115e59;
+}
+
+html.dark {
+  --fe-color-primary: #14b8a6;
+  --fe-color-primary-light-3: #5eead4;
+  --fe-color-primary-light-5: #99f6e4;
+  --fe-color-primary-light-7: #ccfbf1;
+  --fe-color-primary-light-9: #f0fdfa;
+  --fe-color-primary-dark-2: #0f766e;
+}

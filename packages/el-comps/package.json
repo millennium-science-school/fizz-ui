@@ -1,0 +1,42 @@
+{
+  "name": "@fizz/el-comps",
+  "type": "module",
+  "version": "0.0.1",
+  "description": "Unstyled structural composite components built on @fizz/el-kit",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs"
+    }
+  },
+  "main": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "files": ["dist"],
+  "scripts": {
+    "build": "vue-tsc --noEmit && vite build",
+    "typecheck": "vue-tsc --noEmit",
+    "lint:package": "publint ."
+  },
+  "peerDependencies": {
+    "@fizz/el-kit": ">=0.0.1",
+    "@fizz/el-plus": ">=0.0.1",
+    "element-plus": ">=2.0.0",
+    "vue": ">=3.0.0"
+  },
+  "dependencies": {
+    "@fizz/el-kit": "workspace:*"
+  },
+  "devDependencies": {
+    "@fizz/el-kit": "workspace:*",
+    "@fizz/el-plus": "workspace:*",
+    "@types/node": "catalog:",
+    "@vitejs/plugin-vue": "catalog:",
+    "@vitejs/plugin-vue-jsx": "catalog:",
+    "element-plus": "catalog:",
+    "publint": "catalog:",
+    "vite": "catalog:",
+    "vite-plugin-dts": "catalog:",
+    "vue": "catalog:",
+    "vue-tsc": "catalog:"
+  }
+}

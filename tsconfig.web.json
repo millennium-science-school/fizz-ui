@@ -1,0 +1,27 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "composite": true,
+    "jsx": "preserve",
+    "jsxImportSource": "vue",
+    "lib": ["ES2023", "DOM", "DOM.Iterable"],
+    "skipLibCheck": true
+  },
+  "include": [
+    "packages/el-plus/src/**/*",
+    "packages/el-plus/__tests__/transparentWrappers.typecheck.tsx",
+    "packages/el-kit/src/**/*",
+    "packages/el-kit/__tests__/useTable.typecheck.ts",
+    "packages/el-comps/src/**/*",
+    "packages/theme/src/**/*",
+    "packages/theme/preview/src/**/*",
+    "packages/theme/preview/**/*.vue",
+    "playground/src/**/*",
+    "playground/**/*.vue"
+  ],
+  "exclude": [
+    "node_modules",
+    "**/dist",
+    "**/*.md"
+  ]
+}

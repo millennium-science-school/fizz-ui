@@ -1,0 +1,39 @@
+{
+  "extends": "@vue/tsconfig/tsconfig.dom.json",
+  "compilerOptions": {
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
+
+    "target": "ES2023",
+    "rootDir": ".",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+
+    "paths": {
+      "@fizz/el-plus": ["./packages/el-plus/src"],
+      "@fizz/el-plus/styles": ["./packages/el-plus/src/styles/index.d.ts"],
+      "@fizz/el-plus/styles/scss": ["./packages/el-plus/src/styles/index.d.ts"],
+      "@fizz/el-plus/*": ["./packages/el-plus/src/*"],
+      "@fizz/el-kit": ["./packages/el-kit/src"],
+      "@fizz/el-kit/*": ["./packages/el-kit/src/*"],
+      "@fizz/el-comps": ["./packages/el-comps/src"],
+      "@fizz/el-comps/*": ["./packages/el-comps/src/*"],
+      "@fizz/theme": ["./packages/theme/src"],
+      "@fizz/theme/styles": ["./packages/theme/src/styles/vars.d.ts"],
+      "@fizz/theme/*": ["./packages/theme/src/*"]
+    },
+
+    "resolveJsonModule": true,
+    "types": ["vite/client"],
+    "allowJs": false,
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "outDir": "dist",
+    "removeComments": false,
+    "sourceMap": false,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "isolatedModules": true
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "name": "@fizz/theme",
+  "type": "module",
+  "version": "0.0.1",
+  "description": "Runtime-independent theme layer for fizz — UnoCSS preset, CSS variables, design tokens",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs"
+    },
+    "./styles": {
+      "types": "./dist/styles/vars.d.ts",
+      "default": "./dist/styles/vars.css"
+    }
+  },
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "files": ["dist"],
+  "scripts": {
+    "dev": "vite --root preview --config preview/vite.config.ts",
+    "build": "vue-tsc --noEmit && vite build && pnpm copy:styles",
+    "copy:styles": "node scripts/copy-styles.mjs",
+    "typecheck": "vue-tsc --noEmit",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "lint:package": "publint ."
+  },
+  "peerDependencies": {
+    "unocss": ">=0.60.0"
+  },
+  "devDependencies": {
+    "@antfu/eslint-config": "catalog:",
+    "@fizz/el-comps": "workspace:*",
+    "@fizz/el-kit": "workspace:*",
+    "@fizz/el-plus": "workspace:*",
+    "@iconify-json/carbon": "catalog:",
+    "@iconify/vue": "catalog:",
+    "@types/node": "catalog:",
+    "@vitejs/plugin-vue": "catalog:",
+    "@vue/tsconfig": "catalog:",
+    "@vueuse/core": "catalog:",
+    "element-plus": "catalog:",
+    "eslint": "catalog:",
+    "publint": "catalog:",
+    "typescript": "catalog:",
+    "unocss": "catalog:",
+    "vite": "catalog:",
+    "vite-plugin-dts": "catalog:",
+    "vite-plugin-vue-devtools": "catalog:",
+    "vue": "catalog:",
+    "vue-router": "catalog:",
+    "vue-tsc": "catalog:"
+  }
+}

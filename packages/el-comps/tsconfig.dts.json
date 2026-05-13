@@ -1,0 +1,11 @@
+{
+  "extends": "../../tsconfig.web.json",
+  "compilerOptions": {
+    "paths": {
+      "@fizz/el-kit": ["packages/el-kit/dist/index.d.ts"],
+      "@fizz/el-kit/*": ["packages/el-kit/dist/*"]
+    }
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist", "**/*.md"]
+}
