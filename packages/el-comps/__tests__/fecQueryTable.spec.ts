@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { createApp, h, nextTick, ref } from 'vue'
+import { createApp, defineComponent, h, nextTick, ref } from 'vue'
 import { FecQueryTable } from '../src'
 
 interface User {
@@ -10,6 +10,32 @@ interface User {
 interface Query {
   keyword: string
 }
+
+const CustomControl = defineComponent({
+  name: 'CustomControl',
+  props: {
+    modelValue: {
+      type: String,
+      default: '',
+    },
+    placeholder: {
+      type: String,
+      default: '',
+    },
+  },
+  emits: ['update:modelValue'],
+  setup(props, { emit }) {
+    return () =>
+      h('input', {
+        'data-custom-control': 'yes',
+        'placeholder': props.placeholder,
+        'value': props.modelValue,
+        'onInput': (event: Event) => {
+          emit('update:modelValue', (event.target as HTMLInputElement).value)
+        },
+      })
+  },
+})
 
 describe('fecQueryTable', () => {
   it('renders query form table and pagination sections', async () => {
@@ -123,6 +149,53 @@ describe('fecQueryTable', () => {
     expect(queryUpdates.at(-1)).toEqual({ keyword: 'Fizz' })
     expect(submitCount).toBe(1)
     expect(resetCount).toBe(1)
+
+    app.unmount()
+    host.remove()
+  })
+
+  it('accepts semantic and custom query controls', async () => {
+    const host = document.createElement('div')
+    document.body.append(host)
+    const queryUpdates: Query[] = []
+
+    const app = createApp({
+      render: () =>
+        h(FecQueryTable<User, Query>, {
+          'query': { keyword: '' },
+          'onUpdate:query': value => queryUpdates.push(value),
+          'querySchema': [
+            { prop: 'keyword', label: '关键词', component: 'input' },
+            {
+              prop: 'keyword',
+              label: '自定义',
+              component: {
+                component: CustomControl,
+                props: { placeholder: 'custom-keyword' },
+              },
+            },
+          ],
+          'columns': [{ prop: 'name', label: '姓名' }],
+          'data': ref([{ name: 'Tom', age: 18 }]),
+          'pagination': {
+            currentPage: ref(1),
+            pageSize: ref(10),
+            total: ref(1),
+          },
+        }),
+    })
+
+    app.mount(host)
+    await nextTick()
+
+    const customInput = host.querySelector('[data-custom-control="yes"]') as HTMLInputElement
+    expect(customInput?.getAttribute('placeholder')).toBe('custom-keyword')
+
+    customInput.value = 'Fizz'
+    customInput.dispatchEvent(new Event('input'))
+    await nextTick()
+
+    expect(queryUpdates.at(-1)).toEqual({ keyword: 'Fizz' })
 
     app.unmount()
     host.remove()
