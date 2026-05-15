@@ -7,7 +7,7 @@ import { createThemeVarsCss } from './tokens'
  * 在消费侧 uno.config.ts 中引入：
  * ```ts
  * import { defineConfig, presetWind3 } from 'unocss'
- * import { fizzPreset } from '@fizz/theme'
+ * import { fizzPreset } from '@fizz/theme/preset/unocss'
  *
  * export default defineConfig({
  *   presets: [presetWind3(), fizzPreset()],
