@@ -3,6 +3,7 @@ import { resolve } from 'node:path'
 import { describe, expect, it } from 'vitest'
 import { createThemeVarsCss } from '../src'
 import { fizzPreset } from '../src/preset/unocss'
+import { createUnoThemeRules, themeUtilityRules } from '../src/theme-rules'
 
 const packageRoot = resolve(__dirname, '..')
 
@@ -85,6 +86,21 @@ describe('theme token generation', () => {
     expect(css).toContain('--fe-color-primary: #0f766e;')
     expect(css).toContain('--fe-color-primary-light-3: #5eead4;')
     expect(css).not.toContain('--fe-color-primary-hover:')
+  })
+
+  it('shares simple class rules between generated CSS and UnoCSS rules', () => {
+    const css = createThemeVarsCss()
+    const unoRules = fizzPreset().rules ?? []
+
+    for (const rule of themeUtilityRules) {
+      expect(css).toContain(`.${rule.className}`)
+
+      for (const [name, value] of Object.entries(rule.declarations)) {
+        expect(css).toContain(`${name}: ${value};`)
+      }
+    }
+
+    expect(unoRules).toEqual(createUnoThemeRules())
   })
 
   it('keeps the checked-in vars.css synchronized with generated token CSS', () => {

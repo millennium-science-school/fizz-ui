@@ -1,4 +1,5 @@
 import type { Preset } from 'unocss'
+import { createUnoThemeRules } from './theme-rules'
 import { createThemeVarsCss } from './tokens'
 
 /**
@@ -46,44 +47,6 @@ export function fizzPreset(): Preset {
     ],
 
     // ── rules：fe-* 类名的样式规则 ────────────────────────────────────────
-    rules: [
-      [
-        'fe-btn',
-        {
-          'font-weight': 'var(--fe-fizz-button-font-weight)',
-          'border-radius': 'var(--fe-fizz-button-radius)',
-          'box-shadow': 'var(--fe-fizz-button-shadow)',
-        },
-      ],
-      [
-        'fe-input',
-        {
-          '--fe-input-border-radius': 'var(--fe-fizz-control-radius)',
-        },
-      ],
-      // 示例：fe-comps-form 结构类（只定义布局变量，颜色由 preflights 覆盖）
-      [
-        'fe-comps-form',
-        {
-          'display': 'grid',
-          'grid-template-columns': 'repeat(var(--fe-comps-form-cols, 2), 1fr)',
-          'gap': 'var(--fe-comps-form-gap, 16px)',
-        },
-      ],
-      [
-        'fe-comps-table',
-        {
-          'border-radius': 'var(--fe-comps-table-radius)',
-          'overflow': 'hidden',
-        },
-      ],
-      [
-        'fe-comps-pagination',
-        {
-          'margin-top': 'var(--fe-comps-pagination-margin-top)',
-          'justify-content': 'flex-end',
-        },
-      ],
-    ],
+    rules: createUnoThemeRules(),
   }
 }
