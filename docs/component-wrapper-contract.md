@@ -69,12 +69,18 @@ Fizz service classes into Element Plus service options. Directive aliases such
 as `vFeLoading`, `vFeInfiniteScroll`, and `FePopoverDirective` preserve Element
 Plus directive behavior under Fizz names.
 
+Directive aliases should use the `vFe*` form in examples when they are consumed
+as Vue directives. Existing non-`v` aliases remain for compatibility and should
+not be removed outside a planned major release.
+
 ### Compatibility aliases
 
 Compatibility aliases only align the public `Fe*` API surface with Element Plus.
-They do not inject `fe-*` classes. `FeLoading`, `FePopper`, and `FePopperArrow`
-fall into this category because they are plugin/provider/internal primitives
-without a stable DOM class target under the transparent wrapper strategy.
+They do not inject `fe-*` classes and should not be treated as full transparent
+wrappers. `FeLoading`, `FePopper`, and `FePopperArrow` fall into this category
+because they are plugin/provider/internal primitives without a stable DOM class
+target under the transparent wrapper strategy. New code should prefer documented
+transparent wrappers or service wrappers when those exist.
 
 Run `pnpm --filter @fizz/el-plus check:coverage` after upgrading Element Plus.
 The check compares the current `El*` runtime exports with transparent wrappers,

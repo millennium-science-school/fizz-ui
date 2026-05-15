@@ -66,6 +66,13 @@ Do not register service APIs with `app.use(FeMessage)` or
 `app.use(FeLoadingService)`. Service app-level installation is intentionally not
 part of the current contract.
 
+## Directive APIs
+
+Use the `vFe*` aliases when consuming Fizz directives directly, for example
+`vFeLoading` and `vFeInfiniteScroll`. Non-`v` directive aliases such as
+`FeInfiniteScroll` remain available only for compatibility and should not be used
+in new examples.
+
 ## Element Plus Variable Overrides
 
 `@fizz/el-plus/styles` already emits Element Plus styles under the `fe` namespace.

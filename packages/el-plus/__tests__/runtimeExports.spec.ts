@@ -58,6 +58,7 @@ describe('@fizz/el-plus runtime exports', () => {
     expect('install' in FizzEl.FeLoadingService).toBe(false)
   })
 
+  // Keep both names until a major release formally removes the legacy alias.
   it('aliases Element Plus directives without app-level registration', () => {
     expect(FizzEl.vFeLoading).toBe(vLoading)
     expect(FizzEl.FeLoadingDirective).toBe(ElLoadingDirective)
