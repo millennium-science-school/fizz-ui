@@ -8,6 +8,10 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.mjs"
     },
+    "./preset/unocss": {
+      "types": "./dist/preset/unocss.d.ts",
+      "import": "./dist/preset/unocss.mjs"
+    },
     "./styles": {
       "types": "./dist/styles/vars.d.ts",
       "default": "./dist/styles/vars.css"
@@ -27,6 +31,11 @@
   },
   "peerDependencies": {
     "unocss": ">=0.60.0"
+  },
+  "peerDependenciesMeta": {
+    "unocss": {
+      "optional": true
+    }
   },
   "devDependencies": {
     "@antfu/eslint-config": "catalog:",

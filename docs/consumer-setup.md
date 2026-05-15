@@ -24,7 +24,7 @@ import { FeConfigProvider } from '@fizz/el-plus'
 ## UnoCSS
 
 ```ts
-import { fizzPreset } from '@fizz/theme'
+import { fizzPreset } from '@fizz/theme/preset/unocss'
 import { defineConfig, presetWind3 } from 'unocss'
 
 export default defineConfig({
