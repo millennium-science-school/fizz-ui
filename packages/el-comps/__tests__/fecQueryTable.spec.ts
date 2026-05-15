@@ -200,4 +200,36 @@ describe('fecQueryTable', () => {
     app.unmount()
     host.remove()
   })
+
+  it('allows query action text to be customized', async () => {
+    const host = document.createElement('div')
+    document.body.append(host)
+
+    const app = createApp({
+      render: () =>
+        h(FecQueryTable<User, Query>, {
+          query: { keyword: '' },
+          querySchema: [{ prop: 'keyword', label: '关键词', component: 'input' }],
+          submitText: 'Search',
+          resetText: 'Clear',
+          columns: [{ prop: 'name', label: '姓名' }],
+          data: ref([{ name: 'Tom', age: 18 }]),
+          pagination: {
+            currentPage: ref(1),
+            pageSize: ref(10),
+            total: ref(1),
+          },
+        }),
+    })
+
+    app.mount(host)
+    await nextTick()
+
+    const buttons = [...host.querySelectorAll('button')]
+    expect(buttons.some(button => button.textContent?.includes('Search'))).toBe(true)
+    expect(buttons.some(button => button.textContent?.includes('Clear'))).toBe(true)
+
+    app.unmount()
+    host.remove()
+  })
 })

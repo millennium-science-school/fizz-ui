@@ -37,6 +37,8 @@ export interface FecQueryTableProps<Row extends object, Query extends QueryModel
   data: MaybeRefOrGetter<Row[]>
   loading?: MaybeRefOrGetter<boolean>
   pagination: FecQueryPagination
+  submitText?: string
+  resetText?: string
 }
 
 export const FecQueryTable = defineComponent({
@@ -69,6 +71,14 @@ export const FecQueryTable = defineComponent({
     pagination: {
       type: Object as PropType<FecQueryPagination>,
       required: true,
+    },
+    submitText: {
+      type: String,
+      default: '查询',
+    },
+    resetText: {
+      type: String,
+      default: '重置',
     },
   },
   emits: [
@@ -116,10 +126,10 @@ export const FecQueryTable = defineComponent({
                 {{
                   default: () => [
                     <FeButton type="primary" onClick={() => emit('submit')}>
-                      查询
+                      {props.submitText}
                     </FeButton>,
                     <FeButton onClick={() => emit('reset')}>
-                      重置
+                      {props.resetText}
                     </FeButton>,
                   ],
                 }}
