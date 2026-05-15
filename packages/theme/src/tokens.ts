@@ -6,6 +6,13 @@
  * variable overrides only when the consuming app opts in.
  */
 
+import {
+  descendantThemeCssRules,
+  renderThemeCssRules,
+  renderUtilityThemeCssRules,
+  serviceThemeCssRules,
+} from './theme-rules'
+
 export interface ElementThemeVars {
   '--fe-color-primary'?: string
   '--fe-color-primary-light-3'?: string
@@ -102,58 +109,14 @@ function renderCssBlock(selector: string, vars: object): string {
 }
 
 function renderServiceCss(): string {
-  return `.fe-message {
-  border-radius: var(--fe-fizz-feedback-radius);
-  box-shadow: var(--fe-fizz-surface-shadow);
-}
-
-.fe-loading {
-  color: var(--fe-color-primary);
-}
-
-.fe-notification {
-  border-radius: var(--fe-fizz-feedback-radius);
-  box-shadow: var(--fe-fizz-surface-shadow);
-}
-
-.fe-message-box {
-  border-radius: var(--fe-fizz-feedback-radius);
-  box-shadow: var(--fe-fizz-surface-shadow);
-}`
+  return renderThemeCssRules(serviceThemeCssRules)
 }
 
 function renderCoreComponentCss(): string {
-  return `.fe-btn {
-  font-weight: var(--fe-fizz-button-font-weight);
-  border-radius: var(--fe-fizz-button-radius);
-  box-shadow: var(--fe-fizz-button-shadow);
-}
-
-.fe-input .fe-input__wrapper,
-.fe-select .fe-select__wrapper {
-  border-radius: var(--fe-fizz-control-radius);
-  box-shadow: var(--fe-fizz-control-shadow);
-}
-
-.fe-input .fe-input__wrapper.is-focus,
-.fe-select .fe-select__wrapper.is-focused {
-  box-shadow: var(--fe-fizz-control-focus-shadow);
-}
-
-.fe-table {
-  overflow: hidden;
-  border-radius: var(--fe-comps-table-radius);
-  --fe-table-header-bg-color: var(--fe-comps-table-header-bg);
-}
-
-.fe-card,
-.fe-dialog {
-  border-radius: var(--fe-fizz-surface-radius);
-}
-
-.fe-dialog {
-  box-shadow: var(--fe-fizz-surface-shadow);
-}`
+  return [
+    renderUtilityThemeCssRules(),
+    renderThemeCssRules(descendantThemeCssRules),
+  ].join('\n\n')
 }
 
 export function createThemeVarsCss(options: ThemeVarsCssOptions = {}): string {

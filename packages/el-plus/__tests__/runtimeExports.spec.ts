@@ -113,6 +113,38 @@ describe('@fizz/el-plus runtime exports', () => {
     handler.close()
   })
 
+  it('adds a fizz class to FeMessageBox alert when options are passed as the second argument', async () => {
+    void FizzEl.FeMessageBox
+      .alert('Saved', {
+        customClass: 'consumer-message-box',
+      })
+      .catch(() => undefined)
+
+    await nextTick()
+
+    const messageBox = document.querySelector('.fe-message-box')
+    expect(messageBox).not.toBeNull()
+    expect(messageBox?.classList.contains('consumer-message-box')).toBe(true)
+
+    FizzEl.FeMessageBox.close()
+  })
+
+  it('adds a fizz class to FeMessageBox alert when title and options are passed', async () => {
+    void FizzEl.FeMessageBox
+      .alert('Saved', 'Notice', {
+        customClass: 'consumer-message-box-title',
+      })
+      .catch(() => undefined)
+
+    await nextTick()
+
+    const messageBox = document.querySelector('.fe-message-box')
+    expect(messageBox).not.toBeNull()
+    expect(messageBox?.classList.contains('consumer-message-box-title')).toBe(true)
+
+    FizzEl.FeMessageBox.close()
+  })
+
   it('adds a fizz class to FeLoadingService while preserving consumer classes', async () => {
     const loading = FizzEl.FeLoadingService({
       customClass: 'consumer-loading',

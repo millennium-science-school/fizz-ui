@@ -1,23 +1,22 @@
 import type { TableColumn } from '@fizz/el-kit'
-import type { TransparentWrapperComponent } from '@fizz/el-plus'
 import type { MaybeRefOrGetter, PropType, Ref } from 'vue'
+import type { FecControl } from './controls'
 import {
   FeForm,
   FeFormItem,
-  FeInput,
-  FeInputNumber,
   FePagination,
   FeTable,
   FeTableColumn,
 } from '@fizz/el-plus'
-import { defineComponent, isRef, toValue } from 'vue'
+import { defineComponent, h, isRef, toValue } from 'vue'
+import { resolveFecControl } from './controls'
 
 type FormModel = Record<string, unknown>
 
 export interface FecFormSchemaItem<T extends object> {
   prop: Extract<keyof T, string>
   label: string
-  component: 'ElInput' | 'ElInputNumber'
+  component: FecControl
 }
 
 export type FecTableColumn<T extends object> = TableColumn<T>
@@ -34,13 +33,6 @@ export interface FecTableProps<T extends object> {
   columns: FecTableColumn<T>[]
   data: MaybeRefOrGetter<T[]>
   pagination: FecPagination
-}
-
-function resolveFormComponent(component: FecFormSchemaItem<object>['component']): TransparentWrapperComponent {
-  if (component === 'ElInputNumber')
-    return FeInputNumber
-
-  return FeInput
 }
 
 export const FecTable = defineComponent({
@@ -88,19 +80,17 @@ export const FecTable = defineComponent({
         <FeForm model={props.form} class="fe-comps-form" inline>
           {{
             default: () => props.formSchema.map((item) => {
-              const FormControl = resolveFormComponent(item.component)
+              const resolvedControl = resolveFecControl(item.component)
+              const FormControl = resolvedControl.component
 
               return (
                 <FeFormItem key={item.prop} label={item.label}>
                   {{
-                    default: () => (
-                      <FormControl
-                        {...{
-                          'modelValue': props.form[item.prop],
-                          'onUpdate:modelValue': (value: unknown) => emitFormField(item.prop, value),
-                        }}
-                      />
-                    ),
+                    default: () => h(FormControl, {
+                      ...resolvedControl.props,
+                      'modelValue': props.form[item.prop],
+                      'onUpdate:modelValue': (value: unknown) => emitFormField(item.prop, value),
+                    }),
                   }}
                 </FeFormItem>
               )
