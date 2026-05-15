@@ -1,6 +1,6 @@
 import { ElPopper } from 'element-plus'
 import { describe, expect, it } from 'vitest'
-import { createApp, h, nextTick } from 'vue'
+import { createApp, h, nextTick, ref } from 'vue'
 import {
   FeAlert,
   FeAvatar,
@@ -63,6 +63,60 @@ describe('transparent wrappers', () => {
     expect(host.querySelector('.el-input')).toBeNull()
     expect(input?.getAttribute('placeholder')).toBe('请输入')
     expect((input as HTMLInputElement | null)?.value).toBe('Fizz')
+
+    app.unmount()
+    host.remove()
+  })
+
+  it('exposes wrapped Element Plus instance methods through refs', async () => {
+    const host = document.createElement('div')
+    document.body.append(host)
+    const inputRef = ref<{ focus: () => void, blur: () => void } | null>(null)
+
+    const app = createApp({
+      render: () =>
+        h(FeConfigProvider, null, () =>
+          h(FeInput, {
+            ref: inputRef,
+            modelValue: '',
+          })),
+    })
+
+    app.mount(host)
+    await nextTick()
+
+    expect(typeof inputRef.value?.focus).toBe('function')
+    expect(typeof inputRef.value?.blur).toBe('function')
+
+    inputRef.value?.focus()
+    await nextTick()
+    expect(document.activeElement).toBe(host.querySelector('input'))
+
+    inputRef.value?.blur()
+
+    app.unmount()
+    host.remove()
+  })
+
+  it('forwards data and aria attrs once through the wrapped component', async () => {
+    const host = document.createElement('div')
+    document.body.append(host)
+
+    const app = createApp({
+      render: () =>
+        h(FeConfigProvider, null, () =>
+          h(FeInput, {
+            'aria-label': 'Keyword',
+            'data-testid': 'keyword-input',
+            'modelValue': '',
+          })),
+    })
+
+    app.mount(host)
+    await nextTick()
+
+    expect(host.querySelectorAll('[data-testid="keyword-input"]')).toHaveLength(1)
+    expect(host.querySelectorAll('[aria-label="Keyword"]')).toHaveLength(1)
 
     app.unmount()
     host.remove()
