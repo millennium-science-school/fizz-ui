@@ -44,6 +44,22 @@ html.dark {
   box-shadow: var(--fe-fizz-button-shadow);
 }
 
+.fe-comps-form {
+  display: grid;
+  grid-template-columns: repeat(var(--fe-comps-form-cols, 2), 1fr);
+  gap: var(--fe-comps-form-gap, 16px);
+}
+
+.fe-comps-table {
+  border-radius: var(--fe-comps-table-radius);
+  overflow: hidden;
+}
+
+.fe-comps-pagination {
+  margin-top: var(--fe-comps-pagination-margin-top);
+  justify-content: flex-end;
+}
+
 .fe-input .fe-input__wrapper,
 .fe-select .fe-select__wrapper {
   border-radius: var(--fe-fizz-control-radius);
