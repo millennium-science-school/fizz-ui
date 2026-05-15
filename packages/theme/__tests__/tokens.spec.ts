@@ -1,7 +1,8 @@
 import { existsSync, readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { describe, expect, it } from 'vitest'
-import { createThemeVarsCss, fizzPreset } from '../src'
+import { createThemeVarsCss } from '../src'
+import { fizzPreset } from '../src/preset/unocss'
 
 const packageRoot = resolve(__dirname, '..')
 

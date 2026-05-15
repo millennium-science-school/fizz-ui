@@ -12,12 +12,15 @@ export default defineConfig({
     // CSS 变量文件通过 scripts/copy-styles.mjs 单独复制到 dist/styles/
     cssCodeSplit: false,
     lib: {
-      entry: resolve(__dirname, 'src/index.ts'),
+      entry: {
+        'index': resolve(__dirname, 'src/index.ts'),
+        'preset/unocss': resolve(__dirname, 'src/preset/unocss.ts'),
+      },
       formats: ['es'],
-      fileName: () => 'index.mjs',
+      fileName: (_format, entryName) => `${entryName}.mjs`,
     },
     rollupOptions: {
-      // theme 库运行时只依赖 unocss（作为 peerDep），不引用任何组件包。
+      // theme 根入口不依赖 UnoCSS；preset 子入口将 unocss 保持为外部 peer。
       // 组件包只允许出现在 preview/playground 中做效果验证。
       external: ['unocss'],
     },
