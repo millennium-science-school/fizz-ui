@@ -13,7 +13,7 @@
 
 ## Required Before Publish
 
-```powershell
+```bash
 pnpm check
 pnpm --filter @fizz/el-plus build
 pnpm --filter @fizz/theme build
@@ -24,8 +24,9 @@ pnpm --filter @fizz/el-comps build
 ## Package Responsibilities
 
 - `@fizz/el-plus`: Element Plus adapter, `fe` namespace provider, CSS/SCSS style entries.
-- `@fizz/theme`: Fizz-owned tokens, CSS variables, UnoCSS preset.
-  Element Plus variable overrides are optional inputs, not mandatory theme output.
+- `@fizz/theme`: Fizz-owned tokens and CSS variables. The root entry does not
+  import UnoCSS types. UnoCSS integration is available through
+  `@fizz/theme/preset/unocss`.
 - `@fizz/el-kit`: headless composables and shared types.
 - `@fizz/el-comps`: structural composite components.
 

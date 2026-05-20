@@ -24,7 +24,7 @@ import { FeConfigProvider } from '@fizz/el-plus'
 ## UnoCSS
 
 ```ts
-import { fizzPreset } from '@fizz/theme'
+import { fizzPreset } from '@fizz/theme/preset/unocss'
 import { defineConfig, presetWind3 } from 'unocss'
 
 export default defineConfig({
@@ -66,6 +66,13 @@ Do not register service APIs with `app.use(FeMessage)` or
 `app.use(FeLoadingService)`. Service app-level installation is intentionally not
 part of the current contract.
 
+## Directive APIs
+
+Use the `vFe*` aliases when consuming Fizz directives directly, for example
+`vFeLoading` and `vFeInfiniteScroll`. Non-`v` directive aliases such as
+`FeInfiniteScroll` remain available only for compatibility and should not be used
+in new examples.
+
 ## Element Plus Variable Overrides
 
 `@fizz/el-plus/styles` already emits Element Plus styles under the `fe` namespace.
@@ -98,3 +105,7 @@ Do not use pseudo Element variables such as `--fe-color-primary-hover` unless Fi
 The supported path uses `@fizz/el-plus/styles` and `FeConfigProvider` to keep
 Element Plus styles and runtime DOM on the `fe` namespace. `@fizz/theme` no
 longer exports an `el` namespace bridge.
+
+## Near-term Component Expansion
+
+The next component expansion wave should prioritize common admin form/query controls that are already supported by `FecControl` semantic names (`select`, `date`, `switch`, and `textarea`) before adding low-frequency widgets. Keep new examples and docs aligned with these semantic controls first, then add custom component patterns as needed.

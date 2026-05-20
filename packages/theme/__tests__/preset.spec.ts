@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { fizzPreset } from '../src'
+import { fizzPreset } from '../src/preset/unocss'
 
 describe('fizzPreset', () => {
   it('uses a higher-specificity root selector than Element Plus defaults', () => {

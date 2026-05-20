@@ -7,13 +7,10 @@
 //   pnpm add @fizz/el-plus @fizz/el-kit @fizz/el-comps @fizz/theme
 //
 // 消费侧典型用法：
-//   uno.config.ts   → import { fizzPreset } from '@fizz/theme'
+//   uno.config.ts   → import { fizzPreset } from '@fizz/theme/preset/unocss'
 //   vite/main.ts    → import '@fizz/el-plus/styles'
 //                     import '@fizz/theme/styles'
 //   ECharts 配色等  → import { lightTokens } from '@fizz/theme'
-
-// ── UnoCSS preset ──────────────────────────────────────────────────────────
-export { fizzPreset } from './preset'
 
 // ── 设计令牌（JS 对象，方便在 JS 中读取颜色值）────────────────────────────
 export { createThemeCssVars, createThemeVarsCss, darkTokens, lightTokens } from './tokens'

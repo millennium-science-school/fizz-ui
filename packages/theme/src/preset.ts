@@ -1,4 +1,7 @@
 import type { Preset } from 'unocss'
+
+// This module is only exported via @fizz/theme/preset/unocss. Do not re-export from src/index.ts.
+import { createUnoThemeRules } from './theme-rules'
 import { createThemeVarsCss } from './tokens'
 
 /**
@@ -7,7 +10,7 @@ import { createThemeVarsCss } from './tokens'
  * 在消费侧 uno.config.ts 中引入：
  * ```ts
  * import { defineConfig, presetWind3 } from 'unocss'
- * import { fizzPreset } from '@fizz/theme'
+ * import { fizzPreset } from '@fizz/theme/preset/unocss'
  *
  * export default defineConfig({
  *   presets: [presetWind3(), fizzPreset()],
@@ -46,44 +49,6 @@ export function fizzPreset(): Preset {
     ],
 
     // ── rules：fe-* 类名的样式规则 ────────────────────────────────────────
-    rules: [
-      [
-        'fe-btn',
-        {
-          'font-weight': 'var(--fe-fizz-button-font-weight)',
-          'border-radius': 'var(--fe-fizz-button-radius)',
-          'box-shadow': 'var(--fe-fizz-button-shadow)',
-        },
-      ],
-      [
-        'fe-input',
-        {
-          '--fe-input-border-radius': 'var(--fe-fizz-control-radius)',
-        },
-      ],
-      // 示例：fe-comps-form 结构类（只定义布局变量，颜色由 preflights 覆盖）
-      [
-        'fe-comps-form',
-        {
-          'display': 'grid',
-          'grid-template-columns': 'repeat(var(--fe-comps-form-cols, 2), 1fr)',
-          'gap': 'var(--fe-comps-form-gap, 16px)',
-        },
-      ],
-      [
-        'fe-comps-table',
-        {
-          'border-radius': 'var(--fe-comps-table-radius)',
-          'overflow': 'hidden',
-        },
-      ],
-      [
-        'fe-comps-pagination',
-        {
-          'margin-top': 'var(--fe-comps-pagination-margin-top)',
-          'justify-content': 'flex-end',
-        },
-      ],
-    ],
+    rules: createUnoThemeRules(),
   }
 }
