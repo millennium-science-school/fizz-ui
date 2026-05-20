@@ -104,3 +104,13 @@ special exports, and compatibility aliases.
 `FeButton` is the reference transparent wrapper. It forwards attrs and slots to
 `ElButton`, adds the fizz wrapper class, and does not implement custom click
 handling.
+
+## Component Expansion Planning
+
+When planning new `@fizz/el-comps` components, prefer this sequence:
+
+1. Build around existing `@fizz/el-plus` transparent wrappers and semantic `FecControl` names.
+2. Add focused tests for attrs/slots/ref behavior before adding wrapper-only enhancements.
+3. Only introduce wrapper-specific props when Element Plus has no equivalent and the prop contract is documented in docs.
+
+This keeps incremental feature growth aligned with the transparent-wrapper boundary and reduces long-term compatibility risk during Element Plus upgrades.

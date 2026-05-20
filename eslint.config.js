@@ -6,7 +6,7 @@ export default antfu(
     formatters: true,
   },
   {
-    ignores: ['**/*_REVIEW.md', '**/ARCHITECTURE_REVIEW.md'],
+    ignores: ['**/*_REVIEW.md', '**/ARCHITECTURE_REVIEW.md', 'docs/superpowers/plans/**/*.md'],
   },
   {
     rules: {

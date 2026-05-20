@@ -105,3 +105,7 @@ Do not use pseudo Element variables such as `--fe-color-primary-hover` unless Fi
 The supported path uses `@fizz/el-plus/styles` and `FeConfigProvider` to keep
 Element Plus styles and runtime DOM on the `fe` namespace. `@fizz/theme` no
 longer exports an `el` namespace bridge.
+
+## Near-term Component Expansion
+
+The next component expansion wave should prioritize common admin form/query controls that are already supported by `FecControl` semantic names (`select`, `date`, `switch`, and `textarea`) before adding low-frequency widgets. Keep new examples and docs aligned with these semantic controls first, then add custom component patterns as needed.

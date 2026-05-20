@@ -13,7 +13,7 @@
 
 ## Required Before Publish
 
-```powershell
+```bash
 pnpm check
 pnpm --filter @fizz/el-plus build
 pnpm --filter @fizz/theme build
