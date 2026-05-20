@@ -98,6 +98,42 @@ describe('transparent wrappers', () => {
     host.remove()
   })
 
+  it('exposes form methods from the wrapped expose object through refs', async () => {
+    const host = document.createElement('div')
+    document.body.append(host)
+    const formRef = ref<{ validate: () => Promise<boolean> } | null>(null)
+
+    const app = createApp({
+      render: () =>
+        h(FeConfigProvider, null, () =>
+          h(
+            FeForm,
+            {
+              ref: formRef,
+              model: { name: 'Fizz' },
+            },
+            () =>
+              h(
+                FeFormItem,
+                {
+                  label: 'Name',
+                  prop: 'name',
+                },
+                () => h(FeInput, { modelValue: 'Fizz' }),
+              ),
+          )),
+    })
+
+    app.mount(host)
+    await nextTick()
+
+    expect(typeof formRef.value?.validate).toBe('function')
+    await expect(formRef.value?.validate()).resolves.toBe(true)
+
+    app.unmount()
+    host.remove()
+  })
+
   it('forwards data and aria attrs once through the wrapped component', async () => {
     const host = document.createElement('div')
     document.body.append(host)

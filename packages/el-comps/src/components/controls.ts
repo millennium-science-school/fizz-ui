@@ -1,10 +1,13 @@
 import type { Component } from 'vue'
 import {
+  FeDatePicker,
   FeInput,
   FeInputNumber,
+  FeSelect,
+  FeSwitch,
 } from '@fizz/el-plus'
 
-export type FecBuiltinControlName = 'input' | 'number'
+export type FecBuiltinControlName = 'input' | 'number' | 'select' | 'date' | 'switch' | 'textarea'
 export type FecLegacyControlName = 'ElInput' | 'ElInputNumber'
 
 export interface FecCustomControl {
@@ -31,6 +34,34 @@ export function resolveFecControl(control: FecControl): FecResolvedControl {
     return {
       component: FeInputNumber,
       props: {},
+    }
+  }
+
+  if (control === 'select') {
+    return {
+      component: FeSelect,
+      props: {},
+    }
+  }
+
+  if (control === 'date') {
+    return {
+      component: FeDatePicker,
+      props: { type: 'date' },
+    }
+  }
+
+  if (control === 'switch') {
+    return {
+      component: FeSwitch,
+      props: {},
+    }
+  }
+
+  if (control === 'textarea') {
+    return {
+      component: FeInput,
+      props: { type: 'textarea' },
     }
   }
 

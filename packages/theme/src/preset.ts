@@ -1,4 +1,6 @@
 import type { Preset } from 'unocss'
+
+// This module is only exported via @fizz/theme/preset/unocss. Do not re-export from src/index.ts.
 import { createUnoThemeRules } from './theme-rules'
 import { createThemeVarsCss } from './tokens'
 

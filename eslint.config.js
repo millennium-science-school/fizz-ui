@@ -6,6 +6,9 @@ export default antfu(
     formatters: true,
   },
   {
+    ignores: ['**/*_REVIEW.md', '**/ARCHITECTURE_REVIEW.md'],
+  },
+  {
     rules: {
       'vue/max-attributes-per-line': [
         'error',

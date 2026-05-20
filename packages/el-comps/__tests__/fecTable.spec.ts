@@ -132,6 +132,38 @@ describe('fecTable', () => {
     host.remove()
   })
 
+  it('supports extended builtin semantic controls', async () => {
+    const host = document.createElement('div')
+    document.body.append(host)
+
+    const app = createApp({
+      render: () =>
+        h(FecTable<User>, {
+          form: { name: '', enabled: false },
+          formSchema: [
+            { prop: 'name', label: '输入', component: 'textarea' },
+            { prop: 'enabled', label: '开关', component: 'switch' },
+          ],
+          columns: [{ prop: 'name', label: '姓名' }],
+          data: ref([{ name: 'Tom', age: 18 }]),
+          pagination: {
+            currentPage: ref(1),
+            total: ref(1),
+            pageSize: 10,
+          },
+        }),
+    })
+
+    app.mount(host)
+    await nextTick()
+
+    expect(host.querySelector('textarea')).toBeTruthy()
+    expect(host.querySelector('.fe-switch')).toBeTruthy()
+
+    app.unmount()
+    host.remove()
+  })
+
   it('accepts semantic and custom form controls', async () => {
     const host = document.createElement('div')
     document.body.append(host)
