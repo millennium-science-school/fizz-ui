@@ -24,7 +24,7 @@ import { FeConfigProvider } from '@fizz/el-plus'
 ## UnoCSS
 
 ```ts
-import { fizzPreset } from '@fizz/theme'
+import { fizzPreset } from '@fizz/theme/preset/unocss'
 import { defineConfig, presetWind3 } from 'unocss'
 
 export default defineConfig({
@@ -65,6 +65,13 @@ Fizz services automatically append fizz service classes such as `fe-message` and
 Do not register service APIs with `app.use(FeMessage)` or
 `app.use(FeLoadingService)`. Service app-level installation is intentionally not
 part of the current contract.
+
+## Directive APIs
+
+Use the `vFe*` aliases when consuming Fizz directives directly, for example
+`vFeLoading` and `vFeInfiniteScroll`. Non-`v` directive aliases such as
+`FeInfiniteScroll` remain available only for compatibility and should not be used
+in new examples.
 
 ## Element Plus Variable Overrides
 

@@ -19,6 +19,12 @@
 // export { useFecTable } from './composables/useFecTable'
 // export type { UseFecTableOptions, FecTableColumn } from './types'
 
+export type {
+  FecBuiltinControlName,
+  FecControl,
+  FecCustomControl,
+  FecLegacyControlName,
+} from './components/controls'
 export { FecQueryTable } from './components/FecQueryTable'
 export type {
   FecQueryPagination,

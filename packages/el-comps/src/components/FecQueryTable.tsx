@@ -1,25 +1,24 @@
 import type { QueryFormRules, TableColumn } from '@fizz/el-kit'
-import type { TransparentWrapperComponent } from '@fizz/el-plus'
 import type { MaybeRefOrGetter, PropType } from 'vue'
+import type { FecControl } from './controls'
 import {
   FeButton,
   FeForm,
   FeFormItem,
-  FeInput,
-  FeInputNumber,
   FePagination,
   FeTable,
   FeTableColumn,
   vFeLoading,
 } from '@fizz/el-plus'
-import { defineComponent, toValue, withDirectives } from 'vue'
+import { defineComponent, h, toValue, withDirectives } from 'vue'
+import { resolveFecControl } from './controls'
 
 type QueryModel = Record<string, unknown>
 
 export interface FecQuerySchemaItem<T extends object> {
   prop: Extract<keyof T, string>
   label: string
-  component: 'ElInput' | 'ElInputNumber'
+  component: FecControl
 }
 
 export type FecQueryTableColumn<T extends object> = TableColumn<T>
@@ -38,13 +37,8 @@ export interface FecQueryTableProps<Row extends object, Query extends QueryModel
   data: MaybeRefOrGetter<Row[]>
   loading?: MaybeRefOrGetter<boolean>
   pagination: FecQueryPagination
-}
-
-function resolveFormComponent(component: FecQuerySchemaItem<object>['component']): TransparentWrapperComponent {
-  if (component === 'ElInputNumber')
-    return FeInputNumber
-
-  return FeInput
+  submitText?: string
+  resetText?: string
 }
 
 export const FecQueryTable = defineComponent({
@@ -78,6 +72,14 @@ export const FecQueryTable = defineComponent({
       type: Object as PropType<FecQueryPagination>,
       required: true,
     },
+    submitText: {
+      type: String,
+      default: '查询',
+    },
+    resetText: {
+      type: String,
+      default: '重置',
+    },
   },
   emits: [
     'reset',
@@ -105,19 +107,17 @@ export const FecQueryTable = defineComponent({
           {{
             default: () => [
               ...props.querySchema.map((item) => {
-                const FormControl = resolveFormComponent(item.component)
+                const resolvedControl = resolveFecControl(item.component)
+                const FormControl = resolvedControl.component
 
                 return (
                   <FeFormItem key={item.prop} label={item.label} prop={item.prop}>
                     {{
-                      default: () => (
-                        <FormControl
-                          {...{
-                            'modelValue': props.query[item.prop],
-                            'onUpdate:modelValue': (value: unknown) => emitQueryField(item.prop, value),
-                          }}
-                        />
-                      ),
+                      default: () => h(FormControl, {
+                        ...resolvedControl.props,
+                        'modelValue': props.query[item.prop],
+                        'onUpdate:modelValue': (value: unknown) => emitQueryField(item.prop, value),
+                      }),
                     }}
                   </FeFormItem>
                 )
@@ -126,10 +126,10 @@ export const FecQueryTable = defineComponent({
                 {{
                   default: () => [
                     <FeButton type="primary" onClick={() => emit('submit')}>
-                      查询
+                      {props.submitText}
                     </FeButton>,
                     <FeButton onClick={() => emit('reset')}>
-                      重置
+                      {props.resetText}
                     </FeButton>,
                   ],
                 }}
