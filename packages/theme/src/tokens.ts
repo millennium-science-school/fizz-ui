@@ -12,6 +12,7 @@ import {
   renderUtilityThemeCssRules,
   serviceThemeCssRules,
 } from './theme-rules'
+import { createFizzThemeVars } from './token-registry'
 
 export interface ElementThemeVars {
   '--fe-color-primary'?: string
@@ -52,33 +53,12 @@ export interface ThemeTokens {
 
 export const lightTokens: ThemeTokens = {
   elementVars: {},
-  fizzVars: {
-    '--fe-fizz-button-font-weight': '600',
-    '--fe-fizz-button-radius': 'var(--fe-border-radius-base)',
-    '--fe-fizz-button-shadow': '0 1px 2px rgba(15, 118, 110, 0.18)',
-    '--fe-fizz-control-radius': 'var(--fe-border-radius-base)',
-    '--fe-fizz-control-shadow': '0 1px 2px rgba(15, 23, 42, 0.06)',
-    '--fe-fizz-control-focus-shadow': '0 0 0 3px rgba(15, 118, 110, 0.14)',
-    '--fe-fizz-surface-radius': 'var(--fe-border-radius-base)',
-    '--fe-fizz-surface-shadow': '0 8px 24px rgba(15, 23, 42, 0.08)',
-    '--fe-fizz-feedback-radius': 'var(--fe-border-radius-base)',
-    '--fe-comps-form-cols': '2',
-    '--fe-comps-form-gap': '16px',
-    '--fe-comps-table-radius': 'var(--fe-border-radius-base)',
-    '--fe-comps-table-header-bg': '#f9fafb',
-    '--fe-comps-pagination-margin-top': '16px',
-  },
+  fizzVars: createFizzThemeVars('light'),
 }
 
 export const darkTokens: ThemeTokens = {
   elementVars: {},
-  fizzVars: {
-    ...lightTokens.fizzVars,
-    '--fe-fizz-control-shadow': '0 1px 2px rgba(0, 0, 0, 0.2)',
-    '--fe-fizz-control-focus-shadow': '0 0 0 3px rgba(45, 212, 191, 0.18)',
-    '--fe-fizz-surface-shadow': '0 12px 28px rgba(0, 0, 0, 0.32)',
-    '--fe-comps-table-header-bg': '#1f2937',
-  },
+  fizzVars: createFizzThemeVars('dark'),
 }
 
 export type ThemeCssVars = ElementThemeVars & FizzThemeVars

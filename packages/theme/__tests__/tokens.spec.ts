@@ -1,15 +1,44 @@
 import { existsSync, readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { describe, expect, it } from 'vitest'
-import { createThemeVarsCss } from '../src'
+import { createThemeVarsCss, darkTokens, lightTokens } from '../src'
+import { fizzTokenNames, fizzTokenRegistry } from '../src/token-registry'
 import { fizzPreset } from '../src/preset/unocss'
-import { createUnoThemeRules, themeUtilityRules } from '../src/theme-rules'
+import {
+  createUnoThemeRules,
+  descendantThemeCssRules,
+  serviceThemeCssRules,
+  themeUtilityRules,
+} from '../src/theme-rules'
 
 const packageRoot = resolve(__dirname, '..')
 
 function normalizeCss(css: string): string {
   return css.replace(/\s+/g, ' ').trim()
 }
+
+function collectCssVarReferences(value: string): string[] {
+  return Array.from(value.matchAll(/var\((--[a-z0-9-]+)/g), match => match[1])
+}
+
+function collectRuleCssVars(): string[] {
+  return [
+    ...themeUtilityRules,
+    ...descendantThemeCssRules,
+    ...serviceThemeCssRules,
+  ].flatMap(rule =>
+    Object.entries(rule.declarations).flatMap(([name, value]) => [
+      ...(name.startsWith('--') ? [name] : []),
+      ...collectCssVarReferences(value),
+    ]),
+  )
+}
+
+const allowedElementRuleVars = new Set([
+  '--fe-border-radius-base',
+  '--fe-color-primary',
+  '--fe-table-header-bg-color',
+])
 
 describe('theme token generation', () => {
   it('exposes runtime and style entries without component package dependencies', () => {
@@ -119,4 +148,44 @@ describe('theme token generation', () => {
     expect(css).toContain('.fe-theme.dark {')
     expect(css).not.toContain('html:root {')
   })
+
+  it('derives light and dark Fizz vars from the token registry', () => {
+    const registryNames = fizzTokenRegistry.map(token => token.name)
+
+    expect(registryNames).toEqual(fizzTokenNames)
+    expect(Object.keys(lightTokens.fizzVars)).toEqual(registryNames)
+    expect(Object.keys(darkTokens.fizzVars)).toEqual(registryNames)
+    expect(Object.keys(darkTokens.fizzVars)).toEqual(Object.keys(lightTokens.fizzVars))
+
+    for (const token of fizzTokenRegistry) {
+      expect(lightTokens.fizzVars[token.name]).toBe(token.light)
+      expect(darkTokens.fizzVars[token.name]).toBe(token.dark ?? token.light)
+      expect(token.description.trim().length).toBeGreaterThan(0)
+    }
+  })
+
+  it('references only registered Fizz vars or allowed Element Plus vars in theme rules', () => {
+    const fizzNames = new Set(fizzTokenNames)
+    const ruleVars = collectRuleCssVars()
+
+    expect(ruleVars).toContain('--fe-fizz-button-radius')
+    expect(ruleVars).toContain('--fe-comps-table-header-bg')
+
+    for (const cssVar of ruleVars) {
+      if (cssVar.startsWith('--fe-fizz-') || cssVar.startsWith('--fe-comps-')) {
+        expect(fizzNames.has(cssVar)).toBe(true)
+      }
+      else {
+        expect(allowedElementRuleVars.has(cssVar)).toBe(true)
+      }
+    }
+  })
+
+  it('does not define pseudo Element Plus variables in default CSS', () => {
+    const css = createThemeVarsCss()
+
+    expect(css).not.toMatch(/--fe-color-primary-hover\s*:/)
+    expect(css).not.toMatch(/--fe-color-primary-active\s*:/)
+  })
 })
+
