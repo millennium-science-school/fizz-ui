@@ -109,3 +109,5 @@ longer exports an `el` namespace bridge.
 ## Near-term Component Expansion
 
 The next component expansion wave should prioritize common admin form/query controls that are already supported by `FecControl` semantic names (`select`, `date`, `switch`, and `textarea`) before adding low-frequency widgets. Keep new examples and docs aligned with these semantic controls first, then add custom component patterns as needed.
+
+Any visual upgrade to Fizz component styling (new shadows, radius scales, or color tokens) should wait until the component expansion wave is producing stable output. New design tokens must be added to `fizzTokenRegistry` before they appear in any component stylesheet or theme rule.
