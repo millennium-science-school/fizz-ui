@@ -13,7 +13,7 @@ const forbiddenPatterns = [
   },
   {
     label: 'absolute Windows path',
-    pattern: /[A-Za-z]:[\\/]/,
+    pattern: /[A-Z]:[\\/]/i,
   },
   {
     label: 'absolute POSIX workspace path',

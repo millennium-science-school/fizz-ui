@@ -1,14 +1,16 @@
+import assert from 'node:assert/strict'
 import { existsSync, readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
-import assert from 'node:assert/strict'
 
 const packageRoot = resolve(fileURLToPath(new URL('..', import.meta.url)))
 const distRoot = resolve(packageRoot, 'dist')
 const packageJson = JSON.parse(readFileSync(resolve(packageRoot, 'package.json'), 'utf8'))
 
+const whitespaceRe = /\s+/g
+
 function normalizeCss(css) {
-  return css.replace(/\s+/g, ' ').trim()
+  return css.replace(whitespaceRe, ' ').trim()
 }
 
 function assertFile(path) {

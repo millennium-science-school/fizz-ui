@@ -7,6 +7,14 @@
     "lib": ["ES2023", "DOM", "DOM.Iterable"],
     "module": "ESNext",
     "moduleResolution": "bundler",
+    "paths": {
+      "@fizz/el-comps": ["./dist/index.d.ts"],
+      "@fizz/el-comps/*": ["./dist/*"],
+      "@fizz/el-kit": ["../el-kit/dist/index.d.ts"],
+      "@fizz/el-kit/*": ["../el-kit/dist/*"],
+      "@fizz/el-plus": ["../el-plus/dist/index.d.ts"],
+      "@fizz/el-plus/*": ["../el-plus/dist/*"]
+    },
     "resolveJsonModule": true,
     "types": ["vite/client"],
     "allowJs": false,
@@ -18,15 +26,7 @@
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "isolatedModules": true,
-    "skipLibCheck": true,
-    "paths": {
-      "@fizz/el-comps": ["./dist/index.d.ts"],
-      "@fizz/el-comps/*": ["./dist/*"],
-      "@fizz/el-kit": ["../el-kit/dist/index.d.ts"],
-      "@fizz/el-kit/*": ["../el-kit/dist/*"],
-      "@fizz/el-plus": ["../el-plus/dist/index.d.ts"],
-      "@fizz/el-plus/*": ["../el-plus/dist/*"]
-    }
+    "skipLibCheck": true
   },
   "include": [
     "__tests__/consumer-dist.typecheck.tsx"

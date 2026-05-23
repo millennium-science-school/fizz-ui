@@ -5,6 +5,9 @@
     "lib": ["ES2023", "DOM", "DOM.Iterable"],
     "module": "ESNext",
     "moduleResolution": "bundler",
+    "paths": {
+      "@fizz/el-kit": ["./dist/index.d.ts"]
+    },
     "resolveJsonModule": true,
     "types": ["vite/client"],
     "allowJs": false,
@@ -16,10 +19,7 @@
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "isolatedModules": true,
-    "skipLibCheck": true,
-    "paths": {
-      "@fizz/el-kit": ["./dist/index.d.ts"]
-    }
+    "skipLibCheck": true
   },
   "include": [
     "__tests__/consumer-dist.typecheck.ts"
