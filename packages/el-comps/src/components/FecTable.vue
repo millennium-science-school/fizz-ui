@@ -80,10 +80,10 @@ export default defineComponent({
           () => renderTableColumns(props.columns),
         ),
         h(FePagination, {
-          class: 'fe-comps-pagination',
-          currentPage: toValue(props.pagination.currentPage),
-          total: toValue(props.pagination.total),
-          pageSize: toValue(props.pagination.pageSize),
+          'class': 'fe-comps-pagination',
+          'currentPage': toValue(props.pagination.currentPage),
+          'total': toValue(props.pagination.total),
+          'pageSize': toValue(props.pagination.pageSize),
           'onUpdate:currentPage': updateCurrentPage,
         }),
       ])
