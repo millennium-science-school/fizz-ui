@@ -271,6 +271,7 @@ describe('fecTable', () => {
 
     app.mount(host)
     await nextTick()
+    await nextTick()
 
     expect(host.textContent).toContain('姓名')
     expect(host.querySelector('.is-center')).toBeTruthy()

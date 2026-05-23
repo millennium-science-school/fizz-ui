@@ -31,5 +31,5 @@ export type {
   FecQuerySchemaItem,
   FecQueryTableProps,
 } from './components/FecQueryTable'
-export { FecTable } from './components/FecTable'
-export type { FecFormSchemaItem, FecPagination, FecTableProps } from './components/FecTable'
+export { default as FecTable } from './components/FecTable.vue'
+export type { FecFormSchemaItem, FecPagination, FecTableProps } from './components/types'
