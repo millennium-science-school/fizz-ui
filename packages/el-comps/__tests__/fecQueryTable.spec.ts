@@ -232,4 +232,44 @@ describe('fecQueryTable', () => {
     app.unmount()
     host.remove()
   })
+
+  it('emits current page updates from pagination events', async () => {
+    const host = document.createElement('div')
+    document.body.append(host)
+    const currentPageUpdates: number[] = []
+
+    const app = createApp({
+      render: () =>
+        h(FecQueryTable<User, Query>, {
+          'query': { keyword: '' },
+          'querySchema': [{ prop: 'keyword', label: '关键词', component: 'input' }],
+          'columns': [{ prop: 'name', label: '姓名' }],
+          'data': ref([
+            { name: 'Tom', age: 18 },
+            { name: 'Jerry', age: 20 },
+            { name: 'Ann', age: 22 },
+          ]),
+          'pagination': {
+            currentPage: ref(1),
+            pageSize: ref(10),
+            total: ref(30),
+          },
+          'onUpdate:currentPage': (page: number) => {
+            currentPageUpdates.push(page)
+          },
+        }),
+    })
+
+    app.mount(host)
+    await nextTick()
+
+    const nextButton = host.querySelector('.btn-next') as HTMLButtonElement
+    nextButton.click()
+    await nextTick()
+
+    expect(currentPageUpdates.at(-1)).toBe(2)
+
+    app.unmount()
+    host.remove()
+  })
 })

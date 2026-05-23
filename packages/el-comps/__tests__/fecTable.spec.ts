@@ -210,4 +210,72 @@ describe('fecTable', () => {
     app.unmount()
     host.remove()
   })
+
+  it('updates writable current page refs from pagination events', async () => {
+    const host = document.createElement('div')
+    document.body.append(host)
+    const currentPage = ref(1)
+
+    const app = createApp({
+      render: () =>
+        h(FecTable<User>, {
+          form: { name: '' },
+          formSchema: [{ prop: 'name', label: '姓名', component: 'input' }],
+          columns: [{ prop: 'name', label: '姓名' }],
+          data: ref([
+            { name: 'Tom', age: 18 },
+            { name: 'Jerry', age: 20 },
+            { name: 'Ann', age: 22 },
+          ]),
+          pagination: {
+            currentPage,
+            total: ref(30),
+            pageSize: ref(10),
+          },
+        }),
+    })
+
+    app.mount(host)
+    await nextTick()
+
+    const nextButton = host.querySelector('.btn-next') as HTMLButtonElement
+    nextButton.click()
+    await nextTick()
+
+    expect(currentPage.value).toBe(2)
+
+    app.unmount()
+    host.remove()
+  })
+
+  it('forwards supported table column props', async () => {
+    const host = document.createElement('div')
+    document.body.append(host)
+
+    const app = createApp({
+      render: () =>
+        h(FecTable<User>, {
+          form: { name: '' },
+          formSchema: [{ prop: 'name', label: '姓名', component: 'input' }],
+          columns: [
+            { prop: 'name', label: '姓名', width: 160, minWidth: 120, align: 'center' },
+          ],
+          data: ref([{ name: 'Tom', age: 18 }]),
+          pagination: {
+            currentPage: ref(1),
+            total: ref(1),
+            pageSize: ref(10),
+          },
+        }),
+    })
+
+    app.mount(host)
+    await nextTick()
+
+    expect(host.textContent).toContain('姓名')
+    expect(host.querySelector('.is-center')).toBeTruthy()
+
+    app.unmount()
+    host.remove()
+  })
 })
