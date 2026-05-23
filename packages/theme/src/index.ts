@@ -15,3 +15,5 @@
 // ── 设计令牌（JS 对象，方便在 JS 中读取颜色值）────────────────────────────
 export { createThemeCssVars, createThemeVarsCss, darkTokens, lightTokens } from './tokens'
 export type { ElementThemeVars, FizzThemeVars, ThemeCssVars, ThemeTokens, ThemeVarsCssOptions } from './tokens'
+export { createFizzThemeVars, fizzTokenNames, fizzTokenRegistry } from './token-registry'
+export type { FizzTokenCategory, FizzTokenDefinition } from './token-registry'

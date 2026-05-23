@@ -41,6 +41,18 @@ const presetEntry = await import(pathToFileURL(resolve(distRoot, 'preset/unocss.
 
 assert.equal(typeof themeEntry.createThemeVarsCss, 'function')
 assert.equal(typeof themeEntry.createThemeCssVars, 'function')
+assert.equal(Array.isArray(themeEntry.fizzTokenRegistry), true)
+assert.equal(Array.isArray(themeEntry.fizzTokenNames), true)
+assert.equal(typeof themeEntry.createFizzThemeVars, 'function')
+assert.equal(themeEntry.fizzTokenRegistry.length, themeEntry.fizzTokenNames.length)
+assert.deepEqual(
+  Object.keys(themeEntry.createFizzThemeVars('light')),
+  themeEntry.fizzTokenNames,
+)
+assert.deepEqual(
+  Object.keys(themeEntry.createFizzThemeVars('dark')),
+  themeEntry.fizzTokenNames,
+)
 assert.equal(typeof presetEntry.fizzPreset, 'function')
 
 const generatedCss = themeEntry.createThemeVarsCss()

@@ -110,9 +110,9 @@ export const fizzTokenNames = fizzTokenRegistry.map(token => token.name)
 
 export function createFizzThemeVars(mode: 'light' | 'dark'): FizzThemeVars {
   return Object.fromEntries(
-    fizzTokenRegistry.map(token => [
+    (fizzTokenRegistry as readonly FizzTokenDefinition[]).map(token => [
       token.name,
       mode === 'dark' ? token.dark ?? token.light : token.light,
     ]),
-  ) as FizzThemeVars
+  ) as unknown as FizzThemeVars
 }

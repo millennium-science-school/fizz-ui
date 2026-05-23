@@ -1,6 +1,7 @@
 import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { describe, expect, it } from 'vitest'
+import { createFizzThemeVars, fizzTokenNames, fizzTokenRegistry } from '../src'
 
 const packageRoot = resolve(__dirname, '..')
 
@@ -27,5 +28,12 @@ describe('@fizz/theme style exports', () => {
     })
     expect(packageJson.peerDependencies.unocss).toBe('>=0.60.0')
     expect(packageJson.peerDependenciesMeta.unocss.optional).toBe(true)
+  })
+
+  it('exposes token registry metadata through the runtime entry', () => {
+    expect(fizzTokenRegistry.length).toBeGreaterThan(0)
+    expect(fizzTokenNames).toEqual(fizzTokenRegistry.map(token => token.name))
+    expect(Object.keys(createFizzThemeVars('light'))).toEqual(fizzTokenNames)
+    expect(Object.keys(createFizzThemeVars('dark'))).toEqual(fizzTokenNames)
   })
 })
