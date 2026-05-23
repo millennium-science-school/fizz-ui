@@ -11,7 +11,7 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "check": "pnpm test -- --run && pnpm typecheck && pnpm build && pnpm -C playground build && pnpm check:packages",
-    "check:packages": "pnpm --filter @fizz/el-plus typecheck:consumer && pnpm --filter @fizz/el-plus lint:package && pnpm --filter @fizz/theme lint:package && pnpm --filter @fizz/el-kit lint:package && pnpm --filter @fizz/el-comps lint:package",
+    "check:packages": "pnpm --filter @fizz/el-plus typecheck:consumer && pnpm --filter @fizz/el-kit typecheck:consumer && pnpm --filter @fizz/el-comps typecheck:consumer && pnpm --filter @fizz/theme check:exports && pnpm --filter @fizz/el-plus lint:package && pnpm --filter @fizz/theme lint:package && pnpm --filter @fizz/el-kit lint:package && pnpm --filter @fizz/el-comps lint:package",
     "test": "vitest",
     "test:ui": "vitest --ui"
   },

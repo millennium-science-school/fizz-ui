@@ -13,13 +13,27 @@
 
 ## Required Before Publish
 
+Run the full local release path from the workspace root:
+
 ```bash
-pnpm check
-pnpm --filter @fizz/el-plus build
-pnpm --filter @fizz/theme build
-pnpm --filter @fizz/el-kit build
-pnpm --filter @fizz/el-comps build
+pnpm lint
+pnpm exec vitest run packages/el-plus/__tests__ playground/__tests__/integration.spec.ts
+pnpm --filter @fizz/el-plus check:coverage
+pnpm typecheck
+pnpm build
+pnpm -C playground build
+pnpm check:packages
 ```
+
+`pnpm check:packages` is the package contract gate. It runs:
+
+- `@fizz/el-plus` consumer-dist typecheck, style subpath typecheck, and public
+  declaration scan.
+- `@fizz/el-kit` consumer-dist typecheck and public declaration scan.
+- `@fizz/el-comps` consumer-dist typecheck and public declaration scan.
+- `@fizz/theme` built runtime/style/preset export check and public declaration
+  scan.
+- `publint` for all publishable packages.
 
 ## Package Responsibilities
 

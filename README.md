@@ -65,10 +65,10 @@ pnpm -C playground build
 pnpm check:packages
 ```
 
-`pnpm check:packages` includes a consumer-facing typecheck for
-`@fizz/el-plus`. It builds the package, checks the `dist` type entry from the
-package name, and verifies public declaration files do not expose internal or
-non-portable paths.
+`pnpm check:packages` runs consumer or built-entry checks for every publishable
+package, then runs `publint` for each package. The package checks build the
+relevant `dist` entries, typecheck imports from package names or package
+subpaths, and scan generated declaration files for non-portable public paths.
 
 ## Documentation
 
