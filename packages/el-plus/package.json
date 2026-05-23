@@ -30,7 +30,7 @@
     "build": "vue-tsc --noEmit && vite build && pnpm build:styles",
     "build:styles": "node scripts/build-styles.mjs",
     "check:coverage": "node scripts/element-plus-coverage.mjs",
-    "typecheck:consumer": "pnpm build && vue-tsc --noEmit -p tsconfig.consumer.json && node scripts/assert-public-dts.mjs",
+    "typecheck:consumer": "pnpm build && vue-tsc --noEmit -p tsconfig.consumer.json && node ../../scripts/assert-public-dts.mjs .",
     "typecheck": "vue-tsc --noEmit",
     "lint:package": "publint ."
   },
