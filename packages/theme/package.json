@@ -25,6 +25,7 @@
     "build": "vue-tsc --noEmit && vite build && pnpm copy:styles",
     "copy:styles": "node scripts/copy-styles.mjs",
     "typecheck": "vue-tsc --noEmit",
+    "check:exports": "pnpm build && node scripts/check-exports.mjs && node ../../scripts/assert-public-dts.mjs .",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "lint:package": "publint ."
