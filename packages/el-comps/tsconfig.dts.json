@@ -2,8 +2,10 @@
   "extends": "../../tsconfig.web.json",
   "compilerOptions": {
     "paths": {
-      "@fizz/el-kit": ["packages/el-kit/dist/index.d.ts"],
-      "@fizz/el-kit/*": ["packages/el-kit/dist/*"]
+      "@fizz/el-plus": ["../el-plus/dist/index.d.ts"],
+      "@fizz/el-plus/*": ["../el-plus/dist/*"],
+      "@fizz/el-kit": ["../el-kit/dist/index.d.ts"],
+      "@fizz/el-kit/*": ["../el-kit/dist/*"]
     }
   },
   "include": ["src/**/*"],
