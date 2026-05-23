@@ -1,0 +1,38 @@
+{
+  "extends": "@vue/tsconfig/tsconfig.dom.json",
+  "compilerOptions": {
+    "target": "ES2023",
+    "jsx": "preserve",
+    "jsxImportSource": "vue",
+    "lib": ["ES2023", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "types": ["vite/client"],
+    "allowJs": false,
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noEmit": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "isolatedModules": true,
+    "skipLibCheck": true,
+    "paths": {
+      "@fizz/el-comps": ["./dist/index.d.ts"],
+      "@fizz/el-comps/*": ["./dist/*"],
+      "@fizz/el-kit": ["../el-kit/dist/index.d.ts"],
+      "@fizz/el-kit/*": ["../el-kit/dist/*"],
+      "@fizz/el-plus": ["../el-plus/dist/index.d.ts"],
+      "@fizz/el-plus/*": ["../el-plus/dist/*"]
+    }
+  },
+  "include": [
+    "__tests__/consumer-dist.typecheck.tsx"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
+}

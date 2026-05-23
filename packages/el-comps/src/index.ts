@@ -25,8 +25,26 @@ export type {
   FecCustomControl,
   FecLegacyControlName,
 } from './components/controls'
-export { default as FecQueryTable } from './components/FecQueryTable.vue'
-export { default as FecTable } from './components/FecTable.vue'
+import type { DefineComponent } from 'vue'
+import type { FecQueryTableProps, FecTableProps } from './components/types'
+import FecQueryTableImpl from './components/FecQueryTable.vue'
+import FecTableImpl from './components/FecTable.vue'
+
+// Typed facades: SFC vite-plugin-dts erases the generic T to `object`.
+// Casting to DefineComponent<Props<any>> restores a usable public surface
+// while keeping the runtime component intact.
+export const FecTable = FecTableImpl as unknown as DefineComponent<
+  FecTableProps<any> & { 'onUpdate:form'?: (...args: any[]) => void }
+>
+export const FecQueryTable = FecQueryTableImpl as unknown as DefineComponent<
+  FecQueryTableProps<any, any> & {
+    onReset?: (...args: any[]) => void
+    onSubmit?: (...args: any[]) => void
+    'onUpdate:currentPage'?: (...args: any[]) => void
+    'onUpdate:pageSize'?: (...args: any[]) => void
+    'onUpdate:query'?: (...args: any[]) => void
+  }
+>
 export type {
   FecFormSchemaItem,
   FecPagination,
