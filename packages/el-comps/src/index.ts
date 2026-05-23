@@ -25,11 +25,13 @@ export type {
   FecCustomControl,
   FecLegacyControlName,
 } from './components/controls'
-export { FecQueryTable } from './components/FecQueryTable'
+export { default as FecQueryTable } from './components/FecQueryTable.vue'
+export { default as FecTable } from './components/FecTable.vue'
 export type {
+  FecFormSchemaItem,
+  FecPagination,
   FecQueryPagination,
   FecQuerySchemaItem,
   FecQueryTableProps,
-} from './components/FecQueryTable'
-export { default as FecTable } from './components/FecTable.vue'
-export type { FecFormSchemaItem, FecPagination, FecTableProps } from './components/types'
+  FecTableProps,
+} from './components/types'
