@@ -11,6 +11,7 @@
     "packages/el-plus/src/**/*",
     "packages/el-plus/__tests__/transparentWrappers.typecheck.tsx",
     "packages/el-kit/src/**/*",
+    "packages/el-kit/__tests__/useQueryForm.typecheck.ts",
     "packages/el-kit/__tests__/useTable.typecheck.ts",
     "packages/el-comps/src/**/*",
     "packages/theme/src/**/*",

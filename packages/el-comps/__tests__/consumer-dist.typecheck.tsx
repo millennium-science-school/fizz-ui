@@ -7,14 +7,14 @@ import type {
   FecTableProps,
 } from '@fizz/el-comps'
 import { FecQueryTable, FecTable } from '@fizz/el-comps'
-import { h, ref } from 'vue'
+import { ref } from 'vue'
 
 interface User {
   name: string
   age: number
 }
 
-interface Query extends Record<string, unknown> {
+interface Query {
   keyword: string
 }
 
@@ -33,6 +33,15 @@ const invalidFormSchema: FecFormSchemaItem<User>[] = [
 
 const querySchema: FecQuerySchemaItem<Query>[] = [
   { prop: 'keyword', label: '关键词', component: 'input' },
+]
+
+const invalidQuerySchema: FecQuerySchemaItem<Query>[] = [
+  {
+    label: '缺失',
+    component: 'input',
+    // @ts-expect-error query schema prop should be keyed to the query model
+    prop: 'missing',
+  },
 ]
 
 const pagination: FecPagination = {
@@ -67,15 +76,32 @@ const queryTableProps: FecQueryTableProps<User, Query> = {
   resetText: 'Clear',
 }
 
-const tableVNode = h(FecTable, {
-  ...tableProps,
-  'onUpdate:form': (form: Record<string, unknown>) => {
-    void form
-  },
-})
+const tableVNode = (
+  <FecTable<User>
+    {...tableProps}
+    {...{ 'onUpdate:form': (form: Record<string, unknown>) => { void form } }}
+  />
+)
+
+const invalidTableJsx = (
+  <FecTable<User>
+    form={{ name: '' }}
+    formSchema={[
+      {
+        label: '缺失',
+        component: 'input',
+        // @ts-expect-error FecTable formSchema prop should be keyed to the row type
+        prop: 'missing',
+      },
+    ]}
+    columns={[{ prop: 'name', label: '姓名' }]}
+    data={ref([{ name: 'Tom', age: 18 }])}
+    pagination={pagination}
+  />
+)
 
 const queryTableVNode = (
-  <FecQueryTable
+  <FecQueryTable<User, Query>
     {...queryTableProps}
     {...{
       'onUpdate:currentPage': (page: number) => {
@@ -91,6 +117,26 @@ const queryTableVNode = (
   />
 )
 
+const invalidQueryTableJsx = (
+  <FecQueryTable<User, Query>
+    query={{ keyword: '' }}
+    querySchema={[
+      {
+        label: '缺失',
+        component: 'input',
+        // @ts-expect-error FecQueryTable querySchema prop should be keyed to the query model
+        prop: 'missing',
+      },
+    ]}
+    columns={[{ prop: 'age', label: '年龄' }]}
+    data={[]}
+    pagination={queryPagination}
+  />
+)
+
 void invalidFormSchema
+void invalidQuerySchema
 void tableVNode
+void invalidTableJsx
 void queryTableVNode
+void invalidQueryTableJsx

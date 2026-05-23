@@ -3,7 +3,7 @@ import type { MaybeRefOrGetter } from 'vue'
 import type { FecControl } from './controls'
 
 export type FecFormModel = Record<string, unknown>
-export type FecQueryModel = Record<string, unknown>
+export type FecQueryModel = object
 
 export interface FecFormSchemaItem<T extends object> {
   prop: Extract<keyof T, string>

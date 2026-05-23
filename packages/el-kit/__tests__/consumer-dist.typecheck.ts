@@ -11,7 +11,7 @@ interface User {
   age: number
 }
 
-interface Query extends Record<string, unknown> {
+interface Query {
   keyword: string
   enabled: boolean
 }
@@ -53,6 +53,11 @@ const rules: QueryFormRules<Query> = {
   enabled: [{ validator: value => typeof value === 'boolean' }],
 }
 
+const invalidRules: QueryFormRules<Query> = {
+  // @ts-expect-error query rules should be keyed to the query model
+  missing: [{ required: true }],
+}
+
 const submitted: Query[] = []
 const queryForm = useQueryForm<Query>({
   model: ref({ keyword: '', enabled: false }),
@@ -67,10 +72,14 @@ queryForm.setRules({ keyword: [{ max: 20 }] })
 queryForm.reset()
 queryForm.submit()
 
+// @ts-expect-error setField should reject unknown query fields
+queryForm.setField('missing', 'value')
+
 // @ts-expect-error setField should preserve the field value type
 queryForm.setField('enabled', 'yes')
 
 void invalidColumns
+void invalidRules
 void table
 void queryForm
 void submitted

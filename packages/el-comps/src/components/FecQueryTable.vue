@@ -81,13 +81,13 @@ export default defineComponent({
           {
             class: 'fe-comps-query-form',
             inline: true,
-            model: props.query,
+            model: props.query as Record<string, unknown>,
             rules: props.rules,
           },
           () => [
             ...renderSchemaFields({
               schema: props.querySchema,
-              model: props.query,
+              model: props.query as Record<string, unknown>,
               includeProp: true,
               onUpdateField: emitQueryField,
             }),
