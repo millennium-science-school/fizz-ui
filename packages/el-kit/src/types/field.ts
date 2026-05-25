@@ -1,10 +1,10 @@
-export type FieldControlKind =
-  | 'input'
-  | 'number'
-  | 'select'
-  | 'date'
-  | 'switch'
-  | 'textarea'
+export type FieldControlKind
+  = | 'input'
+    | 'number'
+    | 'select'
+    | 'date'
+    | 'switch'
+    | 'textarea'
 
 export interface FieldOption<Value = unknown> {
   label: string

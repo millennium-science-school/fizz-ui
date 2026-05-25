@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest'
 import type { VNode } from 'vue'
+import { describe, expect, it } from 'vitest'
 import { renderSchemaFields } from '../src/components/schemaFields'
 
 describe('schemaFields', () => {

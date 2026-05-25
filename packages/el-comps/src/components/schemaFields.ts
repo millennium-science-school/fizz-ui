@@ -1,5 +1,5 @@
-import type { Component, VNodeChild } from 'vue'
 import type { FieldControlKind, FieldOption } from '@fizz/el-kit'
+import type { Component, VNodeChild } from 'vue'
 import { FeFormItem, FeOption } from '@fizz/el-plus'
 import { h } from 'vue'
 import { resolveFecControl } from './controls'
@@ -19,9 +19,9 @@ export interface FecCustomSchemaFieldItem extends FecSchemaFieldBase {
   component: Component
 }
 
-export type FecSchemaFieldItem =
-  | FecBuiltinSchemaFieldItem
-  | FecCustomSchemaFieldItem
+export type FecSchemaFieldItem
+  = | FecBuiltinSchemaFieldItem
+    | FecCustomSchemaFieldItem
 
 export interface RenderSchemaFieldsOptions {
   schema: FecSchemaFieldItem[]

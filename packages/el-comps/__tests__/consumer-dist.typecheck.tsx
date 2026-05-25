@@ -6,8 +6,8 @@ import type {
   FecQueryTableProps,
   FecTableProps,
 } from '@fizz/el-comps'
-import type { Component } from 'vue'
 import type { FieldOption } from '@fizz/el-kit'
+import type { Component } from 'vue'
 import { FecQueryTable, FecTable } from '@fizz/el-comps'
 import { ref } from 'vue'
 

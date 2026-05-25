@@ -13,11 +13,11 @@ export interface FecRenderFieldConfig {
   fieldProps?: Record<string, unknown>
 }
 
-export type FecBuiltinFormSchemaItem<T extends object> =
-  FormSchemaItem<T> & FecRenderFieldConfig
+export type FecBuiltinFormSchemaItem<T extends object>
+  = FormSchemaItem<T> & FecRenderFieldConfig
 
-export type FecBuiltinQuerySchemaItem<T extends object> =
-  QuerySchemaItem<T> & FecRenderFieldConfig
+export type FecBuiltinQuerySchemaItem<T extends object>
+  = QuerySchemaItem<T> & FecRenderFieldConfig
 
 export interface FecCustomFormSchemaItem<T extends object> extends FecRenderFieldConfig {
   prop: Extract<keyof T, string>
@@ -31,13 +31,13 @@ export interface FecCustomQuerySchemaItem<T extends object> extends FecRenderFie
   component: Component
 }
 
-export type FecFormSchemaItem<T extends object> =
-  | FecBuiltinFormSchemaItem<T>
-  | FecCustomFormSchemaItem<T>
+export type FecFormSchemaItem<T extends object>
+  = | FecBuiltinFormSchemaItem<T>
+    | FecCustomFormSchemaItem<T>
 
-export type FecQuerySchemaItem<T extends object> =
-  | FecBuiltinQuerySchemaItem<T>
-  | FecCustomQuerySchemaItem<T>
+export type FecQuerySchemaItem<T extends object>
+  = | FecBuiltinQuerySchemaItem<T>
+    | FecCustomQuerySchemaItem<T>
 
 export type FecTableColumn<T extends object> = TableColumn<T>
 export type FecQueryTableColumn<T extends object> = TableColumn<T>
@@ -73,4 +73,3 @@ export interface FecQueryTableProps<Row extends object, Query extends FecQueryMo
   submitText?: string
   resetText?: string
 }
-
