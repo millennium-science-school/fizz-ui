@@ -2,7 +2,6 @@ import { existsSync, readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { describe, expect, it } from 'vitest'
 import { createThemeVarsCss, darkTokens, lightTokens } from '../src'
-import { fizzTokenNames, fizzTokenRegistry } from '../src/token-registry'
 import { fizzPreset } from '../src/preset/unocss'
 import {
   createUnoThemeRules,
@@ -10,6 +9,7 @@ import {
   serviceThemeCssRules,
   themeUtilityRules,
 } from '../src/theme-rules'
+import { fizzTokenNames, fizzTokenRegistry } from '../src/token-registry'
 
 const packageRoot = resolve(__dirname, '..')
 
@@ -188,4 +188,3 @@ describe('theme token generation', () => {
     expect(css).not.toMatch(/--fe-color-primary-active\s*:/)
   })
 })
-

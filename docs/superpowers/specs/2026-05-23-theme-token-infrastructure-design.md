@@ -65,12 +65,12 @@ Fizz-owned token metadata.
 The registry should describe each Fizz-owned variable as data:
 
 ```ts
-export type FizzTokenCategory =
-  | 'button'
-  | 'control'
-  | 'surface'
-  | 'feedback'
-  | 'composite'
+export type FizzTokenCategory
+  = | 'button'
+    | 'control'
+    | 'surface'
+    | 'feedback'
+    | 'composite'
 
 export interface FizzTokenDefinition {
   name: keyof FizzThemeVars
@@ -105,20 +105,20 @@ for CSS variable references and verify that:
 The following imports must remain source-compatible:
 
 ```ts
-import {
-  createThemeCssVars,
-  createThemeVarsCss,
-  darkTokens,
-  fizzPreset,
-  lightTokens,
-} from '@fizz/theme'
-
 import type {
   ElementThemeVars,
   FizzThemeVars,
   ThemeCssVars,
   ThemeTokens,
   ThemeVarsCssOptions,
+} from '@fizz/theme'
+
+import {
+  createThemeCssVars,
+  createThemeVarsCss,
+  darkTokens,
+  fizzPreset,
+  lightTokens,
 } from '@fizz/theme'
 ```
 

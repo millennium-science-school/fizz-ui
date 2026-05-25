@@ -1,11 +1,11 @@
 import type { FizzThemeVars } from './tokens'
 
-export type FizzTokenCategory =
-  | 'button'
-  | 'control'
-  | 'surface'
-  | 'feedback'
-  | 'composite'
+export type FizzTokenCategory
+  = | 'button'
+    | 'control'
+    | 'surface'
+    | 'feedback'
+    | 'composite'
 
 export interface FizzTokenDefinition<Name extends keyof FizzThemeVars = keyof FizzThemeVars> {
   name: Name
