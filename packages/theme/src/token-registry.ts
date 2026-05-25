@@ -106,6 +106,16 @@ export const fizzTokenRegistry = [
   },
 ] as const satisfies readonly FizzTokenDefinition[]
 
+type RegisteredFizzTokenName = (typeof fizzTokenRegistry)[number]['name']
+type AssertNever<T extends never> = T
+
+export type FizzTokenRegistryIncludesAllThemeVars = AssertNever<
+  Exclude<keyof FizzThemeVars, RegisteredFizzTokenName>
+>
+export type FizzTokenRegistryUsesOnlyThemeVars = AssertNever<
+  Exclude<RegisteredFizzTokenName, keyof FizzThemeVars>
+>
+
 export const fizzTokenNames = fizzTokenRegistry.map(token => token.name)
 
 export function createFizzThemeVars(mode: 'light' | 'dark'): FizzThemeVars {
