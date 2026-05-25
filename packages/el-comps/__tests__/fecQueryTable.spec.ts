@@ -46,7 +46,7 @@ describe('fecQueryTable', () => {
       render: () =>
         h(FecQueryTable<User, Query>, {
           query: { keyword: '' },
-          querySchema: [{ prop: 'keyword', label: '关键词', component: 'ElInput' }],
+          querySchema: [{ prop: 'keyword', label: '关键词', kind: 'select', options: [{ label: 'Fizz', value: 'fizz' }] }],
           columns: [
             { prop: 'name', label: '姓名' },
             { prop: 'age', label: '年龄' },
@@ -81,7 +81,7 @@ describe('fecQueryTable', () => {
       render: () =>
         h(FecQueryTable<User, Query>, {
           query: { keyword: '' },
-          querySchema: [{ prop: 'keyword', label: '关键词', component: 'ElInput' }],
+          querySchema: [{ prop: 'keyword', label: '关键词', kind: 'input' }],
           columns: [{ prop: 'name', label: '姓名' }],
           data: () => [{ name: 'Getter', age: 18 }],
           loading: () => false,
@@ -121,7 +121,7 @@ describe('fecQueryTable', () => {
           'onReset': () => {
             resetCount += 1
           },
-          'querySchema': [{ prop: 'keyword', label: '关键词', component: 'ElInput' }],
+          'querySchema': [{ prop: 'keyword', label: '关键词', kind: 'input' }],
           'columns': [{ prop: 'name', label: '姓名' }],
           'data': ref([{ name: 'Tom', age: 18 }]),
           'pagination': {
@@ -165,14 +165,12 @@ describe('fecQueryTable', () => {
           'query': { keyword: '' },
           'onUpdate:query': value => queryUpdates.push(value),
           'querySchema': [
-            { prop: 'keyword', label: '关键词', component: 'input' },
+            { prop: 'keyword', label: '关键词', kind: 'input' },
             {
               prop: 'keyword',
               label: '自定义',
-              component: {
-                component: CustomControl,
-                props: { placeholder: 'custom-keyword' },
-              },
+              component: CustomControl,
+              fieldProps: { placeholder: 'custom-keyword' },
             },
           ],
           'columns': [{ prop: 'name', label: '姓名' }],
@@ -209,7 +207,7 @@ describe('fecQueryTable', () => {
       render: () =>
         h(FecQueryTable<User, Query>, {
           query: { keyword: '' },
-          querySchema: [{ prop: 'keyword', label: '关键词', component: 'input' }],
+          querySchema: [{ prop: 'keyword', label: '关键词', kind: 'input' }],
           submitText: 'Search',
           resetText: 'Clear',
           columns: [{ prop: 'name', label: '姓名' }],
@@ -242,7 +240,7 @@ describe('fecQueryTable', () => {
       render: () =>
         h(FecQueryTable<User, Query>, {
           'query': { keyword: '' },
-          'querySchema': [{ prop: 'keyword', label: '关键词', component: 'input' }],
+          'querySchema': [{ prop: 'keyword', label: '关键词', kind: 'input' }],
           'columns': [{ prop: 'name', label: '姓名' }],
           'data': ref([
             { name: 'Tom', age: 18 },

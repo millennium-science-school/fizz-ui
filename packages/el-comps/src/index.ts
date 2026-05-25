@@ -25,11 +25,18 @@ import FecQueryTableImpl from './components/FecQueryTable.vue'
 import FecTableImpl from './components/FecTable.vue'
 
 export type {
-  FecBuiltinControlName,
-  FecControl,
-  FecCustomControl,
-  FecLegacyControlName,
-} from './components/controls'
+  FecBuiltinFormSchemaItem,
+  FecBuiltinQuerySchemaItem,
+  FecCustomFormSchemaItem,
+  FecCustomQuerySchemaItem,
+  FecFormSchemaItem,
+  FecPagination,
+  FecQueryPagination,
+  FecQuerySchemaItem,
+  FecQueryTableProps,
+  FecRenderFieldConfig,
+  FecTableProps,
+} from './components/types'
 
 // Typed facades: SFC vite-plugin-dts erases the generic T to `object`.
 // Using the constructor-generic pattern (`new <T>() => { $props: P }`) lets
@@ -52,11 +59,3 @@ export const FecQueryTable = FecQueryTableImpl as unknown as new <
     'onUpdate:query'?: (...args: any[]) => void
   }
 }
-export type {
-  FecFormSchemaItem,
-  FecPagination,
-  FecQueryPagination,
-  FecQuerySchemaItem,
-  FecQueryTableProps,
-  FecTableProps,
-} from './components/types'

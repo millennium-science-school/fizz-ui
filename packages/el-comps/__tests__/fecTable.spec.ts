@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { createApp, defineComponent, h, nextTick, ref } from 'vue'
 import { FecTable } from '../src'
+import { renderSchemaFields } from '../src/components/schemaFields'
 
 interface User {
   name: string
@@ -42,7 +43,7 @@ describe('fecTable', () => {
       render: () =>
         h(FecTable<User>, {
           form: { name: '' },
-          formSchema: [{ prop: 'name', label: '姓名', component: 'ElInput' }],
+          formSchema: [{ prop: 'name', label: '姓名', kind: 'input' }],
           columns: [
             { prop: 'name', label: '姓名' },
             { prop: 'age', label: '年龄' },
@@ -75,7 +76,7 @@ describe('fecTable', () => {
       render: () =>
         h(FecTable<User>, {
           form: { name: '' },
-          formSchema: [{ prop: 'name', label: '姓名', component: 'ElInput' }],
+          formSchema: [{ prop: 'name', label: '姓名', kind: 'input' }],
           columns: [{ prop: 'name', label: '姓名' }],
           data: () => [{ name: 'Getter', age: 18 }],
           pagination: {
@@ -106,7 +107,7 @@ describe('fecTable', () => {
         h(FecTable<User>, {
           'form': originalForm,
           'onUpdate:form': value => updates.push(value),
-          'formSchema': [{ prop: 'name', label: '姓名', component: 'ElInput' }],
+          'formSchema': [{ prop: 'name', label: '姓名', kind: 'input' }],
           'columns': [{ prop: 'name', label: '姓名' }],
           'data': ref([{ name: 'Tom', age: 18 }]),
           'pagination': {
@@ -141,8 +142,8 @@ describe('fecTable', () => {
         h(FecTable<User>, {
           form: { name: '', enabled: false },
           formSchema: [
-            { prop: 'name', label: '输入', component: 'textarea' },
-            { prop: 'enabled', label: '开关', component: 'switch' },
+            { prop: 'name', label: '输入', kind: 'textarea' },
+            { prop: 'enabled', label: '开关', kind: 'switch' },
           ],
           columns: [{ prop: 'name', label: '姓名' }],
           data: ref([{ name: 'Tom', age: 18 }]),
@@ -175,14 +176,12 @@ describe('fecTable', () => {
           'form': { name: '' },
           'onUpdate:form': value => updates.push(value),
           'formSchema': [
-            { prop: 'name', label: '姓名', component: 'input' },
+            { prop: 'name', label: '姓名', kind: 'input' },
             {
               prop: 'name',
               label: '自定义',
-              component: {
-                component: CustomControl,
-                props: { placeholder: 'custom-name' },
-              },
+              component: CustomControl,
+              fieldProps: { placeholder: 'custom-name' },
             },
           ],
           'columns': [{ prop: 'name', label: '姓名' }],
@@ -220,7 +219,7 @@ describe('fecTable', () => {
       render: () =>
         h(FecTable<User>, {
           form: { name: '' },
-          formSchema: [{ prop: 'name', label: '姓名', component: 'input' }],
+          formSchema: [{ prop: 'name', label: '姓名', kind: 'input' }],
           columns: [{ prop: 'name', label: '姓名' }],
           data: ref([
             { name: 'Tom', age: 18 },
@@ -256,7 +255,7 @@ describe('fecTable', () => {
       render: () =>
         h(FecTable<User>, {
           form: { name: '' },
-          formSchema: [{ prop: 'name', label: '姓名', component: 'input' }],
+          formSchema: [{ prop: 'name', label: '姓名', kind: 'input' }],
           columns: [
             { prop: 'name', label: '姓名', width: 160, minWidth: 120, align: 'center' },
           ],
@@ -278,5 +277,25 @@ describe('fecTable', () => {
 
     app.unmount()
     host.remove()
+  })
+
+  it('renders select options from field schema metadata', () => {
+    const fields = renderSchemaFields({
+      schema: [
+        {
+          prop: 'status',
+          label: '状态',
+          kind: 'select',
+          options: [
+            { label: '启用', value: 'enabled' },
+            { label: '禁用', value: 'disabled', disabled: true },
+          ],
+        },
+      ],
+      model: { status: 'enabled' },
+      onUpdateField: () => {},
+    })
+
+    expect(fields).toHaveLength(1)
   })
 })

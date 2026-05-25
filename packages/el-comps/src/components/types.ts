@@ -1,21 +1,43 @@
-import type { QueryFormRules, TableColumn } from '@fizz/el-kit'
-import type { MaybeRefOrGetter } from 'vue'
-import type { FecControl } from './controls'
+import type {
+  FormSchemaItem,
+  QueryFormRules,
+  QuerySchemaItem,
+  TableColumn,
+} from '@fizz/el-kit'
+import type { Component, MaybeRefOrGetter } from 'vue'
 
 export type FecFormModel = Record<string, unknown>
 export type FecQueryModel = object
 
-export interface FecFormSchemaItem<T extends object> {
-  prop: Extract<keyof T, string>
-  label: string
-  component: FecControl
+export interface FecRenderFieldConfig {
+  fieldProps?: Record<string, unknown>
 }
 
-export interface FecQuerySchemaItem<T extends object> {
+export type FecBuiltinFormSchemaItem<T extends object> =
+  FormSchemaItem<T> & FecRenderFieldConfig
+
+export type FecBuiltinQuerySchemaItem<T extends object> =
+  QuerySchemaItem<T> & FecRenderFieldConfig
+
+export interface FecCustomFormSchemaItem<T extends object> extends FecRenderFieldConfig {
   prop: Extract<keyof T, string>
   label: string
-  component: FecControl
+  component: Component
 }
+
+export interface FecCustomQuerySchemaItem<T extends object> extends FecRenderFieldConfig {
+  prop: Extract<keyof T, string>
+  label: string
+  component: Component
+}
+
+export type FecFormSchemaItem<T extends object> =
+  | FecBuiltinFormSchemaItem<T>
+  | FecCustomFormSchemaItem<T>
+
+export type FecQuerySchemaItem<T extends object> =
+  | FecBuiltinQuerySchemaItem<T>
+  | FecCustomQuerySchemaItem<T>
 
 export type FecTableColumn<T extends object> = TableColumn<T>
 export type FecQueryTableColumn<T extends object> = TableColumn<T>
@@ -51,3 +73,4 @@ export interface FecQueryTableProps<Row extends object, Query extends FecQueryMo
   submitText?: string
   resetText?: string
 }
+

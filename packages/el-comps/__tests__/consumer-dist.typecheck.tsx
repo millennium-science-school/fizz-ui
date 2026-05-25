@@ -6,6 +6,8 @@ import type {
   FecQueryTableProps,
   FecTableProps,
 } from '@fizz/el-comps'
+import type { Component } from 'vue'
+import type { FieldOption } from '@fizz/el-kit'
 import { FecQueryTable, FecTable } from '@fizz/el-comps'
 import { ref } from 'vue'
 
@@ -18,27 +20,45 @@ interface Query {
   keyword: string
 }
 
+declare const CustomControl: Component
+
+const statusOptions: FieldOption<string>[] = [
+  { label: 'Enabled', value: 'enabled' },
+  { label: 'Disabled', value: 'disabled', disabled: true },
+]
+
 const formSchema: FecFormSchemaItem<User>[] = [
-  { prop: 'name', label: '姓名', component: 'input' },
+  { prop: 'name', label: '姓名', kind: 'input', fieldProps: { placeholder: '姓名' } },
+  { prop: 'age', label: '年龄', kind: 'number' },
+  { prop: 'name', label: '自定义', component: CustomControl, fieldProps: { placeholder: 'custom' } },
 ]
 
 const invalidFormSchema: FecFormSchemaItem<User>[] = [
   {
     label: '缺失',
-    component: 'input',
+    kind: 'input',
     // @ts-expect-error form schema prop should be keyed to the row type
     prop: 'missing',
   },
 ]
 
+const removedComponentStringSchema: FecFormSchemaItem<User>[] = [
+  {
+    prop: 'name',
+    label: '旧写法',
+    // @ts-expect-error semantic controls should use kind instead of component strings
+    component: 'input',
+  },
+]
+
 const querySchema: FecQuerySchemaItem<Query>[] = [
-  { prop: 'keyword', label: '关键词', component: 'input' },
+  { prop: 'keyword', label: '关键词', kind: 'select', options: statusOptions },
 ]
 
 const invalidQuerySchema: FecQuerySchemaItem<Query>[] = [
   {
     label: '缺失',
-    component: 'input',
+    kind: 'input',
     // @ts-expect-error query schema prop should be keyed to the query model
     prop: 'missing',
   },
@@ -89,7 +109,7 @@ const invalidTableJsx = (
     formSchema={[
       {
         label: '缺失',
-        component: 'input',
+        kind: 'input',
         // @ts-expect-error FecTable formSchema prop should be keyed to the row type
         prop: 'missing',
       },
@@ -123,7 +143,7 @@ const invalidQueryTableJsx = (
     querySchema={[
       {
         label: '缺失',
-        component: 'input',
+        kind: 'input',
         // @ts-expect-error FecQueryTable querySchema prop should be keyed to the query model
         prop: 'missing',
       },
@@ -140,3 +160,4 @@ void tableVNode
 void invalidTableJsx
 void queryTableVNode
 void invalidQueryTableJsx
+void removedComponentStringSchema

@@ -1,3 +1,4 @@
+import type { FieldControlKind } from '@fizz/el-kit'
 import type { Component } from 'vue'
 import {
   FeDatePicker,
@@ -7,15 +8,7 @@ import {
   FeSwitch,
 } from '@fizz/el-plus'
 
-export type FecBuiltinControlName = 'input' | 'number' | 'select' | 'date' | 'switch' | 'textarea'
-export type FecLegacyControlName = 'ElInput' | 'ElInputNumber'
-
-export interface FecCustomControl {
-  component: Component
-  props?: Record<string, unknown>
-}
-
-export type FecControl = FecBuiltinControlName | FecLegacyControlName | FecCustomControl
+export type FecControl = FieldControlKind | Component
 
 export interface FecResolvedControl {
   component: Component
@@ -25,12 +18,12 @@ export interface FecResolvedControl {
 export function resolveFecControl(control: FecControl): FecResolvedControl {
   if (typeof control !== 'string') {
     return {
-      component: control.component,
-      props: control.props ?? {},
+      component: control,
+      props: {},
     }
   }
 
-  if (control === 'number' || control === 'ElInputNumber') {
+  if (control === 'number') {
     return {
       component: FeInputNumber,
       props: {},
