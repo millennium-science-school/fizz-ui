@@ -26,3 +26,9 @@ Rules follow the same rule: a writable rules ref stays connected, plain rules
 are internally managed, and readonly rules reject `setRules()`. `reset()`
 restores an initial snapshot, and `submit()` emits the current model snapshot
 without owning any rendering.
+
+## Field Schema Protocol
+
+`@fizz/el-kit` owns the headless field schema protocol used by composite form and query surfaces. Built-in controls use `kind`, not `component`, so schema data stays free of Vue component references.
+
+`FieldControlKind` covers the first common admin control set: `input`, `number`, `select`, `date`, `switch`, and `textarea`. `FieldOption[]` is synchronous metadata for select-like controls. Async loading, field placeholders, clearable behavior, and custom Vue components belong in `@fizz/el-comps` or application code until repeated use justifies promoting a field into the headless protocol.
