@@ -12,6 +12,8 @@
 //                     import '@fizz/theme/styles'
 //   ECharts 配色等  → import { lightTokens } from '@fizz/theme'
 
-// ── 设计令牌（JS 对象，方便在 JS 中读取颜色值）────────────────────────────
+// ── 设计令牌（JS 对象与 metadata，方便在 JS 中读取主题信息）───────────────
+export { createFizzThemeVars, fizzTokenNames, fizzTokenRegistry } from './token-registry'
+export type { FizzTokenCategory, FizzTokenDefinition } from './token-registry'
 export { createThemeCssVars, createThemeVarsCss, darkTokens, lightTokens } from './tokens'
 export type { ElementThemeVars, FizzThemeVars, ThemeCssVars, ThemeTokens, ThemeVarsCssOptions } from './tokens'

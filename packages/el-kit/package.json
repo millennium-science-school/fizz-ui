@@ -15,6 +15,7 @@
   "scripts": {
     "build": "vue-tsc --noEmit && vite build",
     "typecheck": "vue-tsc --noEmit",
+    "typecheck:consumer": "pnpm build && vue-tsc --noEmit -p tsconfig.consumer.json && node ../../scripts/assert-public-dts.mjs .",
     "lint:package": "publint ."
   },
   "peerDependencies": {

@@ -19,17 +19,44 @@
 // export { useFecTable } from './composables/useFecTable'
 // export type { UseFecTableOptions, FecTableColumn } from './types'
 
+import type { AllowedComponentProps, VNodeProps } from 'vue'
+import type { FecQueryModel, FecQueryTableProps, FecTableProps } from './components/types'
+import FecQueryTableImpl from './components/FecQueryTable.vue'
+import FecTableImpl from './components/FecTable.vue'
+
 export type {
   FecBuiltinControlName,
   FecControl,
   FecCustomControl,
   FecLegacyControlName,
 } from './components/controls'
-export { FecQueryTable } from './components/FecQueryTable'
+
+// Typed facades: SFC vite-plugin-dts erases the generic T to `object`.
+// Using the constructor-generic pattern (`new <T>() => { $props: P }`) lets
+// consumers pass explicit type arguments (`<FecTable<User> ...>` in JSX) and
+// preserves row/query-key validation at the component level.
+export const FecTable = FecTableImpl as unknown as new <T extends object>() => {
+  $props: FecTableProps<T> & VNodeProps & AllowedComponentProps & {
+    'onUpdate:form'?: (...args: any[]) => void
+  }
+}
+export const FecQueryTable = FecQueryTableImpl as unknown as new <
+  Row extends object,
+  Query extends FecQueryModel,
+>() => {
+  $props: FecQueryTableProps<Row, Query> & VNodeProps & AllowedComponentProps & {
+    'onReset'?: (...args: any[]) => void
+    'onSubmit'?: (...args: any[]) => void
+    'onUpdate:currentPage'?: (...args: any[]) => void
+    'onUpdate:pageSize'?: (...args: any[]) => void
+    'onUpdate:query'?: (...args: any[]) => void
+  }
+}
 export type {
+  FecFormSchemaItem,
+  FecPagination,
   FecQueryPagination,
   FecQuerySchemaItem,
   FecQueryTableProps,
-} from './components/FecQueryTable'
-export { FecTable } from './components/FecTable'
-export type { FecFormSchemaItem, FecPagination, FecTableProps } from './components/FecTable'
+  FecTableProps,
+} from './components/types'

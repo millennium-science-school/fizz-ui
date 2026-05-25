@@ -93,6 +93,20 @@ The current minimum verification confirms:
 - `@fizz/theme/styles/bridge` is not part of the supported package contract.
 - `@fizz/theme/styles` should not define `--fe-color-primary-hover` or other pseudo Element variables.
 - `.fe-btn` may use Fizz-owned variables, but it should not duplicate Element Plus button state styling.
+- Fizz-owned variables are registered in `packages/theme/src/token-registry.ts`.
+- `lightTokens.fizzVars` and `darkTokens.fizzVars` must be derived from the registry.
+- Theme CSS rules may reference registered `--fe-fizz-*` and `--fe-comps-*` variables.
+- Theme CSS rules may reference only explicitly allowed Element Plus variables.
+
+## Theme Infrastructure Boundary
+
+The token registry (`packages/theme/src/token-registry.ts`) is the single source of truth for Fizz-owned CSS variables.
+
+- Adding a new Fizz CSS variable requires a corresponding entry in `fizzTokenRegistry`.
+- Both light and dark theme values must be provided in the registry entry (`dark` is optional and falls back to `light`).
+- `FizzThemeVars` in `tokens.ts` must stay in sync with the registry's `name` fields.
+- `createFizzThemeVars` builds `lightTokens.fizzVars` and `darkTokens.fizzVars` from the registry; do not override these object literals manually.
+- The `tokens.spec.ts` tests `'derives light and dark Fizz vars from the token registry'` and `'references only registered Fizz vars or allowed Element Plus vars in theme rules'` guard this boundary automatically.
 
 ## Browser Verification
 

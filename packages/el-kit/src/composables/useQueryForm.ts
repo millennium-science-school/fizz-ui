@@ -6,7 +6,7 @@ import {
   shallowRef,
 } from 'vue'
 
-export type QueryFormModel = Record<string, unknown>
+export type QueryFormModel = object
 
 export interface QueryFormRule {
   required?: boolean
