@@ -1,5 +1,9 @@
 import type {
+  FieldControlKind,
+  FieldOption,
+  FormSchemaItem,
   QueryFormRules,
+  QuerySchemaItem,
   TableColumn,
   UseTableOptions,
 } from '@fizz/el-kit'
@@ -78,8 +82,50 @@ queryForm.setField('missing', 'value')
 // @ts-expect-error setField should preserve the field value type
 queryForm.setField('enabled', 'yes')
 
+type Status = 'enabled' | 'disabled'
+
+const statusOptions: FieldOption<Status>[] = [
+  { label: 'Enabled', value: 'enabled' },
+  { label: 'Disabled', value: 'disabled', disabled: true },
+]
+
+const fieldKind: FieldControlKind = 'select'
+
+const formSchema: FormSchemaItem<User>[] = [
+  { prop: 'name', label: '姓名', kind: 'input' },
+  { prop: 'age', label: '年龄', kind: 'number' },
+]
+
+const querySchema: QuerySchemaItem<Query>[] = [
+  { prop: 'keyword', label: '关键词', kind: 'input' },
+  { prop: 'enabled', label: '状态', kind: fieldKind, options: statusOptions },
+]
+
+const invalidFormSchema: FormSchemaItem<User>[] = [
+  {
+    label: '缺失',
+    kind: 'input',
+    // @ts-expect-error form schema prop should be keyed to the form model
+    prop: 'missing',
+  },
+]
+
+const invalidControlKind: FormSchemaItem<User>[] = [
+  {
+    prop: 'name',
+    label: '错误控件',
+    // @ts-expect-error semantic controls should use FieldControlKind
+    kind: 'ElInput',
+  },
+]
+
 void invalidColumns
 void invalidRules
 void table
 void queryForm
 void submitted
+void formSchema
+void querySchema
+void invalidFormSchema
+void invalidControlKind
+void statusOptions

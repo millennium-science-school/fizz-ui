@@ -12,6 +12,12 @@
 // export type { TableColumn, UseTableOptions } from './types/table'
 // export type { FormLinkageRule } from './types/form'
 
+export type {
+  FieldControlKind,
+  FieldOption,
+  FormSchemaItem,
+  QuerySchemaItem,
+} from './types/field'
 export { useQueryForm } from './composables/useQueryForm'
 export type {
   QueryFormModel,
