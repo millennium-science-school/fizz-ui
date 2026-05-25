@@ -39,9 +39,9 @@ function renderFieldOptions(item: FecSchemaFieldItem): VNodeChild[] | undefined 
     return undefined
   }
 
-  return item.options?.map(option =>
+  return item.options?.map((option, idx) =>
     h(FeOption, {
-      key: String(option.value),
+      key: idx,
       disabled: option.disabled,
       label: option.label,
       value: option.value as string | number | boolean | Record<string, unknown>,
