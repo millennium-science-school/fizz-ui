@@ -6,6 +6,7 @@ import {
   FecQueryTable,
   FecSection,
 } from '@fizz/el-comps'
+import { FeButton, FeDialog } from '@fizz/el-plus'
 import { ref } from 'vue'
 
 interface User {
@@ -43,11 +44,11 @@ function applyQuery() {
   })
 }
 
-const pagination = ref({
+const pagination = {
   currentPage: ref(1),
   pageSize: ref(10),
   total: ref(users.value.length),
-})
+}
 
 const querySchema = [
   { prop: 'keyword' as const, label: '姓名', kind: 'input' as const },
@@ -79,6 +80,11 @@ const detailSchema = [
   { prop: 'status' as const, label: '状态' },
 ]
 
+const formRules = {
+  name: [{ required: true, message: '姓名必填', trigger: 'blur' }],
+  age: [{ type: 'number' as const, min: 1, message: '年龄须大于 0', trigger: 'blur' }],
+}
+
 // Dialog form state
 const dialogVisible = ref(false)
 const dialogMode = ref<'create' | 'edit'>('create')
@@ -106,7 +112,7 @@ function handleConfirm(model: { name: string, age: number }) {
     Object.assign(editingUser.value, model)
   }
   filteredUsers.value = [...users.value]
-  pagination.value.total.value = users.value.length
+  pagination.total.value = users.value.length
   dialogVisible.value = false
 }
 
@@ -129,10 +135,6 @@ function handleRowAction(key: string, row: User) {
 
 <template>
   <FecPage title="用户管理" description="示例 CRUD 管理页面">
-    <template #extra>
-      <a href="/" style="margin-right:8px">← 返回首页</a>
-    </template>
-
     <FecSection title="用户列表">
       <FecQueryTable
         v-model:query="queryModel"
@@ -157,20 +159,20 @@ function handleRowAction(key: string, row: User) {
 
   <FecDialogForm
     v-model:model-value="dialogVisible"
+    v-model:model="dialogModel"
     :title="dialogMode === 'create' ? '新建用户' : '编辑用户'"
-    :model="dialogModel"
     :schema="formSchema"
+    :rules="formRules"
     @confirm="handleConfirm"
     @cancel="dialogVisible = false"
   />
 
-  <div v-if="detailVisible" class="fe-comps-detail-overlay">
-    <FecDetail
-      :record="detailRecord"
-      :schema="detailSchema"
-    />
-    <button @click="detailVisible = false">
-      关闭
-    </button>
-  </div>
+  <FeDialog v-model="detailVisible" title="用户详情" width="480px">
+    <FecDetail :record="detailRecord" :schema="detailSchema" :columns="1" />
+    <template #footer>
+      <FeButton @click="detailVisible = false">
+        关闭
+      </FeButton>
+    </template>
+  </FeDialog>
 </template>

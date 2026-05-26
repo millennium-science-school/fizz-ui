@@ -10,8 +10,10 @@
  * so their `validate` method can be toggled between "resolve" and "reject" to
  * exercise the try/catch gate that guards submit/confirm.
  */
-import { defineComponent, h } from 'vue'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { createApp, defineComponent, h, nextTick } from 'vue'
+
+import { FecDialogForm, FecDrawerForm, FecQueryForm } from '../src'
 
 // `shouldFail` is read lazily by the mocks' setup at call time.
 let shouldFail = false
@@ -63,16 +65,15 @@ vi.mock('../src/components/FecForm.vue', () => ({
   }),
 }))
 
-import { createApp, nextTick } from 'vue'
-import { FecDialogForm, FecDrawerForm, FecQueryForm } from '../src'
-
 const flushPromises = () => new Promise<void>(resolve => setTimeout(resolve, 0))
 
-interface User { name: string; age: number }
-interface Query { keyword: string; status: string }
+interface User { name: string, age: number }
+interface Query { keyword: string, status: string }
 
 // Reset the flag before every test so tests are isolated.
-beforeEach(() => { shouldFail = false })
+beforeEach(() => {
+  shouldFail = false
+})
 
 // ─── FecQueryForm ────────────────────────────────────────────────────────────
 

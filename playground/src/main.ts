@@ -18,6 +18,10 @@ const router = createRouter({
       component: () => import('./views/CrudPage.vue'),
     },
     {
+      path: '/comps-lab',
+      component: () => import('./views/CompsLabPage.vue'),
+    },
+    {
       path: '/:pathMatch(.*)*',
       component: () => import('./views/NotFound.vue'),
     },
