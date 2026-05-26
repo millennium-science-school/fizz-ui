@@ -59,3 +59,14 @@ export const FecQueryTable = FecQueryTableImpl as unknown as new <
     'onUpdate:query'?: (...args: any[]) => void
   }
 }
+
+import FecPageImpl from './components/FecPage.vue'
+import FecSectionImpl from './components/FecSection.vue'
+import FecStackImpl from './components/FecStack.vue'
+import FecToolbarImpl from './components/FecToolbar.vue'
+
+export const FecPage = FecPageImpl
+export const FecSection = FecSectionImpl
+export const FecStack = FecStackImpl
+export const FecToolbar = FecToolbarImpl
+export type { FecActionItem, FecActionType, FecRowAction } from './components/actionTypes'
