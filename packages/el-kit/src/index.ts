@@ -28,3 +28,9 @@ export type {
   UseTableOptions,
   UseTablePaginationOptions,
 } from './composables/useTable'
+export type {
+  FieldControlKind,
+  FieldOption,
+  FormSchemaItem,
+  QuerySchemaItem,
+} from './types/field'

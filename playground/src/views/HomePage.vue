@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { FecQueryTable, FecTable } from '@fizz/el-comps'
-import { useQueryForm, useTable } from '@fizz/el-kit'
+import { useTable } from '@fizz/el-kit'
 import {
   FeAlert,
   FeAvatar,
@@ -58,28 +58,18 @@ const table = useTable<User>({
   data,
 })
 
-const form = ref({
-  name: '',
+const queryModel = ref({
+  keyword: '',
 })
 
-const queryForm = useQueryForm({
-  model: ref({
-    keyword: '',
-  }),
-  rules: {
-    keyword: [{ min: 2, message: '至少两个字符' }],
-  },
-})
-
-const formSchema = [
-  { prop: 'name', label: '姓名', component: 'ElInput' },
-] as const
+const queryRules = {
+  keyword: [{ min: 2, message: '至少两个字符' }],
+}
 
 const querySchema = [
-  { prop: 'keyword', label: '关键词', component: 'ElInput' },
-] as const
+  { prop: 'keyword', label: '关键词', kind: 'input' as const },
+]
 
-const currentPage = ref(1)
 const keyword = ref('Fizz UI')
 const city = ref('shanghai')
 const enabled = ref(true)
@@ -89,11 +79,11 @@ const activeTab = ref('overview')
 const dialogVisible = ref(false)
 
 function resetQuery() {
-  queryForm.reset()
+  queryModel.value = { keyword: '' }
 }
 
 function submitQuery() {
-  FeMessage.success(`查询：${queryForm.model.value.keyword || '全部'}`)
+  FeMessage.success(`查询：${queryModel.value.keyword || '全部'}`)
 }
 
 function showMessage() {
@@ -425,9 +415,9 @@ function showLoading() {
         FecQueryTable
       </h2>
       <FecQueryTable
-        v-model:query="queryForm.model"
+        v-model:query="queryModel"
         :query-schema="querySchema"
-        :rules="queryForm.rules"
+        :query-rules="queryRules"
         :columns="table.columns.value"
         :data="table.data"
         :loading="table.loading"
@@ -444,11 +434,8 @@ function showLoading() {
         组合组件
       </h2>
       <FecTable
-        v-model:form="form"
-        :form-schema="formSchema"
         :columns="table.columns.value"
         :data="data"
-        :pagination="{ currentPage, total: data.length, pageSize: 10 }"
       />
     </section>
 

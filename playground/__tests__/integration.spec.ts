@@ -31,4 +31,28 @@ describe('playground integration contract', () => {
     expect(home).toContain('table.columns.value.map')
     expect(home).toContain(':columns="table.columns.value"')
   })
+
+  it('cRUD demo page uses the new CRUD wave components', () => {
+    const crud = readFileSync(resolve(__dirname, '../src/views/CrudPage.vue'), 'utf8')
+    const main = readFileSync(resolve(__dirname, '../src/main.ts'), 'utf8')
+
+    // route is registered
+    expect(main).toContain('/crud')
+    expect(main).toContain('CrudPage.vue')
+
+    // page structure
+    expect(crud).toContain('FecPage')
+    expect(crud).toContain('FecSection')
+    expect(crud).toContain('FecQueryTable')
+    expect(crud).toContain('FecDialogForm')
+    expect(crud).toContain('FecDetail')
+
+    // toolbar and row actions
+    expect(crud).toContain('toolbar-actions')
+    expect(crud).toContain('row-actions')
+
+    // submit / reset
+    expect(crud).toContain('submit-text')
+    expect(crud).toContain('reset-text')
+  })
 })

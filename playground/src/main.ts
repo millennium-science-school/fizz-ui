@@ -14,6 +14,10 @@ const router = createRouter({
       component: () => import('./views/HomePage.vue'),
     },
     {
+      path: '/crud',
+      component: () => import('./views/CrudPage.vue'),
+    },
+    {
       path: '/:pathMatch(.*)*',
       component: () => import('./views/NotFound.vue'),
     },
