@@ -34,9 +34,11 @@ const filteredUsers = ref<User[]>(users.value)
 
 function applyQuery() {
   const { keyword, status } = queryModel.value
-  filteredUsers.value = users.value.filter(u => {
-    if (keyword && !u.name.includes(keyword)) return false
-    if (status && u.status !== status) return false
+  filteredUsers.value = users.value.filter((u) => {
+    if (keyword && !u.name.includes(keyword))
+      return false
+    if (status && u.status !== status)
+      return false
     return true
   })
 }
@@ -118,8 +120,10 @@ function openDetail(row: User) {
 }
 
 function handleRowAction(key: string, row: User) {
-  if (key === 'edit') openEdit(row)
-  else if (key === 'detail') openDetail(row)
+  if (key === 'edit')
+    openEdit(row)
+  else if (key === 'detail')
+    openDetail(row)
 }
 </script>
 
@@ -165,6 +169,8 @@ function handleRowAction(key: string, row: User) {
       :record="detailRecord"
       :schema="detailSchema"
     />
-    <button @click="detailVisible = false">关闭</button>
+    <button @click="detailVisible = false">
+      关闭
+    </button>
   </div>
 </template>

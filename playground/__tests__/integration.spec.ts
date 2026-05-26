@@ -32,7 +32,7 @@ describe('playground integration contract', () => {
     expect(home).toContain(':columns="table.columns.value"')
   })
 
-  it('CRUD demo page uses the new CRUD wave components', () => {
+  it('cRUD demo page uses the new CRUD wave components', () => {
     const crud = readFileSync(resolve(__dirname, '../src/views/CrudPage.vue'), 'utf8')
     const main = readFileSync(resolve(__dirname, '../src/main.ts'), 'utf8')
 

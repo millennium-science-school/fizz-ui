@@ -266,7 +266,7 @@ describe('fecQueryTable', () => {
           columns: [{ prop: 'name', label: '姓名' }],
           data: ref([]),
           toolbarActions: [{ key: 'create', label: '新建', type: 'primary' }],
-          'onToolbar-action': (key: string) => toolbarEvents.push(key),
+          onToolbarAction: (key: string) => toolbarEvents.push(key),
         }),
     })
 
@@ -299,7 +299,7 @@ describe('fecQueryTable', () => {
           columns: [{ prop: 'name', label: '姓名' }],
           data: ref([{ name: 'Tom', age: 18 }]),
           rowActions: [{ key: 'edit', label: '编辑' }],
-          'onRow-action': (key: string, row: User) => rowEvents.push({ key, row }),
+          onRowAction: (key: string, row: User) => rowEvents.push({ key, row }),
         }),
     })
 

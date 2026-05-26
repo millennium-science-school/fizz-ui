@@ -1,4 +1,5 @@
 import type {
+  FecActionItem,
   FecDetailProps,
   FecDetailSchemaItem,
   FecDialogFormProps,
@@ -9,9 +10,9 @@ import type {
   FecQueryFormProps,
   FecQuerySchemaItem,
   FecQueryTableProps,
+  FecRowAction,
   FecTableProps,
 } from '@fizz/el-comps'
-import type { FecActionItem, FecRowAction } from '@fizz/el-comps'
 import type { FieldOption } from '@fizz/el-kit'
 import type { Component } from 'vue'
 import {
@@ -170,8 +171,11 @@ const tableVNode = (
     {...{
       'onUpdate:currentPage': (page: number) => { void page },
       'onUpdate:pageSize': (size: number) => { void size },
-      'onToolbar-action': (key: string) => { void key },
-      'onRow-action': (key: string, row: User) => { void key; void row },
+      'onToolbarAction': (key: string) => { void key },
+      'onRowAction': (key: string, row: User) => {
+        void key
+        void row
+      },
     }}
   />
 )
@@ -214,8 +218,11 @@ const queryTableVNode = (
       'onReset': () => {},
       'onUpdate:currentPage': (page: number) => { void page },
       'onUpdate:pageSize': (size: number) => { void size },
-      'onToolbar-action': (key: string) => { void key },
-      'onRow-action': (key: string, row: User) => { void key; void row },
+      'onToolbarAction': (key: string) => { void key },
+      'onRowAction': (key: string, row: User) => {
+        void key
+        void row
+      },
     }}
   />
 )
@@ -240,7 +247,7 @@ const invalidQueryTableJsx = (
 
 const detailSchema: FecDetailSchemaItem<User>[] = [
   { prop: 'name', label: '姓名' },
-  { prop: 'age', label: '年龄', formatter: (value) => `${value} 岁` },
+  { prop: 'age', label: '年龄', formatter: value => `${value} 岁` },
 ]
 
 const detailProps: FecDetailProps<User> = {

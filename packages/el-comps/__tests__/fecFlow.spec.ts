@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { createApp, h, nextTick, ref } from 'vue'
+import { createApp, h, nextTick } from 'vue'
 import { FecDetail, FecDialogForm, FecDrawerForm } from '../src'
 
 interface User {
@@ -7,7 +7,7 @@ interface User {
   age: number
 }
 
-describe('FecDetail', () => {
+describe('fecDetail', () => {
   it('renders label/value pairs with stable class', async () => {
     const host = document.createElement('div')
     document.body.append(host)
@@ -86,7 +86,7 @@ describe('FecDetail', () => {
   })
 })
 
-describe('FecDialogForm', () => {
+describe('fecDialogForm', () => {
   it('renders dialog title and form fields when visible', async () => {
     const host = document.createElement('div')
     document.body.append(host)
@@ -121,12 +121,12 @@ describe('FecDialogForm', () => {
     const app = createApp({
       render: () =>
         h(FecDialogForm<User>, {
-          modelValue: true,
-          title: '编辑',
-          model: { name: 'Tom', age: 18 },
-          schema: [{ prop: 'name', label: '姓名', kind: 'input' }],
-          onConfirm: () => events.push('confirm'),
-          onCancel: () => events.push('cancel'),
+          'modelValue': true,
+          'title': '编辑',
+          'model': { name: 'Tom', age: 18 },
+          'schema': [{ prop: 'name', label: '姓名', kind: 'input' }],
+          'onConfirm': () => events.push('confirm'),
+          'onCancel': () => events.push('cancel'),
           'onUpdate:modelValue': () => events.push('close'),
         }),
     })
@@ -151,7 +151,7 @@ describe('FecDialogForm', () => {
   })
 })
 
-describe('FecDrawerForm', () => {
+describe('fecDrawerForm', () => {
   it('renders drawer title and form fields when visible', async () => {
     const host = document.createElement('div')
     document.body.append(host)
@@ -185,12 +185,12 @@ describe('FecDrawerForm', () => {
     const app = createApp({
       render: () =>
         h(FecDrawerForm<User>, {
-          modelValue: true,
-          title: '编辑',
-          model: { name: 'Tom', age: 18 },
-          schema: [{ prop: 'name', label: '姓名', kind: 'input' }],
-          onConfirm: () => events.push('confirm'),
-          onCancel: () => events.push('cancel'),
+          'modelValue': true,
+          'title': '编辑',
+          'model': { name: 'Tom', age: 18 },
+          'schema': [{ prop: 'name', label: '姓名', kind: 'input' }],
+          'onConfirm': () => events.push('confirm'),
+          'onCancel': () => events.push('cancel'),
           'onUpdate:modelValue': () => events.push('close'),
         }),
     })

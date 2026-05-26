@@ -25,22 +25,20 @@ export default defineComponent({
   },
   setup(props) {
     return () =>
-      h('dl', { class: [`fe-comps-detail`, `fe-comps-detail--cols-${props.columns}`] },
-        props.schema.map(item => {
-          const raw = props.record[item.prop]
-          const formatted = item.formatter
-            ? item.formatter(raw as never, props.record as never)
-            : raw
-          const display = formatted === null || formatted === undefined || formatted === ''
-            ? props.emptyText
-            : String(formatted)
+      h('dl', { class: [`fe-comps-detail`, `fe-comps-detail--cols-${props.columns}`] }, props.schema.map((item) => {
+        const raw = props.record[item.prop]
+        const formatted = item.formatter
+          ? item.formatter(raw as never, props.record as never)
+          : raw
+        const display = formatted === null || formatted === undefined || formatted === ''
+          ? props.emptyText
+          : String(formatted)
 
-          return [
-            h('dt', { class: 'fe-comps-detail-label', key: `${item.prop}-label` }, item.label),
-            h('dd', { class: 'fe-comps-detail-value', key: `${item.prop}-value` }, display),
-          ]
-        }).flat(),
-      )
+        return [
+          h('dt', { class: 'fe-comps-detail-label', key: `${item.prop}-label` }, item.label),
+          h('dd', { class: 'fe-comps-detail-value', key: `${item.prop}-value` }, display),
+        ]
+      }).flat())
   },
 })
 </script>

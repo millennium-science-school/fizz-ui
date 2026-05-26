@@ -25,29 +25,16 @@ import FecDetailImpl from './components/FecDetail.vue'
 import FecDialogFormImpl from './components/FecDialogForm.vue'
 import FecDrawerFormImpl from './components/FecDrawerForm.vue'
 import FecFormImpl from './components/FecForm.vue'
+import FecPageImpl from './components/FecPage.vue'
 import FecQueryFormImpl from './components/FecQueryForm.vue'
 import FecQueryTableImpl from './components/FecQueryTable.vue'
-import FecTableImpl from './components/FecTable.vue'
 
-export type {
-  FecBuiltinFormSchemaItem,
-  FecBuiltinQuerySchemaItem,
-  FecCustomFormSchemaItem,
-  FecCustomQuerySchemaItem,
-  FecDetailProps,
-  FecDetailSchemaItem,
-  FecDialogFormProps,
-  FecDrawerFormProps,
-  FecFormProps,
-  FecFormSchemaItem,
-  FecPagination,
-  FecQueryFormProps,
-  FecQueryPagination,
-  FecQuerySchemaItem,
-  FecQueryTableProps,
-  FecRenderFieldConfig,
-  FecTableProps,
-} from './components/types'
+import FecSectionImpl from './components/FecSection.vue'
+import FecStackImpl from './components/FecStack.vue'
+import FecTableImpl from './components/FecTable.vue'
+import FecToolbarImpl from './components/FecToolbar.vue'
+
+export type { FecActionItem, FecActionType, FecRowAction } from './components/actionTypes'
 
 export const FecForm = FecFormImpl as unknown as new <T extends object>() => {
   $props: FecFormProps<T> & VNodeProps & AllowedComponentProps & {
@@ -91,16 +78,29 @@ export const FecQueryTable = FecQueryTableImpl as unknown as new <
   }
 }
 
-import FecPageImpl from './components/FecPage.vue'
-import FecSectionImpl from './components/FecSection.vue'
-import FecStackImpl from './components/FecStack.vue'
-import FecToolbarImpl from './components/FecToolbar.vue'
-
 export const FecPage = FecPageImpl
 export const FecSection = FecSectionImpl
 export const FecStack = FecStackImpl
 export const FecToolbar = FecToolbarImpl
-export type { FecActionItem, FecActionType, FecRowAction } from './components/actionTypes'
+export type {
+  FecBuiltinFormSchemaItem,
+  FecBuiltinQuerySchemaItem,
+  FecCustomFormSchemaItem,
+  FecCustomQuerySchemaItem,
+  FecDetailProps,
+  FecDetailSchemaItem,
+  FecDialogFormProps,
+  FecDrawerFormProps,
+  FecFormProps,
+  FecFormSchemaItem,
+  FecPagination,
+  FecQueryFormProps,
+  FecQueryPagination,
+  FecQuerySchemaItem,
+  FecQueryTableProps,
+  FecRenderFieldConfig,
+  FecTableProps,
+} from './components/types'
 
 export const FecDetail = FecDetailImpl as unknown as new <T extends object>() => {
   $props: FecDetailProps<T> & VNodeProps & AllowedComponentProps

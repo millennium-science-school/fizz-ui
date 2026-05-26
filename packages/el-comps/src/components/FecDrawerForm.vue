@@ -45,23 +45,34 @@ export default defineComponent({
       h(
         FeDrawer,
         {
-          modelValue: props.modelValue,
-          title: props.title,
+          'modelValue': props.modelValue,
+          'title': props.title,
           'onUpdate:modelValue': (val: boolean) => emit('update:modelValue', val),
         },
         {
           default: () =>
             h(FecForm, {
-              model: props.model,
-              schema: props.schema,
-              rules: props.rules,
-              labelWidth: props.labelWidth,
-              columns: props.columns,
+              'model': props.model,
+              'schema': props.schema,
+              'rules': props.rules,
+              'labelWidth': props.labelWidth,
+              'columns': props.columns,
               'onUpdate:model': (updated: FecFormModel) => emit('update:model', updated),
             }),
           footer: () => [
-            h(FeButton, { onClick: () => { emit('cancel'); emit('update:modelValue', false) } }, () => props.cancelText),
-            h(FeButton, { type: 'primary', onClick: () => { emit('confirm', { ...props.model }); emit('update:modelValue', false) } }, () => props.confirmText),
+            h(FeButton, {
+              onClick: () => {
+                emit('cancel')
+                emit('update:modelValue', false)
+              },
+            }, () => props.cancelText),
+            h(FeButton, {
+              type: 'primary',
+              onClick: () => {
+                emit('confirm', { ...props.model })
+                emit('update:modelValue', false)
+              },
+            }, () => props.confirmText),
           ],
         },
       )

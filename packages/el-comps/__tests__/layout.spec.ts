@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { createApp, h, nextTick } from 'vue'
 import { FecPage, FecSection, FecStack, FecToolbar } from '../src'
 
-describe('CRUD layout components', () => {
+describe('cRUD layout components', () => {
   it('renders page and section structure with stable classes', async () => {
     const host = document.createElement('div')
     document.body.append(host)

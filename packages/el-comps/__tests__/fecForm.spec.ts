@@ -1,5 +1,5 @@
-import { describe, expect, it, vi } from 'vitest'
-import { createApp, h, nextTick, ref } from 'vue'
+import { describe, expect, it } from 'vitest'
+import { createApp, h, nextTick } from 'vue'
 import { FecForm, FecQueryForm } from '../src'
 
 interface User {
@@ -12,7 +12,7 @@ interface Query {
   status: string
 }
 
-describe('FecForm', () => {
+describe('fecForm', () => {
   it('renders kind fields from schema', async () => {
     const host = document.createElement('div')
     document.body.append(host)
@@ -49,7 +49,7 @@ describe('FecForm', () => {
       render: () =>
         h(FecForm<User>, {
           model,
-          schema: [{ prop: 'name', label: '姓名', kind: 'input' }],
+          'schema': [{ prop: 'name', label: '姓名', kind: 'input' }],
           'onUpdate:model': (updated: User) => emitted.push(updated),
         }),
     })
@@ -73,7 +73,7 @@ describe('FecForm', () => {
   })
 })
 
-describe('FecQueryForm', () => {
+describe('fecQueryForm', () => {
   it('renders submit and reset buttons', async () => {
     const host = document.createElement('div')
     document.body.append(host)
@@ -141,8 +141,8 @@ describe('FecQueryForm', () => {
     const app = createApp({
       render: () =>
         h(FecQueryForm<Query>, {
-          model: { keyword: '', status: '' },
-          schema: [
+          'model': { keyword: '', status: '' },
+          'schema': [
             {
               prop: 'status',
               label: '状态',

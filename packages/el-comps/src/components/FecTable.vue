@@ -10,8 +10,8 @@ import {
   vFeLoading,
 } from '@fizz/el-plus'
 import { defineComponent, h, toValue, withDirectives } from 'vue'
-import { renderTableColumns } from './tableColumns'
 import FecToolbar from './FecToolbar.vue'
+import { renderTableColumns } from './tableColumns'
 
 export default defineComponent({
   name: 'FecTable',
@@ -45,11 +45,12 @@ export default defineComponent({
       default: false,
     },
   },
-  emits: ['toolbar-action', 'row-action', 'selection-change', 'update:currentPage', 'update:pageSize'],
+  emits: ['toolbarAction', 'rowAction', 'selectionChange', 'update:currentPage', 'update:pageSize'],
   setup(props, { emit }) {
-    function renderRowActionColumn(rows: object[]) {
+    function renderRowActionColumn() {
       const visibleActions = props.rowActions.filter(a => !a.hidden)
-      if (!visibleActions.length) return null
+      if (!visibleActions.length)
+        return null
 
       return h(FeTableColumn, { label: '操作', fixed: 'right' }, {
         default: ({ row, $index }: { row: object, $index: number }) =>
@@ -60,8 +61,9 @@ export default defineComponent({
               type: action.type,
               disabled: action.disabled,
               onClick: () => {
-                if (action.onClick) action.onClick(row as never, $index)
-                emit('row-action', action.key, row, $index, action)
+                if (action.onClick)
+                  action.onClick(row as never, $index)
+                emit('rowAction', action.key, row, $index, action)
               },
             }, () => action.label),
           ),
@@ -78,12 +80,12 @@ export default defineComponent({
           {
             class: 'fe-comps-table',
             data,
-            onSelectionChange: (selection: object[]) => emit('selection-change', selection),
+            onSelectionChange: (selection: object[]) => emit('selectionChange', selection),
           },
           () => [
             props.selectable ? h(FeTableColumn, { type: 'selection', width: 55 }) : null,
             ...renderTableColumns(props.columns),
-            renderRowActionColumn(data),
+            renderRowActionColumn(),
           ],
         ),
         [[vFeLoading, loading]],
@@ -93,7 +95,7 @@ export default defineComponent({
         props.toolbarActions.length
           ? h(FecToolbar, {
               actions: props.toolbarActions,
-              onAction: (key: string, action: FecActionItem) => emit('toolbar-action', key, action),
+              onAction: (key: string, action: FecActionItem) => emit('toolbarAction', key, action),
             })
           : null,
         tableNode,
