@@ -2,6 +2,8 @@ import { describe, expect, it } from 'vitest'
 import { createApp, h, nextTick } from 'vue'
 import { FecDetail, FecDialogForm, FecDrawerForm } from '../src'
 
+const flushPromises = () => new Promise<void>(resolve => setTimeout(resolve, 0))
+
 interface User {
   name: string
   age: number
@@ -140,7 +142,7 @@ describe('fecDialogForm', () => {
     const cancelBtn = buttons.find(b => b.textContent?.includes('取消'))
 
     confirmBtn?.click()
-    await nextTick()
+    await flushPromises()
     expect(events).toContain('confirm')
 
     cancelBtn?.click()
@@ -204,7 +206,7 @@ describe('fecDrawerForm', () => {
     const cancelBtn = buttons.find(b => b.textContent?.includes('取消'))
 
     confirmBtn?.click()
-    await nextTick()
+    await flushPromises()
     expect(events).toContain('confirm')
 
     cancelBtn?.click()

@@ -2,6 +2,8 @@ import { describe, expect, it } from 'vitest'
 import { createApp, defineComponent, h, nextTick, ref } from 'vue'
 import { FecQueryTable } from '../src'
 
+const flushPromises = () => new Promise<void>(resolve => setTimeout(resolve, 0))
+
 interface User {
   name: string
   age: number
@@ -132,6 +134,7 @@ describe('fecQueryTable', () => {
 
     const buttons = [...host.querySelectorAll('button')]
     buttons.find(b => b.textContent?.includes('查询'))?.click()
+    await flushPromises()
     buttons.find(b => b.textContent?.includes('重置'))?.click()
     await nextTick()
 

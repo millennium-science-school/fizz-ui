@@ -2,7 +2,7 @@
 import type { PropType } from 'vue'
 import type { FecFormModel, FecQuerySchemaItem } from './types'
 import { FeButton, FeForm, FeFormItem } from '@fizz/el-plus'
-import { defineComponent, h } from 'vue'
+import { defineComponent, h, ref } from 'vue'
 import { renderSchemaFields } from './schemaFields'
 
 export default defineComponent({
@@ -36,6 +36,8 @@ export default defineComponent({
   },
   emits: ['update:model', 'submit', 'reset'],
   setup(props, { emit }) {
+    const feFormRef = ref<InstanceType<typeof FeForm>>()
+
     function emitField(prop: string, value: unknown) {
       emit('update:model', {
         ...props.model,
@@ -47,6 +49,7 @@ export default defineComponent({
       h(
         FeForm,
         {
+          ref: feFormRef,
           class: ['fe-comps-query-form', `fe-comps-query-form--cols-${props.columns}`],
           model: props.model,
           rules: props.rules,
@@ -61,7 +64,16 @@ export default defineComponent({
             onUpdateField: emitField,
           }),
           h(FeFormItem, { class: 'fe-comps-query-actions' }, () => [
-            h(FeButton, { type: 'primary', onClick: () => emit('submit', { ...props.model }) }, () => props.submitText),
+            h(FeButton, {
+              type: 'primary',
+              onClick: async () => {
+                try {
+                  await (feFormRef.value as any)?.validate?.()
+                  emit('submit', { ...props.model })
+                }
+                catch {}
+              },
+            }, () => props.submitText),
             h(FeButton, { onClick: () => emit('reset') }, () => props.resetText),
           ]),
         ],

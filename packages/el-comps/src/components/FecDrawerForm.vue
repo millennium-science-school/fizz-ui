@@ -2,7 +2,7 @@
 import type { PropType } from 'vue'
 import type { FecFormModel, FecFormSchemaItem } from './types'
 import { FeButton, FeDrawer } from '@fizz/el-plus'
-import { defineComponent, h } from 'vue'
+import { defineComponent, h, ref } from 'vue'
 import FecForm from './FecForm.vue'
 
 export default defineComponent({
@@ -41,6 +41,8 @@ export default defineComponent({
   },
   emits: ['update:modelValue', 'update:model', 'confirm', 'cancel'],
   setup(props, { emit }) {
+    const formRef = ref<{ validate?: () => Promise<boolean> }>()
+
     return () =>
       h(
         FeDrawer,
@@ -52,6 +54,7 @@ export default defineComponent({
         {
           default: () =>
             h(FecForm, {
+              'ref': formRef,
               'model': props.model,
               'schema': props.schema,
               'rules': props.rules,
@@ -68,9 +71,13 @@ export default defineComponent({
             }, () => props.cancelText),
             h(FeButton, {
               type: 'primary',
-              onClick: () => {
-                emit('confirm', { ...props.model })
-                emit('update:modelValue', false)
+              onClick: async () => {
+                try {
+                  await formRef.value?.validate?.()
+                  emit('confirm', { ...props.model })
+                  emit('update:modelValue', false)
+                }
+                catch {}
               },
             }, () => props.confirmText),
           ],

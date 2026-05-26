@@ -2,6 +2,8 @@ import { describe, expect, it } from 'vitest'
 import { createApp, h, nextTick } from 'vue'
 import { FecForm, FecQueryForm } from '../src'
 
+const flushPromises = () => new Promise<void>(resolve => setTimeout(resolve, 0))
+
 interface User {
   name: string
   age: number
@@ -121,7 +123,7 @@ describe('fecQueryForm', () => {
     const resetBtn = Array.from(buttons).find(b => b.textContent?.includes('重置'))
 
     submitBtn!.click()
-    await nextTick()
+    await flushPromises()
     expect(submits).toHaveLength(1)
     expect(submits[0].keyword).toBe('fizz')
 
