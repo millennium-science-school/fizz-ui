@@ -72,7 +72,7 @@ export default defineComponent({
     return () =>
       h('div', { class: 'fe-comps-query-table' }, [
         h(FecQueryForm, {
-          model: props.query,
+          model: props.query as Record<string, unknown>,
           schema: props.querySchema,
           rules: props.queryRules,
           submitText: props.submitText,

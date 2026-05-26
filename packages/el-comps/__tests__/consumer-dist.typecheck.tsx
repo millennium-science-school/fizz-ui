@@ -1,14 +1,32 @@
 import type {
+  FecDetailProps,
+  FecDetailSchemaItem,
+  FecDialogFormProps,
+  FecDrawerFormProps,
+  FecFormProps,
   FecFormSchemaItem,
   FecPagination,
-  FecQueryPagination,
+  FecQueryFormProps,
   FecQuerySchemaItem,
   FecQueryTableProps,
   FecTableProps,
 } from '@fizz/el-comps'
+import type { FecActionItem, FecRowAction } from '@fizz/el-comps'
 import type { FieldOption } from '@fizz/el-kit'
 import type { Component } from 'vue'
-import { FecQueryTable, FecTable } from '@fizz/el-comps'
+import {
+  FecDetail,
+  FecDialogForm,
+  FecDrawerForm,
+  FecForm,
+  FecPage,
+  FecQueryForm,
+  FecQueryTable,
+  FecSection,
+  FecStack,
+  FecTable,
+  FecToolbar,
+} from '@fizz/el-comps'
 import { ref } from 'vue'
 
 interface User {
@@ -22,10 +40,48 @@ interface Query {
 
 declare const CustomControl: Component
 
+// ---- shared data ----
+
 const statusOptions: FieldOption<string>[] = [
   { label: 'Enabled', value: 'enabled' },
   { label: 'Disabled', value: 'disabled', disabled: true },
 ]
+
+const pagination: FecPagination = {
+  currentPage: ref(1),
+  pageSize: () => 10,
+  total: 1,
+}
+
+// ---- FecPage / FecSection / FecStack / FecToolbar ----
+
+const toolbarActions: FecActionItem[] = [
+  { key: 'create', label: '新建', type: 'primary' },
+]
+
+const pageVNode = (
+  <FecPage title="Users" description="Manage users">
+    {{
+      extra: () => <button>Create</button>,
+      default: () => (
+        <FecSection title="List">
+          {{
+            default: () => (
+              <FecStack direction="horizontal" gap="sm">
+                <FecToolbar
+                  actions={toolbarActions}
+                  onAction={(key: string) => { void key }}
+                />
+              </FecStack>
+            ),
+          }}
+        </FecSection>
+      ),
+    }}
+  </FecPage>
+)
+
+// ---- FecForm ----
 
 const formSchema: FecFormSchemaItem<User>[] = [
   { prop: 'name', label: '姓名', kind: 'input', fieldProps: { placeholder: '姓名' } },
@@ -51,6 +107,21 @@ const removedComponentStringSchema: FecFormSchemaItem<User>[] = [
   },
 ]
 
+const formProps: FecFormProps<User> = {
+  model: { name: '', age: 0 },
+  schema: formSchema,
+  columns: 2,
+}
+
+const formVNode = (
+  <FecForm<User>
+    {...formProps}
+    {...{ 'onUpdate:model': (model: User) => { void model } }}
+  />
+)
+
+// ---- FecQueryForm ----
+
 const querySchema: FecQuerySchemaItem<Query>[] = [
   { prop: 'keyword', label: '关键词', kind: 'select', options: statusOptions },
 ]
@@ -64,75 +135,87 @@ const invalidQuerySchema: FecQuerySchemaItem<Query>[] = [
   },
 ]
 
-const pagination: FecPagination = {
-  currentPage: ref(1),
-  pageSize: () => 10,
-  total: 1,
+const queryFormProps: FecQueryFormProps<Query> = {
+  model: { keyword: '' },
+  schema: querySchema,
+  submitText: '搜索',
 }
 
-const queryPagination: FecQueryPagination = {
-  currentPage: ref(1),
-  pageSize: ref(10),
-  total: () => 30,
-}
+const queryFormVNode = (
+  <FecQueryForm<Query>
+    {...queryFormProps}
+    onSubmit={(model: Query) => { void model }}
+    onReset={() => {}}
+    {...{ 'onUpdate:model': (model: Query) => { void model } }}
+  />
+)
+
+// ---- FecTable ----
 
 const tableProps: FecTableProps<User> = {
-  form: { name: '' },
-  formSchema,
   columns: [{ prop: 'name', label: '姓名', width: 160, align: 'center' }],
   data: ref([{ name: 'Tom', age: 18 }]),
   pagination,
 }
 
-const queryTableProps: FecQueryTableProps<User, Query> = {
-  query: { keyword: '' },
-  querySchema,
-  rules: { keyword: [{ min: 2, message: '至少两个字符' }] },
-  columns: [{ prop: 'age', label: '年龄', minWidth: 120 }],
-  data: () => [{ name: 'Jerry', age: 20 }],
-  loading: ref(false),
-  pagination: queryPagination,
-  submitText: 'Search',
-  resetText: 'Clear',
-}
+const rowActions: FecRowAction<User>[] = [
+  { key: 'edit', label: '编辑' },
+]
 
 const tableVNode = (
   <FecTable<User>
     {...tableProps}
-    {...{ 'onUpdate:form': (form: Record<string, unknown>) => { void form } }}
+    toolbarActions={toolbarActions}
+    rowActions={rowActions}
+    {...{
+      'onUpdate:currentPage': (page: number) => { void page },
+      'onUpdate:pageSize': (size: number) => { void size },
+      'onToolbar-action': (key: string) => { void key },
+      'onRow-action': (key: string, row: User) => { void key; void row },
+    }}
   />
 )
 
 const invalidTableJsx = (
   <FecTable<User>
-    form={{ name: '' }}
-    formSchema={[
+    columns={[
       {
         label: '缺失',
-        kind: 'input',
-        // @ts-expect-error FecTable formSchema prop should be keyed to the row type
+        // @ts-expect-error FecTable columns prop should be keyed to the row type
         prop: 'missing',
       },
     ]}
-    columns={[{ prop: 'name', label: '姓名' }]}
     data={ref([{ name: 'Tom', age: 18 }])}
-    pagination={pagination}
   />
 )
+
+// ---- FecQueryTable ----
+
+const queryTableProps: FecQueryTableProps<User, Query> = {
+  query: { keyword: '' },
+  querySchema,
+  queryRules: { keyword: [{ min: 2, message: '至少两个字符' }] },
+  columns: [{ prop: 'age', label: '年龄', minWidth: 120 }],
+  data: () => [{ name: 'Jerry', age: 20 }],
+  loading: ref(false),
+  pagination,
+  submitText: 'Search',
+  resetText: 'Clear',
+}
 
 const queryTableVNode = (
   <FecQueryTable<User, Query>
     {...queryTableProps}
+    toolbarActions={toolbarActions}
+    rowActions={rowActions}
     {...{
-      'onUpdate:currentPage': (page: number) => {
-        void page
-      },
-      'onUpdate:pageSize': (pageSize: number) => {
-        void pageSize
-      },
-      'onUpdate:query': (query: Query) => {
-        void query
-      },
+      'onUpdate:query': (query: Query) => { void query },
+      'onSubmit': (model: Query) => { void model },
+      'onReset': () => {},
+      'onUpdate:currentPage': (page: number) => { void page },
+      'onUpdate:pageSize': (size: number) => { void size },
+      'onToolbar-action': (key: string) => { void key },
+      'onRow-action': (key: string, row: User) => { void key; void row },
     }}
   />
 )
@@ -150,14 +233,77 @@ const invalidQueryTableJsx = (
     ]}
     columns={[{ prop: 'age', label: '年龄' }]}
     data={[]}
-    pagination={queryPagination}
+  />
+)
+
+// ---- FecDetail ----
+
+const detailSchema: FecDetailSchemaItem<User>[] = [
+  { prop: 'name', label: '姓名' },
+  { prop: 'age', label: '年龄', formatter: (value) => `${value} 岁` },
+]
+
+const detailProps: FecDetailProps<User> = {
+  record: { name: 'Tom', age: 18 },
+  schema: detailSchema,
+  columns: 2,
+  emptyText: '-',
+}
+
+const detailVNode = <FecDetail<User> {...detailProps} />
+
+// ---- FecDialogForm ----
+
+const dialogFormProps: FecDialogFormProps<User> = {
+  modelValue: true,
+  title: '新建用户',
+  model: { name: '', age: 0 },
+  schema: formSchema,
+}
+
+const dialogVNode = (
+  <FecDialogForm<User>
+    {...dialogFormProps}
+    onConfirm={(model: User) => { void model }}
+    onCancel={() => {}}
+    {...{
+      'onUpdate:modelValue': (val: boolean) => { void val },
+      'onUpdate:model': (model: User) => { void model },
+    }}
+  />
+)
+
+// ---- FecDrawerForm ----
+
+const drawerFormProps: FecDrawerFormProps<User> = {
+  modelValue: false,
+  title: '编辑用户',
+  model: { name: 'Tom', age: 18 },
+  schema: formSchema,
+}
+
+const drawerVNode = (
+  <FecDrawerForm<User>
+    {...drawerFormProps}
+    onConfirm={(model: User) => { void model }}
+    onCancel={() => {}}
+    {...{
+      'onUpdate:modelValue': (val: boolean) => { void val },
+      'onUpdate:model': (model: User) => { void model },
+    }}
   />
 )
 
 void invalidFormSchema
 void invalidQuerySchema
+void removedComponentStringSchema
+void pageVNode
+void formVNode
+void queryFormVNode
 void tableVNode
 void invalidTableJsx
 void queryTableVNode
 void invalidQueryTableJsx
-void removedComponentStringSchema
+void detailVNode
+void dialogVNode
+void drawerVNode
