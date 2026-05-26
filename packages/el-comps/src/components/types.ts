@@ -86,11 +86,14 @@ export interface FecTableProps<Row extends object> {
 export interface FecQueryTableProps<Row extends object, Query extends FecQueryModel> {
   query: Query
   querySchema: FecQuerySchemaItem<Query>[]
-  rules?: QueryFormRules<Query>
+  queryRules?: QueryFormRules<Query>
   columns: FecQueryTableColumn<Row>[]
   data: MaybeRefOrGetter<Row[]>
   loading?: MaybeRefOrGetter<boolean>
-  pagination: FecQueryPagination
+  pagination?: FecPagination
+  toolbarActions?: FecActionItem[]
+  rowActions?: FecRowAction<Row>[]
+  selectable?: boolean
   submitText?: string
   resetText?: string
 }

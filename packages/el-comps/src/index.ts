@@ -80,11 +80,14 @@ export const FecQueryTable = FecQueryTableImpl as unknown as new <
   Query extends FecQueryModel,
 >() => {
   $props: FecQueryTableProps<Row, Query> & VNodeProps & AllowedComponentProps & {
-    'onReset'?: (...args: any[]) => void
+    'onUpdate:query'?: (...args: any[]) => void
     'onSubmit'?: (...args: any[]) => void
+    'onReset'?: (...args: any[]) => void
     'onUpdate:currentPage'?: (...args: any[]) => void
     'onUpdate:pageSize'?: (...args: any[]) => void
-    'onUpdate:query'?: (...args: any[]) => void
+    'onToolbar-action'?: (...args: any[]) => void
+    'onRow-action'?: (...args: any[]) => void
+    'onSelection-change'?: (...args: any[]) => void
   }
 }
 

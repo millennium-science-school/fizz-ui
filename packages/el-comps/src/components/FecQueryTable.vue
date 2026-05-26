@@ -1,23 +1,10 @@
 <script lang="ts">
-import type { QueryFormRules } from '@fizz/el-kit'
 import type { MaybeRefOrGetter, PropType } from 'vue'
-import type {
-  FecQueryModel,
-  FecQueryPagination,
-  FecQuerySchemaItem,
-  FecQueryTableColumn,
-} from './types'
-import {
-  FeButton,
-  FeForm,
-  FeFormItem,
-  FePagination,
-  FeTable,
-  vFeLoading,
-} from '@fizz/el-plus'
-import { defineComponent, h, toValue, withDirectives } from 'vue'
-import { renderSchemaFields } from './schemaFields'
-import { renderTableColumns } from './tableColumns'
+import type { FecActionItem, FecRowAction } from './actionTypes'
+import type { FecPagination, FecQueryModel, FecQuerySchemaItem, FecQueryTableColumn } from './types'
+import { defineComponent, h } from 'vue'
+import FecQueryForm from './FecQueryForm.vue'
+import FecTable from './FecTable.vue'
 
 export default defineComponent({
   name: 'FecQueryTable',
@@ -30,8 +17,8 @@ export default defineComponent({
       type: Array as PropType<FecQuerySchemaItem<Record<string, unknown>>[]>,
       required: true,
     },
-    rules: {
-      type: Object as PropType<QueryFormRules<FecQueryModel>>,
+    queryRules: {
+      type: Object,
       default: () => ({}),
     },
     columns: {
@@ -47,8 +34,20 @@ export default defineComponent({
       default: false,
     },
     pagination: {
-      type: Object as PropType<FecQueryPagination>,
-      required: true,
+      type: Object as PropType<FecPagination>,
+      default: undefined,
+    },
+    toolbarActions: {
+      type: Array as PropType<FecActionItem[]>,
+      default: () => [],
+    },
+    rowActions: {
+      type: Array as PropType<FecRowAction<object>[]>,
+      default: () => [],
+    },
+    selectable: {
+      type: Boolean,
+      default: false,
     },
     submitText: {
       type: String,
@@ -60,78 +59,41 @@ export default defineComponent({
     },
   },
   emits: [
-    'reset',
+    'update:query',
     'submit',
+    'reset',
     'update:currentPage',
     'update:pageSize',
-    'update:query',
+    'toolbar-action',
+    'row-action',
+    'selection-change',
   ],
   setup(props, { emit }) {
-    function emitQueryField(prop: string, value: unknown) {
-      emit('update:query', {
-        ...props.query,
-        [prop]: value,
-      })
-    }
-
     return () =>
       h('div', { class: 'fe-comps-query-table' }, [
-        h(
-          FeForm,
-          {
-            class: 'fe-comps-query-form',
-            inline: true,
-            model: props.query as Record<string, unknown>,
-            rules: props.rules,
-          },
-          () => [
-            ...renderSchemaFields({
-              schema: props.querySchema,
-              model: props.query as Record<string, unknown>,
-              includeProp: true,
-              onUpdateField: emitQueryField,
-            }),
-            h(
-              FeFormItem,
-              { class: 'fe-comps-query-actions' },
-              () => [
-                h(
-                  FeButton,
-                  {
-                    type: 'primary',
-                    onClick: () => emit('submit'),
-                  },
-                  () => props.submitText,
-                ),
-                h(
-                  FeButton,
-                  {
-                    onClick: () => emit('reset'),
-                  },
-                  () => props.resetText,
-                ),
-              ],
-            ),
-          ],
-        ),
-        withDirectives(
-          h(
-            FeTable,
-            {
-              class: 'fe-comps-table',
-              data: toValue(props.data),
-            },
-            () => renderTableColumns(props.columns),
-          ),
-          [[vFeLoading, toValue(props.loading)]],
-        ),
-        h(FePagination, {
-          'class': 'fe-comps-pagination',
-          'currentPage': toValue(props.pagination.currentPage),
-          'pageSize': toValue(props.pagination.pageSize),
-          'total': toValue(props.pagination.total),
+        h(FecQueryForm, {
+          model: props.query,
+          schema: props.querySchema,
+          rules: props.queryRules,
+          submitText: props.submitText,
+          resetText: props.resetText,
+          'onUpdate:model': (updated: FecQueryModel) => emit('update:query', updated),
+          onSubmit: (model: FecQueryModel) => emit('submit', model),
+          onReset: () => emit('reset'),
+        }),
+        h(FecTable, {
+          columns: props.columns,
+          data: props.data,
+          loading: props.loading,
+          pagination: props.pagination,
+          toolbarActions: props.toolbarActions,
+          rowActions: props.rowActions,
+          selectable: props.selectable,
           'onUpdate:currentPage': (page: number) => emit('update:currentPage', page),
-          'onUpdate:pageSize': (pageSize: number) => emit('update:pageSize', pageSize),
+          'onUpdate:pageSize': (size: number) => emit('update:pageSize', size),
+          'onToolbar-action': (key: string, action: FecActionItem) => emit('toolbar-action', key, action),
+          'onRow-action': (key: string, row: object, index: number, action: FecRowAction<object>) => emit('row-action', key, row, index, action),
+          'onSelection-change': (selection: object[]) => emit('selection-change', selection),
         }),
       ])
   },
