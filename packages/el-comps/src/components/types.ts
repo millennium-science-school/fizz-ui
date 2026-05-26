@@ -5,6 +5,7 @@ import type {
   TableColumn,
 } from '@fizz/el-kit'
 import type { Component, MaybeRefOrGetter } from 'vue'
+import type { FecActionItem, FecRowAction } from './actionTypes'
 
 export type FecFormModel = Record<string, unknown>
 export type FecQueryModel = object
@@ -54,6 +55,24 @@ export interface FecQueryPagination {
   total: MaybeRefOrGetter<number>
 }
 
+export interface FecFormProps<T extends object> {
+  model: T
+  schema: FecFormSchemaItem<T>[]
+  rules?: QueryFormRules<T>
+  labelWidth?: string | number
+  columns?: 1 | 2 | 3 | 4
+}
+
+export interface FecQueryFormProps<T extends object> {
+  model: T
+  schema: FecQuerySchemaItem<T>[]
+  rules?: QueryFormRules<T>
+  labelWidth?: string | number
+  columns?: 1 | 2 | 3 | 4
+  submitText?: string
+  resetText?: string
+}
+
 export interface FecTableProps<T extends object> {
   form: FecFormModel
   formSchema: FecFormSchemaItem<T>[]
@@ -73,3 +92,6 @@ export interface FecQueryTableProps<Row extends object, Query extends FecQueryMo
   submitText?: string
   resetText?: string
 }
+
+// Re-export action types for consumers
+export type { FecActionItem, FecRowAction }

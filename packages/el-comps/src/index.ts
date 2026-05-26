@@ -20,7 +20,9 @@
 // export type { UseFecTableOptions, FecTableColumn } from './types'
 
 import type { AllowedComponentProps, VNodeProps } from 'vue'
-import type { FecQueryModel, FecQueryTableProps, FecTableProps } from './components/types'
+import type { FecFormProps, FecQueryFormProps, FecQueryModel, FecQueryTableProps, FecTableProps } from './components/types'
+import FecFormImpl from './components/FecForm.vue'
+import FecQueryFormImpl from './components/FecQueryForm.vue'
 import FecQueryTableImpl from './components/FecQueryTable.vue'
 import FecTableImpl from './components/FecTable.vue'
 
@@ -29,14 +31,29 @@ export type {
   FecBuiltinQuerySchemaItem,
   FecCustomFormSchemaItem,
   FecCustomQuerySchemaItem,
+  FecFormProps,
   FecFormSchemaItem,
   FecPagination,
+  FecQueryFormProps,
   FecQueryPagination,
   FecQuerySchemaItem,
   FecQueryTableProps,
   FecRenderFieldConfig,
   FecTableProps,
 } from './components/types'
+
+export const FecForm = FecFormImpl as unknown as new <T extends object>() => {
+  $props: FecFormProps<T> & VNodeProps & AllowedComponentProps & {
+    'onUpdate:model'?: (...args: any[]) => void
+  }
+}
+export const FecQueryForm = FecQueryFormImpl as unknown as new <T extends object>() => {
+  $props: FecQueryFormProps<T> & VNodeProps & AllowedComponentProps & {
+    'onUpdate:model'?: (...args: any[]) => void
+    'onSubmit'?: (...args: any[]) => void
+    'onReset'?: (...args: any[]) => void
+  }
+}
 
 // Typed facades: SFC vite-plugin-dts erases the generic T to `object`.
 // Using the constructor-generic pattern (`new <T>() => { $props: P }`) lets
