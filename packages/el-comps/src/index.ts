@@ -35,13 +35,19 @@ import FecTableImpl from './components/FecTable.vue'
 import FecToolbarImpl from './components/FecToolbar.vue'
 
 export type { FecActionItem, FecActionType, FecRowAction } from './components/actionTypes'
+export {
+  defineFecDetailSchema,
+  defineFecFormSchema,
+  defineFecQuerySchema,
+  defineFecTableColumns,
+} from './components/types'
 
-export const FecForm = FecFormImpl as unknown as new <T extends object>() => {
+export const FecForm = FecFormImpl as unknown as new <T extends object = any>() => {
   $props: FecFormProps<T> & VNodeProps & AllowedComponentProps & {
     'onUpdate:model'?: (...args: any[]) => void
   }
 }
-export const FecQueryForm = FecQueryFormImpl as unknown as new <T extends object>() => {
+export const FecQueryForm = FecQueryFormImpl as unknown as new <T extends object = any>() => {
   $props: FecQueryFormProps<T> & VNodeProps & AllowedComponentProps & {
     'onUpdate:model'?: (...args: any[]) => void
     'onSubmit'?: (...args: any[]) => void
@@ -53,7 +59,9 @@ export const FecQueryForm = FecQueryFormImpl as unknown as new <T extends object
 // Using the constructor-generic pattern (`new <T>() => { $props: P }`) lets
 // consumers pass explicit type arguments (`<FecTable<User> ...>` in JSX) and
 // preserves row/query-key validation at the component level.
-export const FecTable = FecTableImpl as unknown as new <Row extends object>() => {
+// The generic defaults stay wide because Vue templates cannot provide explicit
+// generic arguments; strict schema/column checking is provided by defineFec* helpers.
+export const FecTable = FecTableImpl as unknown as new <Row extends object = any>() => {
   $props: FecTableProps<Row> & VNodeProps & AllowedComponentProps & {
     'onUpdate:currentPage'?: (...args: any[]) => void
     'onUpdate:pageSize'?: (...args: any[]) => void
@@ -63,8 +71,8 @@ export const FecTable = FecTableImpl as unknown as new <Row extends object>() =>
   }
 }
 export const FecQueryTable = FecQueryTableImpl as unknown as new <
-  Row extends object,
-  Query extends FecQueryModel,
+  Row extends object = any,
+  Query extends FecQueryModel = any,
 >() => {
   $props: FecQueryTableProps<Row, Query> & VNodeProps & AllowedComponentProps & {
     'onUpdate:query'?: (...args: any[]) => void
@@ -102,10 +110,10 @@ export type {
   FecTableProps,
 } from './components/types'
 
-export const FecDetail = FecDetailImpl as unknown as new <T extends object>() => {
+export const FecDetail = FecDetailImpl as unknown as new <T extends object = any>() => {
   $props: FecDetailProps<T> & VNodeProps & AllowedComponentProps
 }
-export const FecDialogForm = FecDialogFormImpl as unknown as new <T extends object>() => {
+export const FecDialogForm = FecDialogFormImpl as unknown as new <T extends object = any>() => {
   $props: FecDialogFormProps<T> & VNodeProps & AllowedComponentProps & {
     'onUpdate:modelValue'?: (...args: any[]) => void
     'onUpdate:model'?: (...args: any[]) => void
@@ -113,7 +121,7 @@ export const FecDialogForm = FecDialogFormImpl as unknown as new <T extends obje
     'onCancel'?: (...args: any[]) => void
   }
 }
-export const FecDrawerForm = FecDrawerFormImpl as unknown as new <T extends object>() => {
+export const FecDrawerForm = FecDrawerFormImpl as unknown as new <T extends object = any>() => {
   $props: FecDrawerFormProps<T> & VNodeProps & AllowedComponentProps & {
     'onUpdate:modelValue'?: (...args: any[]) => void
     'onUpdate:model'?: (...args: any[]) => void

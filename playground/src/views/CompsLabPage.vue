@@ -6,6 +6,10 @@
  * 不是文档页，不追求完美排版，以覆盖行为路径为优先。
  */
 import {
+  defineFecDetailSchema,
+  defineFecFormSchema,
+  defineFecQuerySchema,
+  defineFecTableColumns,
   FecDetail,
   FecDialogForm,
   FecDrawerForm,
@@ -60,43 +64,43 @@ const ColorInput = defineComponent({
   },
 })
 
-const formSchema = [
-  { prop: 'name' as const, label: '姓名 (input)', kind: 'input' as const },
-  { prop: 'age' as const, label: '年龄 (number)', kind: 'number' as const },
+const formSchema = defineFecFormSchema<typeof formModel.value>([
+  { prop: 'name', label: '姓名 (input)', kind: 'input' },
+  { prop: 'age', label: '年龄 (number)', kind: 'number' },
   {
-    prop: 'status' as const,
+    prop: 'status',
     label: '状态 (select)',
-    kind: 'select' as const,
+    kind: 'select',
     options: [
       { label: '启用', value: 'enabled' },
       { label: '禁用', value: 'disabled' },
     ],
   },
-  { prop: 'flag' as const, label: '开关 (switch)', kind: 'switch' as const },
+  { prop: 'flag', label: '开关 (switch)', kind: 'switch' },
   {
-    prop: 'color' as const,
+    prop: 'color',
     label: '自定义控件 (color)',
     component: ColorInput,
   },
-] as const
+])
 
 // ─── FecQueryForm ─────────────────────────────────────────────────────────────
 
 const queryModel = ref<Query>({ keyword: '', status: '' })
 const queryRules = { keyword: [{ min: 2, message: '至少两个字符' }] }
 
-const querySchema = [
-  { prop: 'keyword' as const, label: '关键词', kind: 'input' as const },
+const querySchema = defineFecQuerySchema<Query>([
+  { prop: 'keyword', label: '关键词', kind: 'input' },
   {
-    prop: 'status' as const,
+    prop: 'status',
     label: '状态',
-    kind: 'select' as const,
+    kind: 'select',
     options: [
       { label: '启用', value: 'enabled' },
       { label: '禁用', value: 'disabled' },
     ],
   },
-]
+])
 
 function onQuerySubmit() {
   FeMessage.success(`查询：keyword=${queryModel.value.keyword || '全部'}, status=${queryModel.value.status || '全部'}`)
@@ -117,12 +121,12 @@ const allRows = ref<Row[]>([
 ])
 
 const tableLoading = ref(false)
-const tableColumns = [
-  { prop: 'name' as const, label: '姓名' },
-  { prop: 'age' as const, label: '年龄', align: 'right' as const },
-  { prop: 'status' as const, label: '状态' },
-  { prop: 'score' as const, label: '得分', align: 'right' as const },
-]
+const tableColumns = defineFecTableColumns<Row>([
+  { prop: 'name', label: '姓名' },
+  { prop: 'age', label: '年龄', align: 'right' },
+  { prop: 'status', label: '状态' },
+  { prop: 'score', label: '得分', align: 'right' },
+])
 
 const tablePagination = {
   currentPage: ref(1),
@@ -174,10 +178,10 @@ const dialogMode = ref<'create' | 'edit'>('create')
 const dialogModel = ref({ name: '', age: 0 })
 const dialogRules = { name: [{ required: true, message: '姓名必填' }] }
 
-const dialogSchema = [
-  { prop: 'name' as const, label: '姓名', kind: 'input' as const },
-  { prop: 'age' as const, label: '年龄', kind: 'number' as const },
-] as const
+const dialogSchema = defineFecFormSchema<typeof dialogModel.value>([
+  { prop: 'name', label: '姓名', kind: 'input' },
+  { prop: 'age', label: '年龄', kind: 'number' },
+])
 
 function openDialog(mode: 'create' | 'edit') {
   dialogMode.value = mode
@@ -207,12 +211,12 @@ function handleDrawerConfirm(model: { name: string, age: number }) {
 
 const detailRecord = { name: 'Alice', age: 28, status: 'enabled', score: null as number | null }
 
-const detailSchema = [
-  { prop: 'name' as const, label: '姓名' },
-  { prop: 'age' as const, label: '年龄', formatter: (v: number) => `${v} 岁` },
-  { prop: 'status' as const, label: '状态', formatter: (v: string) => v === 'enabled' ? '启用' : '禁用' },
-  { prop: 'score' as const, label: '得分 (空值)', formatter: (v: number | null) => v == null ? '—' : String(v) },
-]
+const detailSchema = defineFecDetailSchema<typeof detailRecord>([
+  { prop: 'name', label: '姓名' },
+  { prop: 'age', label: '年龄', formatter: (v: number) => `${v} 岁` },
+  { prop: 'status', label: '状态', formatter: (v: string) => v === 'enabled' ? '启用' : '禁用' },
+  { prop: 'score', label: '得分 (空值)', formatter: (v: number | null) => v == null ? '—' : String(v) },
+])
 
 function simulateLoading() {
   tableLoading.value = true

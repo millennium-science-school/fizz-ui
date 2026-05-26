@@ -14,11 +14,11 @@ export default defineComponent({
   props: {
     direction: {
       type: String as PropType<'vertical' | 'horizontal'>,
-      default: 'vertical' as const,
+      default: 'vertical',
     },
     gap: {
       type: String as PropType<'xs' | 'sm' | 'md' | 'lg'>,
-      default: 'md' as const,
+      default: 'md',
     },
   },
   setup(props, { slots }) {

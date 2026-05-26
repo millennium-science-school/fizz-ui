@@ -20,7 +20,7 @@ export type {
   QueryFormState,
   UseQueryFormOptions,
 } from './composables/useQueryForm'
-export { useTable } from './composables/useTable'
+export { defineTableColumns, useTable } from './composables/useTable'
 export type {
   TableColumn,
   TablePaginationState,
@@ -28,6 +28,10 @@ export type {
   UseTableOptions,
   UseTablePaginationOptions,
 } from './composables/useTable'
+export {
+  defineFormSchema,
+  defineQuerySchema,
+} from './types/field'
 export type {
   FieldControlKind,
   FieldOption,

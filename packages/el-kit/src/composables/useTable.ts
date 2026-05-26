@@ -7,7 +7,7 @@ import {
 } from 'vue'
 
 export interface TableColumn<T extends object> {
-  prop: Extract<keyof T, string>
+  prop: [keyof T] extends [never] ? string : Extract<keyof T, string>
   label: string
   visible?: boolean
   width?: number | string
@@ -23,7 +23,7 @@ export interface UseTablePaginationOptions {
 }
 
 export interface UseTableOptions<T extends object> {
-  columns: MaybeRefOrGetter<TableColumn<T>[]>
+  columns: MaybeRefOrGetter<readonly TableColumn<T>[]>
   data: MaybeRefOrGetter<T[]>
   loading?: MaybeRefOrGetter<boolean>
   pagination?: UseTablePaginationOptions
@@ -36,16 +36,22 @@ export interface TablePaginationState {
 }
 
 export interface TableState<T extends object> {
-  columns: Ref<TableColumn<T>[]>
+  columns: Ref<readonly TableColumn<T>[]>
   data: Ref<T[]>
   loading: Ref<boolean>
   pagination: TablePaginationState
-  setColumns: (columns: TableColumn<T>[]) => void
+  setColumns: (columns: readonly TableColumn<T>[]) => void
   setData: (data: T[]) => void
   setLoading: (loading: boolean) => void
   setPage: (page: number) => void
   setPageSize: (pageSize: number) => void
   setTotal: (total: number) => void
+}
+
+export function defineTableColumns<T extends object>(
+  columns: readonly TableColumn<T>[],
+): readonly TableColumn<T>[] {
+  return columns
 }
 
 interface StateSource<T> {

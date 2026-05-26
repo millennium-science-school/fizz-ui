@@ -12,7 +12,7 @@ export interface FecSchemaFieldBase {
 
 export interface FecBuiltinSchemaFieldItem extends FecSchemaFieldBase {
   kind: FieldControlKind
-  options?: FieldOption[]
+  options?: readonly FieldOption[]
 }
 
 export interface FecCustomSchemaFieldItem extends FecSchemaFieldBase {
@@ -24,7 +24,7 @@ export type FecSchemaFieldItem
     | FecCustomSchemaFieldItem
 
 export interface RenderSchemaFieldsOptions {
-  schema: FecSchemaFieldItem[]
+  schema: readonly FecSchemaFieldItem[]
   model: Record<string, unknown>
   includeProp?: boolean
   onUpdateField: (prop: string, value: unknown) => void

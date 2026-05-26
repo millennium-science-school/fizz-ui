@@ -1,6 +1,6 @@
 <script lang="ts">
 import type { PropType } from 'vue'
-import type { FecDetailSchemaItem } from './types'
+import type { FecLooseDetailSchemaItem } from './types'
 import { FeDescriptions, FeDescriptionsItem } from '@fizz/el-plus'
 import { defineComponent, h } from 'vue'
 
@@ -12,7 +12,7 @@ export default defineComponent({
       required: true,
     },
     schema: {
-      type: Array as PropType<FecDetailSchemaItem<Record<string, unknown>>[]>,
+      type: Array as PropType<readonly FecLooseDetailSchemaItem[]>,
       required: true,
     },
     columns: {
@@ -37,7 +37,7 @@ export default defineComponent({
           props.schema.map((item) => {
             const raw = props.record[item.prop]
             const formatted = item.formatter
-              ? item.formatter(raw as never, props.record as never)
+              ? item.formatter(raw, props.record)
               : raw
             const display = formatted === null || formatted === undefined || formatted === ''
               ? props.emptyText

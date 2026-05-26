@@ -7,7 +7,13 @@ import type {
   TableColumn,
   UseTableOptions,
 } from '@fizz/el-kit'
-import { useQueryForm, useTable } from '@fizz/el-kit'
+import {
+  defineFormSchema,
+  defineQuerySchema,
+  defineTableColumns,
+  useQueryForm,
+  useTable,
+} from '@fizz/el-kit'
 import { ref } from 'vue'
 
 interface User {
@@ -24,6 +30,19 @@ const columns: TableColumn<User>[] = [
   { prop: 'name', label: '姓名' },
   { prop: 'age', label: '年龄', align: 'right', minWidth: 120 },
 ]
+
+const helperColumns = defineTableColumns<User>([
+  { prop: 'name', label: '姓名' },
+  { prop: 'age', label: '年龄', align: 'right', minWidth: 120 },
+])
+
+defineTableColumns<User>([
+  {
+    label: '缺失',
+    // @ts-expect-error defineTableColumns should reject unknown row fields
+    prop: 'missing',
+  },
+])
 
 const invalidColumns: TableColumn<User>[] = [
   {
@@ -96,10 +115,20 @@ const formSchema: FormSchemaItem<User>[] = [
   { prop: 'age', label: '年龄', kind: 'number' },
 ]
 
+const helperFormSchema = defineFormSchema<User>([
+  { prop: 'name', label: '姓名', kind: 'input' },
+  { prop: 'age', label: '年龄', kind: 'number' },
+])
+
 const querySchema: QuerySchemaItem<Query>[] = [
   { prop: 'keyword', label: '关键词', kind: 'input' },
   { prop: 'enabled', label: '状态', kind: fieldKind, options: statusOptions },
 ]
+
+const helperQuerySchema = defineQuerySchema<Query>([
+  { prop: 'keyword', label: '关键词', kind: 'input' },
+  { prop: 'enabled', label: '状态', kind: fieldKind, options: statusOptions },
+])
 
 const invalidFormSchema: FormSchemaItem<User>[] = [
   {
@@ -125,6 +154,9 @@ void table
 void queryForm
 void submitted
 void formSchema
+void helperColumns
+void helperFormSchema
+void helperQuerySchema
 void querySchema
 void invalidFormSchema
 void invalidControlKind

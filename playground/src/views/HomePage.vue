@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { FecQueryTable, FecTable } from '@fizz/el-comps'
-import { useTable } from '@fizz/el-kit'
+import { defineQuerySchema, defineTableColumns, useTable } from '@fizz/el-kit'
 import {
   FeAlert,
   FeAvatar,
@@ -50,11 +50,13 @@ const data = shallowRef<User[]>([
   { name: 'Jerry', age: 20 },
 ])
 
+const tableColumns = defineTableColumns<User>([
+  { prop: 'name', label: '姓名' },
+  { prop: 'age', label: '年龄' },
+])
+
 const table = useTable<User>({
-  columns: [
-    { prop: 'name', label: '姓名' },
-    { prop: 'age', label: '年龄' },
-  ],
+  columns: tableColumns,
   data,
 })
 
@@ -66,9 +68,9 @@ const queryRules = {
   keyword: [{ min: 2, message: '至少两个字符' }],
 }
 
-const querySchema = [
-  { prop: 'keyword', label: '关键词', kind: 'input' as const },
-]
+const querySchema = defineQuerySchema<typeof queryModel.value>([
+  { prop: 'keyword', label: '关键词', kind: 'input' },
+])
 
 const keyword = ref('Fizz UI')
 const city = ref('shanghai')
@@ -418,7 +420,7 @@ function showLoading() {
         v-model:query="queryModel"
         :query-schema="querySchema"
         :query-rules="queryRules"
-        :columns="table.columns.value"
+        :columns="tableColumns"
         :data="table.data"
         :loading="table.loading"
         :pagination="table.pagination"
@@ -434,7 +436,7 @@ function showLoading() {
         组合组件
       </h2>
       <FecTable
-        :columns="table.columns.value"
+        :columns="tableColumns"
         :data="data"
       />
     </section>

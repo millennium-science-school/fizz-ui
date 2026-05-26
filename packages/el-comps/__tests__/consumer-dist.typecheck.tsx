@@ -16,6 +16,10 @@ import type {
 import type { FieldOption } from '@fizz/el-kit'
 import type { Component } from 'vue'
 import {
+  defineFecDetailSchema,
+  defineFecFormSchema,
+  defineFecQuerySchema,
+  defineFecTableColumns,
   FecDetail,
   FecDialogForm,
   FecDrawerForm,
@@ -90,6 +94,12 @@ const formSchema: FecFormSchemaItem<User>[] = [
   { prop: 'name', label: '自定义', component: CustomControl, fieldProps: { placeholder: 'custom' } },
 ]
 
+const helperFormSchema = defineFecFormSchema<User>([
+  { prop: 'name', label: '姓名', kind: 'input', fieldProps: { placeholder: '姓名' } },
+  { prop: 'age', label: '年龄', kind: 'number' },
+  { prop: 'name', label: '自定义', component: CustomControl, fieldProps: { placeholder: 'custom' } },
+])
+
 const invalidFormSchema: FecFormSchemaItem<User>[] = [
   {
     label: '缺失',
@@ -127,6 +137,10 @@ const querySchema: FecQuerySchemaItem<Query>[] = [
   { prop: 'keyword', label: '关键词', kind: 'select', options: statusOptions },
 ]
 
+const helperQuerySchema = defineFecQuerySchema<Query>([
+  { prop: 'keyword', label: '关键词', kind: 'select', options: statusOptions },
+])
+
 const invalidQuerySchema: FecQuerySchemaItem<Query>[] = [
   {
     label: '缺失',
@@ -158,6 +172,19 @@ const tableProps: FecTableProps<User> = {
   data: ref([{ name: 'Tom', age: 18 }]),
   pagination,
 }
+
+const helperColumns = defineFecTableColumns<User>([
+  { prop: 'name', label: '姓名', width: 160, align: 'center' },
+  { prop: 'age', label: '年龄', minWidth: 120 },
+])
+
+defineFecTableColumns<User>([
+  {
+    label: '缺失',
+    // @ts-expect-error defineFecTableColumns should reject unknown row fields
+    prop: 'missing',
+  },
+])
 
 const rowActions: FecRowAction<User>[] = [
   { key: 'edit', label: '编辑' },
@@ -250,6 +277,20 @@ const detailSchema: FecDetailSchemaItem<User>[] = [
   { prop: 'age', label: '年龄', formatter: value => `${value} 岁` },
 ]
 
+const helperDetailSchema = defineFecDetailSchema<User>([
+  { prop: 'name', label: '姓名' },
+  { prop: 'age', label: '年龄', formatter: value => `${value} 岁` },
+])
+
+defineFecDetailSchema<User>([
+  // @ts-expect-error detail formatter value should match the selected field type
+  {
+    prop: 'age',
+    label: '年龄',
+    formatter: (value: string) => value,
+  },
+])
+
 const detailProps: FecDetailProps<User> = {
   record: { name: 'Tom', age: 18 },
   schema: detailSchema,
@@ -304,6 +345,10 @@ const drawerVNode = (
 void invalidFormSchema
 void invalidQuerySchema
 void removedComponentStringSchema
+void helperFormSchema
+void helperQuerySchema
+void helperColumns
+void helperDetailSchema
 void pageVNode
 void formVNode
 void queryFormVNode

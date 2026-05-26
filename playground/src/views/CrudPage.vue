@@ -1,5 +1,9 @@
 <script setup lang="ts">
 import {
+  defineFecDetailSchema,
+  defineFecFormSchema,
+  defineFecQuerySchema,
+  defineFecTableColumns,
   FecDetail,
   FecDialogForm,
   FecPage,
@@ -19,6 +23,11 @@ interface User {
 interface Query {
   keyword: string
   status: string
+}
+
+interface UserForm {
+  name: string
+  age: number
 }
 
 const users = ref<User[]>([
@@ -50,46 +59,46 @@ const pagination = {
   total: ref(users.value.length),
 }
 
-const querySchema = [
-  { prop: 'keyword' as const, label: '姓名', kind: 'input' as const },
+const querySchema = defineFecQuerySchema<Query>([
+  { prop: 'keyword', label: '姓名', kind: 'input' },
   {
-    prop: 'status' as const,
+    prop: 'status',
     label: '状态',
-    kind: 'select' as const,
+    kind: 'select',
     options: [
       { label: '启用', value: 'enabled' },
       { label: '禁用', value: 'disabled' },
     ],
   },
-]
+])
 
-const columns = [
-  { prop: 'name' as const, label: '姓名' },
-  { prop: 'age' as const, label: '年龄', align: 'right' as const },
-  { prop: 'status' as const, label: '状态' },
-]
+const columns = defineFecTableColumns<User>([
+  { prop: 'name', label: '姓名' },
+  { prop: 'age', label: '年龄', align: 'right' },
+  { prop: 'status', label: '状态' },
+])
 
-const formSchema = [
-  { prop: 'name' as const, label: '姓名', kind: 'input' as const },
-  { prop: 'age' as const, label: '年龄', kind: 'number' as const },
-]
+const formSchema = defineFecFormSchema<UserForm>([
+  { prop: 'name', label: '姓名', kind: 'input' },
+  { prop: 'age', label: '年龄', kind: 'number' },
+])
 
-const detailSchema = [
-  { prop: 'name' as const, label: '姓名' },
-  { prop: 'age' as const, label: '年龄', formatter: (v: number) => `${v} 岁` },
-  { prop: 'status' as const, label: '状态' },
-]
+const detailSchema = defineFecDetailSchema<User>([
+  { prop: 'name', label: '姓名' },
+  { prop: 'age', label: '年龄', formatter: (v: number) => `${v} 岁` },
+  { prop: 'status', label: '状态' },
+])
 
 const formRules = {
   name: [{ required: true, message: '姓名必填', trigger: 'blur' }],
-  age: [{ type: 'number' as const, min: 1, message: '年龄须大于 0', trigger: 'blur' }],
+  age: [{ type: 'number', min: 1, message: '年龄须大于 0', trigger: 'blur' }],
 }
 
 // Dialog form state
 const dialogVisible = ref(false)
 const dialogMode = ref<'create' | 'edit'>('create')
 const editingUser = ref<User>({ id: 0, name: '', age: 0, status: 'enabled' })
-const dialogModel = ref({ name: '', age: 0 })
+const dialogModel = ref<UserForm>({ name: '', age: 0 })
 
 function openCreate() {
   dialogMode.value = 'create'
@@ -104,7 +113,7 @@ function openEdit(row: User) {
   dialogVisible.value = true
 }
 
-function handleConfirm(model: { name: string, age: number }) {
+function handleConfirm(model: UserForm) {
   if (dialogMode.value === 'create') {
     users.value.push({ id: nextId++, status: 'enabled', ...model })
   }

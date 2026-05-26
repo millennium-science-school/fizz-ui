@@ -17,7 +17,7 @@ export default defineComponent({
   name: 'FecTable',
   props: {
     columns: {
-      type: Array as PropType<FecTableColumn<object>[]>,
+      type: Array as PropType<readonly FecTableColumn<object>[]>,
       required: true,
     },
     data: {
