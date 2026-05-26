@@ -20,7 +20,10 @@
 // export type { UseFecTableOptions, FecTableColumn } from './types'
 
 import type { AllowedComponentProps, VNodeProps } from 'vue'
-import type { FecFormProps, FecQueryFormProps, FecQueryModel, FecQueryTableProps, FecTableProps } from './components/types'
+import type { FecDetailProps, FecDialogFormProps, FecDrawerFormProps, FecFormProps, FecQueryFormProps, FecQueryModel, FecQueryTableProps, FecTableProps } from './components/types'
+import FecDetailImpl from './components/FecDetail.vue'
+import FecDialogFormImpl from './components/FecDialogForm.vue'
+import FecDrawerFormImpl from './components/FecDrawerForm.vue'
 import FecFormImpl from './components/FecForm.vue'
 import FecQueryFormImpl from './components/FecQueryForm.vue'
 import FecQueryTableImpl from './components/FecQueryTable.vue'
@@ -31,6 +34,10 @@ export type {
   FecBuiltinQuerySchemaItem,
   FecCustomFormSchemaItem,
   FecCustomQuerySchemaItem,
+  FecDetailProps,
+  FecDetailSchemaItem,
+  FecDialogFormProps,
+  FecDrawerFormProps,
   FecFormProps,
   FecFormSchemaItem,
   FecPagination,
@@ -91,3 +98,23 @@ export const FecSection = FecSectionImpl
 export const FecStack = FecStackImpl
 export const FecToolbar = FecToolbarImpl
 export type { FecActionItem, FecActionType, FecRowAction } from './components/actionTypes'
+
+export const FecDetail = FecDetailImpl as unknown as new <T extends object>() => {
+  $props: FecDetailProps<T> & VNodeProps & AllowedComponentProps
+}
+export const FecDialogForm = FecDialogFormImpl as unknown as new <T extends object>() => {
+  $props: FecDialogFormProps<T> & VNodeProps & AllowedComponentProps & {
+    'onUpdate:modelValue'?: (...args: any[]) => void
+    'onUpdate:model'?: (...args: any[]) => void
+    'onConfirm'?: (...args: any[]) => void
+    'onCancel'?: (...args: any[]) => void
+  }
+}
+export const FecDrawerForm = FecDrawerFormImpl as unknown as new <T extends object>() => {
+  $props: FecDrawerFormProps<T> & VNodeProps & AllowedComponentProps & {
+    'onUpdate:modelValue'?: (...args: any[]) => void
+    'onUpdate:model'?: (...args: any[]) => void
+    'onConfirm'?: (...args: any[]) => void
+    'onCancel'?: (...args: any[]) => void
+  }
+}

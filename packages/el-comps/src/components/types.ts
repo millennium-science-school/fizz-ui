@@ -97,3 +97,30 @@ export interface FecQueryTableProps<Row extends object, Query extends FecQueryMo
 
 // Re-export action types for consumers
 export type { FecActionItem, FecRowAction }
+
+export interface FecDetailSchemaItem<T extends object> {
+  prop: Extract<keyof T, string>
+  label: string
+  formatter?: (value: T[Extract<keyof T, string>], record: T) => unknown
+}
+
+export interface FecDetailProps<T extends object> {
+  record: T
+  schema: FecDetailSchemaItem<T>[]
+  columns?: 1 | 2 | 3 | 4
+  emptyText?: string
+}
+
+export interface FecDialogFormProps<T extends object> extends FecFormProps<T> {
+  modelValue: boolean
+  title?: string
+  confirmText?: string
+  cancelText?: string
+}
+
+export interface FecDrawerFormProps<T extends object> extends FecFormProps<T> {
+  modelValue: boolean
+  title?: string
+  confirmText?: string
+  cancelText?: string
+}
