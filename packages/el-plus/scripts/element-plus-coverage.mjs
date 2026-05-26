@@ -8,7 +8,7 @@ const packageRoot = resolve(scriptDir, '..')
 const EXPORT_BODY_RE = /export \{([\s\S]*?)\};/
 const EXPORT_ALIAS_RE = /\s+as\s+/
 const ELEMENT_COMPONENT_EXPORT_RE = /^El[A-Z]/
-const TRANSPARENT_WRAPPER_RE = /(?:createTransparentWrapper|defineFeTransparentComponent)(?:<[^>]+>)?\('Fe\w+',\s*(El\w+),/g
+const TRANSPARENT_WRAPPER_RE = /(?:createTransparentWrapper|defineFeTransparentComponent)(?:<[^>]+>)?\('(?:Fe\w+|ElDescriptionsItem)',\s*(El\w+),/g
 
 const SPECIAL_AND_COMPAT_EL_EXPORTS = [
   'ElConfigProvider',

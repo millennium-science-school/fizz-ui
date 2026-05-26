@@ -72,10 +72,10 @@ describe('@fizz/el-plus runtime exports', () => {
   })
 
   it('exports transparent component wrappers', () => {
-    for (const { name } of transparentWrappers) {
+    for (const { name, runtimeName } of transparentWrappers) {
       const wrapper = FizzEl[name as keyof typeof FizzEl] as { name?: string } | undefined
 
-      expect(wrapper?.name).toBe(name)
+      expect(wrapper?.name).toBe(runtimeName ?? name)
     }
   })
 

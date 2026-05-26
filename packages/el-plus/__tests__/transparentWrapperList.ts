@@ -35,7 +35,7 @@ export const transparentWrappers = [
   { name: 'FeDatePicker', classSuffix: 'date-picker' },
   { name: 'FeDatePickerPanel', classSuffix: 'date-picker-panel' },
   { name: 'FeDescriptions', classSuffix: 'descriptions' },
-  { name: 'FeDescriptionsItem', classSuffix: 'descriptions-item' },
+  { name: 'FeDescriptionsItem', classSuffix: 'descriptions-item', runtimeName: 'ElDescriptionsItem' },
   { name: 'FeDialog', classSuffix: 'dialog' },
   { name: 'FeDivider', classSuffix: 'divider' },
   { name: 'FeDrawer', classSuffix: 'drawer' },

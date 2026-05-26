@@ -1,6 +1,7 @@
 <script lang="ts">
 import type { PropType } from 'vue'
 import type { FecDetailSchemaItem } from './types'
+import { FeDescriptions, FeDescriptionsItem } from '@fizz/el-plus'
 import { defineComponent, h } from 'vue'
 
 export default defineComponent({
@@ -25,20 +26,26 @@ export default defineComponent({
   },
   setup(props) {
     return () =>
-      h('dl', { class: [`fe-comps-detail`, `fe-comps-detail--cols-${props.columns}`] }, props.schema.map((item) => {
-        const raw = props.record[item.prop]
-        const formatted = item.formatter
-          ? item.formatter(raw as never, props.record as never)
-          : raw
-        const display = formatted === null || formatted === undefined || formatted === ''
-          ? props.emptyText
-          : String(formatted)
+      h(
+        FeDescriptions,
+        {
+          class: 'fe-comps-detail',
+          column: props.columns,
+          border: true,
+        },
+        () =>
+          props.schema.map((item) => {
+            const raw = props.record[item.prop]
+            const formatted = item.formatter
+              ? item.formatter(raw as never, props.record as never)
+              : raw
+            const display = formatted === null || formatted === undefined || formatted === ''
+              ? props.emptyText
+              : String(formatted)
 
-        return [
-          h('dt', { class: 'fe-comps-detail-label', key: `${item.prop}-label` }, item.label),
-          h('dd', { class: 'fe-comps-detail-value', key: `${item.prop}-value` }, display),
-        ]
-      }).flat())
+            return h(FeDescriptionsItem, { key: item.prop, label: item.label }, () => display)
+          }),
+      )
   },
 })
 </script>
