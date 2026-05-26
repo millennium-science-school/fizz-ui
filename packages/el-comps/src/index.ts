@@ -57,9 +57,9 @@ export const FecTable = FecTableImpl as unknown as new <Row extends object>() =>
   $props: FecTableProps<Row> & VNodeProps & AllowedComponentProps & {
     'onUpdate:currentPage'?: (...args: any[]) => void
     'onUpdate:pageSize'?: (...args: any[]) => void
-    'onToolbar-action'?: (...args: any[]) => void
-    'onRow-action'?: (...args: any[]) => void
-    'onSelection-change'?: (...args: any[]) => void
+    'onToolbarAction'?: (...args: any[]) => void
+    'onRowAction'?: (...args: any[]) => void
+    'onSelectionChange'?: (...args: any[]) => void
   }
 }
 export const FecQueryTable = FecQueryTableImpl as unknown as new <
@@ -72,9 +72,9 @@ export const FecQueryTable = FecQueryTableImpl as unknown as new <
     'onReset'?: (...args: any[]) => void
     'onUpdate:currentPage'?: (...args: any[]) => void
     'onUpdate:pageSize'?: (...args: any[]) => void
-    'onToolbar-action'?: (...args: any[]) => void
-    'onRow-action'?: (...args: any[]) => void
-    'onSelection-change'?: (...args: any[]) => void
+    'onToolbarAction'?: (...args: any[]) => void
+    'onRowAction'?: (...args: any[]) => void
+    'onSelectionChange'?: (...args: any[]) => void
   }
 }
 

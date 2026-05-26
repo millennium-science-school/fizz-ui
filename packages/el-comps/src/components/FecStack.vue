@@ -1,18 +1,17 @@
 <script lang="ts">
+import type { PropType } from 'vue'
 import { computed, defineComponent, h } from 'vue'
 
 export default defineComponent({
   name: 'FecStack',
   props: {
     direction: {
-      type: String,
-      default: 'vertical',
-      validator: (value: string) => ['vertical', 'horizontal'].includes(value),
+      type: String as PropType<'vertical' | 'horizontal'>,
+      default: 'vertical' as const,
     },
     gap: {
-      type: String,
-      default: 'md',
-      validator: (value: string) => ['xs', 'sm', 'md', 'lg'].includes(value),
+      type: String as PropType<'xs' | 'sm' | 'md' | 'lg'>,
+      default: 'md' as const,
     },
   },
   setup(props, { slots }) {
