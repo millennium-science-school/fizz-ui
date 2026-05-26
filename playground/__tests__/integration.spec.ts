@@ -55,4 +55,62 @@ describe('playground integration contract', () => {
     expect(crud).toContain('submit-text')
     expect(crud).toContain('reset-text')
   })
+
+  it('comps-lab page covers all key components and interactions', () => {
+    const lab = readFileSync(resolve(__dirname, '../src/views/CompsLabPage.vue'), 'utf8')
+    const main = readFileSync(resolve(__dirname, '../src/main.ts'), 'utf8')
+
+    // route is registered
+    expect(main).toContain('/comps-lab')
+    expect(main).toContain('CompsLabPage.vue')
+
+    // all major components are used
+    expect(lab).toContain('FecForm')
+    expect(lab).toContain('FecQueryForm')
+    expect(lab).toContain('FecTable')
+    expect(lab).toContain('FecQueryTable')
+    expect(lab).toContain('FecDialogForm')
+    expect(lab).toContain('FecDrawerForm')
+    expect(lab).toContain('FecDetail')
+    expect(lab).toContain('FecPage')
+    expect(lab).toContain('FecSection')
+    expect(lab).toContain('FecStack')
+
+    // all built-in kinds are exercised
+    expect(lab).toContain('kind: \'input\'')
+    expect(lab).toContain('kind: \'number\'')
+    expect(lab).toContain('kind: \'select\'')
+    expect(lab).toContain('kind: \'switch\'')
+
+    // custom component slot
+    expect(lab).toContain('component: ColorInput')
+
+    // validation rules on dialog/drawer
+    expect(lab).toContain('dialogRules')
+    expect(lab).toContain('required: true')
+
+    // toolbar and row actions
+    expect(lab).toContain('toolbar-actions')
+    expect(lab).toContain('row-actions')
+    expect(lab).toContain('@toolbar-action')
+    expect(lab).toContain('@row-action')
+
+    // loading state
+    expect(lab).toContain(':loading="tableLoading"')
+
+    // FecTable only advertises currently supported capabilities.
+    expect(lab).not.toContain('empty-text')
+    expect(lab).not.toContain('FecTable — formatter')
+
+    // formatter on detail
+    expect(lab).toContain('formatter')
+
+    // confirm/cancel wiring
+    expect(lab).toContain('@confirm')
+    expect(lab).toContain('@cancel')
+
+    // FecDrawerForm is present (not only Dialog)
+    expect(lab).toContain('FecDrawerForm')
+    expect(lab).toContain('drawerVisible')
+  })
 })

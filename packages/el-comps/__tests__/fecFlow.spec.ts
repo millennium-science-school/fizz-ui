@@ -29,6 +29,9 @@ describe('fecDetail', () => {
     await nextTick()
 
     expect(host.querySelector('.fe-comps-detail')).toBeTruthy()
+    expect(host.querySelector('dl.fe-comps-detail')).toBeTruthy()
+    expect(host.querySelectorAll('dt.fe-comps-detail-label')).toHaveLength(2)
+    expect(host.querySelectorAll('dd.fe-comps-detail-value')).toHaveLength(2)
     expect(host.textContent).toContain('姓名')
     expect(host.textContent).toContain('Tom')
     expect(host.textContent).toContain('年龄')
