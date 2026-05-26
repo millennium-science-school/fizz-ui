@@ -1,31 +1,21 @@
 <script lang="ts">
-import type { MaybeRefOrGetter, PropType, Ref } from 'vue'
-import type {
-  FecFormModel,
-  FecFormSchemaItem,
-  FecPagination,
-  FecTableColumn,
-} from './types'
+import type { MaybeRefOrGetter, PropType } from 'vue'
+import type { FecActionItem, FecRowAction } from './actionTypes'
+import type { FecPagination, FecTableColumn } from './types'
 import {
-  FeForm,
+  FeButton,
   FePagination,
   FeTable,
+  FeTableColumn,
+  vFeLoading,
 } from '@fizz/el-plus'
-import { defineComponent, h, isRef, toValue } from 'vue'
-import { renderSchemaFields } from './schemaFields'
+import { defineComponent, h, toValue, withDirectives } from 'vue'
 import { renderTableColumns } from './tableColumns'
+import FecToolbar from './FecToolbar.vue'
 
 export default defineComponent({
   name: 'FecTable',
   props: {
-    form: {
-      type: Object as PropType<FecFormModel>,
-      required: true,
-    },
-    formSchema: {
-      type: Array as PropType<FecFormSchemaItem<Record<string, unknown>>[]>,
-      required: true,
-    },
     columns: {
       type: Array as PropType<FecTableColumn<object>[]>,
       required: true,
@@ -34,59 +24,91 @@ export default defineComponent({
       type: [Array, Object, Function] as PropType<MaybeRefOrGetter<object[]>>,
       required: true,
     },
+    loading: {
+      type: [Boolean, Object, Function] as PropType<MaybeRefOrGetter<boolean>>,
+      default: false,
+    },
     pagination: {
       type: Object as PropType<FecPagination>,
-      required: true,
+      default: undefined,
+    },
+    rowActions: {
+      type: Array as PropType<FecRowAction<object>[]>,
+      default: () => [],
+    },
+    toolbarActions: {
+      type: Array as PropType<FecActionItem[]>,
+      default: () => [],
+    },
+    selectable: {
+      type: Boolean,
+      default: false,
     },
   },
-  emits: ['update:form'],
+  emits: ['toolbar-action', 'row-action', 'selection-change', 'update:currentPage', 'update:pageSize'],
   setup(props, { emit }) {
-    function emitFormField(prop: string, value: unknown) {
-      emit('update:form', {
-        ...props.form,
-        [prop]: value,
+    function renderRowActionColumn(rows: object[]) {
+      const visibleActions = props.rowActions.filter(a => !a.hidden)
+      if (!visibleActions.length) return null
+
+      return h(FeTableColumn, { label: '操作', fixed: 'right' }, {
+        default: ({ row, $index }: { row: object, $index: number }) =>
+          visibleActions.map(action =>
+            h(FeButton, {
+              key: action.key,
+              size: 'small',
+              type: action.type,
+              disabled: action.disabled,
+              onClick: () => {
+                if (action.onClick) action.onClick(row as never, $index)
+                emit('row-action', action.key, row, $index, action)
+              },
+            }, () => action.label),
+          ),
       })
     }
 
-    function updateCurrentPage(page: number) {
-      if (isRef(props.pagination.currentPage)) {
-        const currentPage = props.pagination.currentPage as Ref<number>
-        currentPage.value = page
-      }
-    }
+    return () => {
+      const data = toValue(props.data)
+      const loading = toValue(props.loading)
 
-    return () =>
-      h('div', { class: 'fe-comps-table-wrap' }, [
-        h(
-          FeForm,
-          {
-            class: 'fe-comps-form',
-            inline: true,
-            model: props.form,
-          },
-          () =>
-            renderSchemaFields({
-              schema: props.formSchema,
-              model: props.form,
-              onUpdateField: emitFormField,
-            }),
-        ),
+      const tableNode = withDirectives(
         h(
           FeTable,
           {
             class: 'fe-comps-table',
-            data: toValue(props.data),
+            data,
+            onSelectionChange: (selection: object[]) => emit('selection-change', selection),
           },
-          () => renderTableColumns(props.columns),
+          () => [
+            props.selectable ? h(FeTableColumn, { type: 'selection', width: 55 }) : null,
+            ...renderTableColumns(props.columns),
+            renderRowActionColumn(data),
+          ],
         ),
-        h(FePagination, {
-          'class': 'fe-comps-pagination',
-          'currentPage': toValue(props.pagination.currentPage),
-          'total': toValue(props.pagination.total),
-          'pageSize': toValue(props.pagination.pageSize),
-          'onUpdate:currentPage': updateCurrentPage,
-        }),
+        [[vFeLoading, loading]],
+      )
+
+      return h('div', { class: 'fe-comps-table-wrap' }, [
+        props.toolbarActions.length
+          ? h(FecToolbar, {
+              actions: props.toolbarActions,
+              onAction: (key: string, action: FecActionItem) => emit('toolbar-action', key, action),
+            })
+          : null,
+        tableNode,
+        props.pagination
+          ? h(FePagination, {
+              'class': 'fe-comps-pagination',
+              'currentPage': toValue(props.pagination.currentPage),
+              'total': toValue(props.pagination.total),
+              'pageSize': toValue(props.pagination.pageSize),
+              'onUpdate:currentPage': (page: number) => emit('update:currentPage', page),
+              'onUpdate:pageSize': (size: number) => emit('update:pageSize', size),
+            })
+          : null,
       ])
+    }
   },
 })
 </script>

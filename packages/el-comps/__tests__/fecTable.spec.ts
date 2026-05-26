@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { createApp, defineComponent, h, nextTick, ref } from 'vue'
+import { createApp, h, nextTick, ref } from 'vue'
 import { FecTable } from '../src'
 import { renderSchemaFields } from '../src/components/schemaFields'
 
@@ -8,42 +8,14 @@ interface User {
   age: number
 }
 
-const CustomControl = defineComponent({
-  name: 'CustomControl',
-  props: {
-    modelValue: {
-      type: String,
-      default: '',
-    },
-    placeholder: {
-      type: String,
-      default: '',
-    },
-  },
-  emits: ['update:modelValue'],
-  setup(props, { emit }) {
-    return () =>
-      h('input', {
-        'data-custom-control': 'yes',
-        'placeholder': props.placeholder,
-        'value': props.modelValue,
-        'onInput': (event: Event) => {
-          emit('update:modelValue', (event.target as HTMLInputElement).value)
-        },
-      })
-  },
-})
-
 describe('fecTable', () => {
-  it('renders stable structural classes for form table and pagination', async () => {
+  it('renders table and pagination without form', async () => {
     const host = document.createElement('div')
     document.body.append(host)
 
     const app = createApp({
       render: () =>
         h(FecTable<User>, {
-          form: { name: '' },
-          formSchema: [{ prop: 'name', label: '姓名', kind: 'input' }],
           columns: [
             { prop: 'name', label: '姓名' },
             { prop: 'age', label: '年龄' },
@@ -60,25 +32,24 @@ describe('fecTable', () => {
     app.mount(host)
     await nextTick()
 
-    expect(host.querySelector('.fe-comps-form')).toBeTruthy()
     expect(host.querySelector('.fe-comps-table')).toBeTruthy()
     expect(host.querySelector('.fe-comps-pagination')).toBeTruthy()
+    expect(host.querySelector('.fe-comps-form')).toBeNull()
 
     app.unmount()
     host.remove()
   })
 
-  it('accepts getter based table data', async () => {
+  it('accepts getter based table data and loading', async () => {
     const host = document.createElement('div')
     document.body.append(host)
 
     const app = createApp({
       render: () =>
         h(FecTable<User>, {
-          form: { name: '' },
-          formSchema: [{ prop: 'name', label: '姓名', kind: 'input' }],
           columns: [{ prop: 'name', label: '姓名' }],
           data: () => [{ name: 'Getter', age: 18 }],
+          loading: ref(false),
           pagination: {
             currentPage: 1,
             total: () => 1,
@@ -96,141 +67,53 @@ describe('fecTable', () => {
     host.remove()
   })
 
-  it('emits update:form instead of mutating the original form object', async () => {
+  it('renders toolbar when toolbarActions are provided', async () => {
     const host = document.createElement('div')
     document.body.append(host)
-    const originalForm = Object.freeze({ name: '' })
-    const updates: Array<Record<string, unknown>> = []
+    const actions: string[] = []
 
     const app = createApp({
       render: () =>
         h(FecTable<User>, {
-          'form': originalForm,
-          'onUpdate:form': value => updates.push(value),
-          'formSchema': [{ prop: 'name', label: '姓名', kind: 'input' }],
-          'columns': [{ prop: 'name', label: '姓名' }],
-          'data': ref([{ name: 'Tom', age: 18 }]),
-          'pagination': {
-            currentPage: ref(1),
-            total: ref(1),
-            pageSize: 10,
-          },
+          columns: [{ prop: 'name', label: '姓名' }],
+          data: ref([]),
+          toolbarActions: [
+            { key: 'create', label: '新建', type: 'primary' },
+          ],
+          'onToolbar-action': (key: string) => actions.push(key),
         }),
     })
 
     app.mount(host)
     await nextTick()
 
-    const input = host.querySelector('input') as HTMLInputElement
-    input.value = 'Ann'
-    input.dispatchEvent(new Event('input'))
-    await nextTick()
+    expect(host.querySelector('.fe-comps-toolbar')).toBeTruthy()
+    expect(host.textContent).toContain('新建')
 
-    expect(originalForm.name).toBe('')
-    expect(updates.at(-1)).toEqual({ name: 'Ann' })
+    ;(host.querySelector('button') as HTMLButtonElement).click()
+    await nextTick()
+    expect(actions).toEqual(['create'])
 
     app.unmount()
     host.remove()
   })
 
-  it('supports extended builtin semantic controls', async () => {
+  it('emits update:currentPage from pagination', async () => {
     const host = document.createElement('div')
     document.body.append(host)
+    const pageUpdates: number[] = []
 
     const app = createApp({
       render: () =>
         h(FecTable<User>, {
-          form: { name: '', enabled: false },
-          formSchema: [
-            { prop: 'name', label: '输入', kind: 'textarea' },
-            { prop: 'enabled', label: '开关', kind: 'switch' },
-          ],
           columns: [{ prop: 'name', label: '姓名' }],
           data: ref([{ name: 'Tom', age: 18 }]),
           pagination: {
             currentPage: ref(1),
-            total: ref(1),
-            pageSize: 10,
-          },
-        }),
-    })
-
-    app.mount(host)
-    await nextTick()
-
-    expect(host.querySelector('textarea')).toBeTruthy()
-    expect(host.querySelector('.fe-switch')).toBeTruthy()
-
-    app.unmount()
-    host.remove()
-  })
-
-  it('accepts semantic and custom form controls', async () => {
-    const host = document.createElement('div')
-    document.body.append(host)
-    const updates: Array<Record<string, unknown>> = []
-
-    const app = createApp({
-      render: () =>
-        h(FecTable<User>, {
-          'form': { name: '' },
-          'onUpdate:form': value => updates.push(value),
-          'formSchema': [
-            { prop: 'name', label: '姓名', kind: 'input' },
-            {
-              prop: 'name',
-              label: '自定义',
-              component: CustomControl,
-              fieldProps: { placeholder: 'custom-name' },
-            },
-          ],
-          'columns': [{ prop: 'name', label: '姓名' }],
-          'data': ref([{ name: 'Tom', age: 18 }]),
-          'pagination': {
-            currentPage: ref(1),
-            total: ref(1),
-            pageSize: 10,
-          },
-        }),
-    })
-
-    app.mount(host)
-    await nextTick()
-
-    const customInput = host.querySelector('[data-custom-control="yes"]') as HTMLInputElement
-    expect(customInput?.getAttribute('placeholder')).toBe('custom-name')
-
-    customInput.value = 'Ann'
-    customInput.dispatchEvent(new Event('input'))
-    await nextTick()
-
-    expect(updates.at(-1)).toEqual({ name: 'Ann' })
-
-    app.unmount()
-    host.remove()
-  })
-
-  it('updates writable current page refs from pagination events', async () => {
-    const host = document.createElement('div')
-    document.body.append(host)
-    const currentPage = ref(1)
-
-    const app = createApp({
-      render: () =>
-        h(FecTable<User>, {
-          form: { name: '' },
-          formSchema: [{ prop: 'name', label: '姓名', kind: 'input' }],
-          columns: [{ prop: 'name', label: '姓名' }],
-          data: ref([
-            { name: 'Tom', age: 18 },
-            { name: 'Jerry', age: 20 },
-            { name: 'Ann', age: 22 },
-          ]),
-          pagination: {
-            currentPage,
             total: ref(30),
             pageSize: ref(10),
           },
+          'onUpdate:currentPage': (page: number) => pageUpdates.push(page),
         }),
     })
 
@@ -241,7 +124,7 @@ describe('fecTable', () => {
     nextButton.click()
     await nextTick()
 
-    expect(currentPage.value).toBe(2)
+    expect(pageUpdates).toContain(2)
 
     app.unmount()
     host.remove()
@@ -254,17 +137,10 @@ describe('fecTable', () => {
     const app = createApp({
       render: () =>
         h(FecTable<User>, {
-          form: { name: '' },
-          formSchema: [{ prop: 'name', label: '姓名', kind: 'input' }],
           columns: [
             { prop: 'name', label: '姓名', width: 160, minWidth: 120, align: 'center' },
           ],
           data: ref([{ name: 'Tom', age: 18 }]),
-          pagination: {
-            currentPage: ref(1),
-            total: ref(1),
-            pageSize: ref(10),
-          },
         }),
     })
 
@@ -279,6 +155,41 @@ describe('fecTable', () => {
     host.remove()
   })
 
+  it('renders row actions and emits row-action', async () => {
+    const host = document.createElement('div')
+    document.body.append(host)
+    const rowEvents: Array<{ key: string, row: User }> = []
+
+    const app = createApp({
+      render: () =>
+        h(FecTable<User>, {
+          columns: [{ prop: 'name', label: '姓名' }],
+          data: ref([{ name: 'Tom', age: 18 }]),
+          rowActions: [{ key: 'edit', label: '编辑' }],
+          'onRow-action': (key: string, row: User) => rowEvents.push({ key, row }),
+        }),
+    })
+
+    app.mount(host)
+    await nextTick()
+    await nextTick()
+
+    const editBtn = Array.from(host.querySelectorAll('button')).find(
+      b => b.textContent?.includes('编辑'),
+    )
+    expect(editBtn).toBeTruthy()
+    editBtn!.click()
+    await nextTick()
+
+    expect(rowEvents[0]?.key).toBe('edit')
+    expect(rowEvents[0]?.row?.name).toBe('Tom')
+
+    app.unmount()
+    host.remove()
+  })
+})
+
+describe('renderSchemaFields', () => {
   it('renders select options from field schema metadata', () => {
     const fields = renderSchemaFields({
       schema: [

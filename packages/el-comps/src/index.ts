@@ -59,9 +59,13 @@ export const FecQueryForm = FecQueryFormImpl as unknown as new <T extends object
 // Using the constructor-generic pattern (`new <T>() => { $props: P }`) lets
 // consumers pass explicit type arguments (`<FecTable<User> ...>` in JSX) and
 // preserves row/query-key validation at the component level.
-export const FecTable = FecTableImpl as unknown as new <T extends object>() => {
-  $props: FecTableProps<T> & VNodeProps & AllowedComponentProps & {
-    'onUpdate:form'?: (...args: any[]) => void
+export const FecTable = FecTableImpl as unknown as new <Row extends object>() => {
+  $props: FecTableProps<Row> & VNodeProps & AllowedComponentProps & {
+    'onUpdate:currentPage'?: (...args: any[]) => void
+    'onUpdate:pageSize'?: (...args: any[]) => void
+    'onToolbar-action'?: (...args: any[]) => void
+    'onRow-action'?: (...args: any[]) => void
+    'onSelection-change'?: (...args: any[]) => void
   }
 }
 export const FecQueryTable = FecQueryTableImpl as unknown as new <
