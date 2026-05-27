@@ -11,7 +11,12 @@ import {
   FecSection,
 } from '@fizz/el-comps'
 import { FeButton, FeDialog } from '@fizz/el-plus'
-import { ref } from 'vue'
+import {
+  useDetailState,
+  useDialogFormState,
+  useQueryTable,
+} from '@fizz/el-kit'
+import { computed, ref } from 'vue'
 
 interface User {
   id: number
@@ -37,27 +42,6 @@ const users = ref<User[]>([
 ])
 
 let nextId = 4
-
-const queryModel = ref<Query>({ keyword: '', status: '' })
-
-const filteredUsers = ref<User[]>(users.value)
-
-function applyQuery() {
-  const { keyword, status } = queryModel.value
-  filteredUsers.value = users.value.filter((u) => {
-    if (keyword && !u.name.includes(keyword))
-      return false
-    if (status && u.status !== status)
-      return false
-    return true
-  })
-}
-
-const pagination = {
-  currentPage: ref(1),
-  pageSize: ref(10),
-  total: ref(users.value.length),
-}
 
 const querySchema = defineFecQuerySchema<Query>([
   { prop: 'keyword', label: '姓名', kind: 'input' },
@@ -94,51 +78,57 @@ const formRules = {
   age: [{ type: 'number', min: 1, message: '年龄须大于 0', trigger: 'blur' }],
 }
 
-// Dialog form state
-const dialogVisible = ref(false)
-const dialogMode = ref<'create' | 'edit'>('create')
-const editingUser = ref<User>({ id: 0, name: '', age: 0, status: 'enabled' })
-const dialogModel = ref<UserForm>({ name: '', age: 0 })
+const list = useQueryTable<User, Query>({
+  columns,
+  fetchList: ({ query }) => {
+    const data = users.value.filter((u) => {
+      if (query.keyword && !u.name.includes(query.keyword))
+        return false
+      if (query.status && u.status !== query.status)
+        return false
+      return true
+    })
+    return { data, total: data.length }
+  },
+  immediate: true,
+  query: { keyword: '', status: '' },
+})
+
+const dialog = useDialogFormState<UserForm, User>({
+  createModel: () => ({ name: '', age: 0 }),
+  toFormModel: user => ({ name: user.name, age: user.age }),
+})
+
+const detail = useDetailState<User>()
+
+const dialogTitle = computed(() =>
+  dialog.mode.value === 'create' ? '新建用户' : '编辑用户',
+)
 
 function openCreate() {
-  dialogMode.value = 'create'
-  dialogModel.value = { name: '', age: 0 }
-  dialogVisible.value = true
+  dialog.openCreate()
 }
 
 function openEdit(row: User) {
-  dialogMode.value = 'edit'
-  editingUser.value = row
-  dialogModel.value = { name: row.name, age: row.age }
-  dialogVisible.value = true
+  dialog.openEdit(row)
 }
 
-function handleConfirm(model: UserForm) {
-  if (dialogMode.value === 'create') {
+async function handleConfirm(model: UserForm) {
+  if (dialog.mode.value === 'create') {
     users.value.push({ id: nextId++, status: 'enabled', ...model })
   }
-  else {
-    Object.assign(editingUser.value, model)
+  else if (dialog.editingRecord.value) {
+    Object.assign(dialog.editingRecord.value, model)
   }
-  filteredUsers.value = [...users.value]
-  pagination.total.value = users.value.length
-  dialogVisible.value = false
-}
-
-// Detail state
-const detailVisible = ref(false)
-const detailRecord = ref<User>({ id: 0, name: '', age: 0, status: '' })
-
-function openDetail(row: User) {
-  detailRecord.value = row
-  detailVisible.value = true
+  dialog.close()
+  await list.refresh()
 }
 
 function handleRowAction(key: string, row: User) {
   if (key === 'edit')
     openEdit(row)
   else if (key === 'detail')
-    openDetail(row)
+    detail.open(row)
 }
 </script>
 
@@ -146,11 +136,12 @@ function handleRowAction(key: string, row: User) {
   <FecPage title="用户管理" description="示例 CRUD 管理页面">
     <FecSection title="用户列表">
       <FecQueryTable
-        v-model:query="queryModel"
+        :query="list.query.model.value"
         :query-schema="querySchema"
-        :columns="columns"
-        :data="filteredUsers"
-        :pagination="pagination"
+        :columns="list.table.columns.value"
+        :data="list.table.data.value"
+        :loading="list.loading.value"
+        :pagination="list.pagination"
         :toolbar-actions="[{ key: 'create', label: '新建用户', type: 'primary' }]"
         :row-actions="[
           { key: 'edit', label: '编辑' },
@@ -158,8 +149,9 @@ function handleRowAction(key: string, row: User) {
         ]"
         submit-text="查询"
         reset-text="重置"
-        @submit="applyQuery"
-        @reset="() => { queryModel = { keyword: '', status: '' }; applyQuery() }"
+        @update:query="list.query.setModel"
+        @submit="list.submit"
+        @reset="list.reset"
         @toolbar-action="(key) => key === 'create' && openCreate()"
         @row-action="handleRowAction"
       />
@@ -167,19 +159,31 @@ function handleRowAction(key: string, row: User) {
   </FecPage>
 
   <FecDialogForm
-    v-model:model-value="dialogVisible"
-    v-model:model="dialogModel"
-    :title="dialogMode === 'create' ? '新建用户' : '编辑用户'"
+    :model-value="dialog.visible.value"
+    :model="dialog.model.value"
+    :title="dialogTitle"
     :schema="formSchema"
     :rules="formRules"
+    @update:model-value="(value) => { if (!value) dialog.close() }"
+    @update:model="dialog.setModel"
     @confirm="handleConfirm"
-    @cancel="dialogVisible = false"
+    @cancel="dialog.close"
   />
 
-  <FeDialog v-model="detailVisible" title="用户详情" width="480px">
-    <FecDetail :record="detailRecord" :schema="detailSchema" :columns="1" />
+  <FeDialog
+    :model-value="detail.visible.value"
+    title="用户详情"
+    width="480px"
+    @update:model-value="(value) => { if (!value) detail.close() }"
+  >
+    <FecDetail
+      v-if="detail.record.value"
+      :record="detail.record.value"
+      :schema="detailSchema"
+      :columns="1"
+    />
     <template #footer>
-      <FeButton @click="detailVisible = false">
+      <FeButton @click="detail.close">
         关闭
       </FeButton>
     </template>
