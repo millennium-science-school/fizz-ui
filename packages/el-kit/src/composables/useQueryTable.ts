@@ -1,6 +1,6 @@
 import type { Ref } from 'vue'
-import type { QueryState } from './useQueryState'
 import type { PaginationState } from './usePaginationState'
+import type { QueryState } from './useQueryState'
 import type { TableColumn, TableState } from './useTable'
 import { shallowRef } from 'vue'
 import { usePaginationState } from './usePaginationState'

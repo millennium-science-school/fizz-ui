@@ -10,12 +10,12 @@ import {
   FecQueryTable,
   FecSection,
 } from '@fizz/el-comps'
-import { FeButton, FeDialog } from '@fizz/el-plus'
 import {
   useDetailState,
   useDialogFormState,
   useQueryTable,
 } from '@fizz/el-kit'
+import { FeButton, FeDialog } from '@fizz/el-plus'
 import { computed, ref } from 'vue'
 
 interface User {
