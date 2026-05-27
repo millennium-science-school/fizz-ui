@@ -17,6 +17,14 @@ export type {
   PaginationState,
   UsePaginationStateOptions,
 } from './composables/usePaginationState'
+export { useDetailState } from './composables/useDetailState'
+export type { DetailState } from './composables/useDetailState'
+export { useDialogFormState } from './composables/useDialogFormState'
+export type {
+  DialogFormMode,
+  DialogFormState,
+  UseDialogFormStateOptions,
+} from './composables/useDialogFormState'
 export { useQueryForm } from './composables/useQueryForm'
 export type {
   QueryFormModel,
