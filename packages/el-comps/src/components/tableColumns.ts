@@ -3,7 +3,7 @@ import type { VNodeChild } from 'vue'
 import { FeTableColumn } from '@fizz/el-plus'
 import { h } from 'vue'
 
-export function renderTableColumns<T extends object>(columns: TableColumn<T>[]): VNodeChild[] {
+export function renderTableColumns<T extends object>(columns: readonly TableColumn<T>[]): VNodeChild[] {
   return columns.map(column =>
     h(FeTableColumn, {
       key: column.prop,

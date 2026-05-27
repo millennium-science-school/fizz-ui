@@ -13,7 +13,7 @@ export default defineComponent({
       required: true,
     },
     schema: {
-      type: Array as PropType<FecFormSchemaItem<Record<string, unknown>>[]>,
+      type: Array as PropType<readonly FecFormSchemaItem<Record<string, unknown>>[]>,
       required: true,
     },
     rules: {

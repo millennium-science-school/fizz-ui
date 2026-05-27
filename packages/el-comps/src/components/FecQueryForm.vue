@@ -13,7 +13,7 @@ export default defineComponent({
       required: true,
     },
     schema: {
-      type: Array as PropType<FecQuerySchemaItem<Record<string, unknown>>[]>,
+      type: Array as PropType<readonly FecQuerySchemaItem<Record<string, unknown>>[]>,
       required: true,
     },
     rules: {

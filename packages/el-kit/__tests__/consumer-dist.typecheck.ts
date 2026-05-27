@@ -7,7 +7,18 @@ import type {
   TableColumn,
   UseTableOptions,
 } from '@fizz/el-kit'
-import { useQueryForm, useTable } from '@fizz/el-kit'
+import {
+  defineFormSchema,
+  defineQuerySchema,
+  defineTableColumns,
+  useDetailState,
+  useDialogFormState,
+  usePaginationState,
+  useQueryForm,
+  useQueryState,
+  useQueryTable,
+  useTable,
+} from '@fizz/el-kit'
 import { ref } from 'vue'
 
 interface User {
@@ -24,6 +35,19 @@ const columns: TableColumn<User>[] = [
   { prop: 'name', label: '姓名' },
   { prop: 'age', label: '年龄', align: 'right', minWidth: 120 },
 ]
+
+const helperColumns = defineTableColumns<User>([
+  { prop: 'name', label: '姓名' },
+  { prop: 'age', label: '年龄', align: 'right', minWidth: 120 },
+])
+
+defineTableColumns<User>([
+  {
+    label: '缺失',
+    // @ts-expect-error defineTableColumns should reject unknown row fields
+    prop: 'missing',
+  },
+])
 
 const invalidColumns: TableColumn<User>[] = [
   {
@@ -96,10 +120,20 @@ const formSchema: FormSchemaItem<User>[] = [
   { prop: 'age', label: '年龄', kind: 'number' },
 ]
 
+const helperFormSchema = defineFormSchema<User>([
+  { prop: 'name', label: '姓名', kind: 'input' },
+  { prop: 'age', label: '年龄', kind: 'number' },
+])
+
 const querySchema: QuerySchemaItem<Query>[] = [
   { prop: 'keyword', label: '关键词', kind: 'input' },
   { prop: 'enabled', label: '状态', kind: fieldKind, options: statusOptions },
 ]
+
+const helperQuerySchema = defineQuerySchema<Query>([
+  { prop: 'keyword', label: '关键词', kind: 'input' },
+  { prop: 'enabled', label: '状态', kind: fieldKind, options: statusOptions },
+])
 
 const invalidFormSchema: FormSchemaItem<User>[] = [
   {
@@ -125,7 +159,60 @@ void table
 void queryForm
 void submitted
 void formSchema
+void helperColumns
+void helperFormSchema
+void helperQuerySchema
 void querySchema
 void invalidFormSchema
 void invalidControlKind
 void statusOptions
+
+// --- New CRUD headless APIs ---
+
+const paginationState = usePaginationState({ pageSize: 20 })
+paginationState.setPage(2)
+paginationState.resetPage()
+
+const queryState = useQueryState<Query>({
+  model: { keyword: '', enabled: false },
+})
+queryState.setField('enabled', true)
+// @ts-expect-error query state should preserve field value types
+queryState.setField('enabled', 'yes')
+
+interface UserForm {
+  name: string
+  age: number
+}
+
+const dialogFormState = useDialogFormState<UserForm, User>({
+  createModel: () => ({ name: '', age: 0 }),
+  toFormModel: user => ({ name: user.name, age: user.age }),
+})
+dialogFormState.openCreate()
+dialogFormState.openEdit({ name: 'Tom', age: 18 })
+
+const detailState = useDetailState<User>()
+detailState.open({ name: 'Tom', age: 18 })
+
+const queryTableState = useQueryTable<User, Query>({
+  columns: helperColumns,
+  query: { keyword: '', enabled: false },
+  fetchList: async request => ({
+    data: [{ name: request.query.keyword || 'Tom', age: 18 }],
+    total: 1,
+  }),
+})
+
+async function exerciseCrudApis() {
+  await queryTableState.submit()
+  await queryTableState.setPage(2)
+  await queryTableState.setPageSize(20)
+}
+
+void paginationState
+void queryState
+void dialogFormState
+void detailState
+void queryTableState
+void exerciseCrudApis

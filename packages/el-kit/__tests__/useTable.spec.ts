@@ -103,4 +103,22 @@ describe('useTable', () => {
       'data is readonly',
     )
   })
+
+  it('exposes pagination reset through the table state', () => {
+    const table = useTable<User>({
+      columns: [{ prop: 'name', label: '姓名' }],
+      data: [{ name: 'Tom', age: 18 }],
+      pagination: {
+        currentPage: 4,
+        pageSize: 20,
+        total: 90,
+      },
+    })
+
+    expect(table.pagination.currentPage.value).toBe(4)
+
+    table.resetPage()
+
+    expect(table.pagination.currentPage.value).toBe(1)
+  })
 })

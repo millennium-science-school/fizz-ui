@@ -1,10 +1,6 @@
 import type { MaybeRefOrGetter, Ref } from 'vue'
-import {
-  computed,
-  isReadonly,
-  isRef,
-  shallowRef,
-} from 'vue'
+import { createStateSource } from './stateSource'
+import { useQueryState } from './useQueryState'
 
 export type QueryFormModel = object
 
@@ -40,80 +36,33 @@ export interface QueryFormState<T extends QueryFormModel> {
   submit: () => void
 }
 
-interface StateSource<T> {
-  ref: Ref<T>
-  set: (value: T) => void
-}
-
 function cloneModel<T extends QueryFormModel>(model: T): T {
   return { ...model }
-}
-
-function createModelSource<T extends QueryFormModel>(
-  source: MaybeRefOrGetter<T>,
-): StateSource<T> {
-  return createStateSource('model', source)
-}
-
-function createStateSource<T>(
-  name: string,
-  source: MaybeRefOrGetter<T>,
-): StateSource<T> {
-  const state = isRef(source)
-    ? source
-    : typeof source === 'function'
-      ? computed(source as () => T)
-      : shallowRef(source)
-
-  return {
-    ref: state as Ref<T>,
-    set(value: T) {
-      if (isReadonly(state)) {
-        throw new Error(`${name} is readonly`)
-      }
-
-      const writableState = state as Ref<T>
-      writableState.value = value
-    },
-  }
 }
 
 export function useQueryForm<T extends QueryFormModel>(
   options: UseQueryFormOptions<T>,
 ): QueryFormState<T> {
-  const model = createModelSource(options.model)
+  const query = useQueryState({
+    initialModel: options.initialModel,
+    model: options.model,
+  })
   const rules = createStateSource<QueryFormRules<T>>('rules', options.rules ?? {})
-  const initialModel = cloneModel(options.initialModel ?? model.ref.value)
-
-  function setModel(value: T) {
-    model.set(value)
-  }
-
-  function setField<K extends Extract<keyof T, string>>(field: K, value: T[K]) {
-    setModel({
-      ...model.ref.value,
-      [field]: value,
-    })
-  }
 
   function setRules(value: QueryFormRules<T>) {
     rules.set(value)
   }
 
-  function reset() {
-    setModel(cloneModel(initialModel))
-  }
-
   function submit() {
-    options.onSubmit?.(cloneModel(model.ref.value))
+    options.onSubmit?.(cloneModel(query.model.value))
   }
 
   return {
-    model: model.ref,
-    reset,
+    model: query.model,
+    reset: query.reset,
     rules: rules.ref,
-    setField,
-    setModel,
+    setField: query.setField,
+    setModel: query.setModel,
     setRules,
     submit,
   }

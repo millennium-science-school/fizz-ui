@@ -29,7 +29,8 @@
     "skipLibCheck": true
   },
   "include": [
-    "__tests__/consumer-dist.typecheck.tsx"
+    "__tests__/consumer-dist.typecheck.tsx",
+    "__tests__/consumer-template.typecheck.vue"
   ],
   "exclude": [
     "node_modules",

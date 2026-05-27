@@ -21,13 +21,13 @@ export type FecBuiltinQuerySchemaItem<T extends object>
   = QuerySchemaItem<T> & FecRenderFieldConfig
 
 export interface FecCustomFormSchemaItem<T extends object> extends FecRenderFieldConfig {
-  prop: Extract<keyof T, string>
+  prop: [keyof T] extends [never] ? string : Extract<keyof T, string>
   label: string
   component: Component
 }
 
 export interface FecCustomQuerySchemaItem<T extends object> extends FecRenderFieldConfig {
-  prop: Extract<keyof T, string>
+  prop: [keyof T] extends [never] ? string : Extract<keyof T, string>
   label: string
   component: Component
 }
@@ -43,6 +43,24 @@ export type FecQuerySchemaItem<T extends object>
 export type FecTableColumn<T extends object> = TableColumn<T>
 export type FecQueryTableColumn<T extends object> = TableColumn<T>
 
+export function defineFecFormSchema<T extends object>(
+  schema: readonly FecFormSchemaItem<T>[],
+): readonly FecFormSchemaItem<T>[] {
+  return schema
+}
+
+export function defineFecQuerySchema<T extends object>(
+  schema: readonly FecQuerySchemaItem<T>[],
+): readonly FecQuerySchemaItem<T>[] {
+  return schema
+}
+
+export function defineFecTableColumns<T extends object>(
+  columns: readonly FecTableColumn<T>[],
+): readonly FecTableColumn<T>[] {
+  return columns
+}
+
 export interface FecPagination {
   currentPage: MaybeRefOrGetter<number>
   total: MaybeRefOrGetter<number>
@@ -57,7 +75,7 @@ export interface FecQueryPagination {
 
 export interface FecFormProps<T extends object> {
   model: T
-  schema: FecFormSchemaItem<T>[]
+  schema: readonly FecFormSchemaItem<T>[]
   rules?: QueryFormRules<T>
   labelWidth?: string | number
   columns?: 1 | 2 | 3 | 4
@@ -65,7 +83,7 @@ export interface FecFormProps<T extends object> {
 
 export interface FecQueryFormProps<T extends object> {
   model: T
-  schema: FecQuerySchemaItem<T>[]
+  schema: readonly FecQuerySchemaItem<T>[]
   rules?: QueryFormRules<T>
   labelWidth?: string | number
   columns?: 1 | 2 | 3 | 4
@@ -74,7 +92,7 @@ export interface FecQueryFormProps<T extends object> {
 }
 
 export interface FecTableProps<Row extends object> {
-  columns: FecTableColumn<Row>[]
+  columns: readonly FecTableColumn<Row>[]
   data: MaybeRefOrGetter<Row[]>
   loading?: MaybeRefOrGetter<boolean>
   pagination?: FecPagination
@@ -85,9 +103,9 @@ export interface FecTableProps<Row extends object> {
 
 export interface FecQueryTableProps<Row extends object, Query extends FecQueryModel> {
   query: Query
-  querySchema: FecQuerySchemaItem<Query>[]
+  querySchema: readonly FecQuerySchemaItem<Query>[]
   queryRules?: QueryFormRules<Query>
-  columns: FecQueryTableColumn<Row>[]
+  columns: readonly FecQueryTableColumn<Row>[]
   data: MaybeRefOrGetter<Row[]>
   loading?: MaybeRefOrGetter<boolean>
   pagination?: FecPagination
@@ -101,15 +119,35 @@ export interface FecQueryTableProps<Row extends object, Query extends FecQueryMo
 // Re-export action types for consumers
 export type { FecActionItem, FecRowAction }
 
-export interface FecDetailSchemaItem<T extends object> {
-  prop: Extract<keyof T, string>
+export type FecDetailSchemaItem<T extends object> = [keyof T] extends [never]
+  ? {
+      prop: string
+      label: string
+      formatter?: (value: unknown, record: T) => unknown
+    }
+  : {
+      [K in Extract<keyof T, string>]: {
+        prop: K
+        label: string
+        formatter?: (value: T[K], record: T) => unknown
+      }
+    }[Extract<keyof T, string>]
+
+export interface FecLooseDetailSchemaItem {
+  prop: string
   label: string
-  formatter?: (value: T[Extract<keyof T, string>], record: T) => unknown
+  formatter?: (value: unknown, record: Record<string, unknown>) => unknown
+}
+
+export function defineFecDetailSchema<T extends object>(
+  schema: readonly FecDetailSchemaItem<T>[],
+): readonly FecDetailSchemaItem<T>[] {
+  return schema
 }
 
 export interface FecDetailProps<T extends object> {
   record: T
-  schema: FecDetailSchemaItem<T>[]
+  schema: readonly FecDetailSchemaItem<T>[]
   columns?: 1 | 2 | 3 | 4
   emptyText?: string
 }

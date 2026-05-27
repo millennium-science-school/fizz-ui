@@ -29,7 +29,7 @@ describe('playground integration contract', () => {
     expect(home).toContain('透明包装')
     expect(home).toContain('兼容别名')
     expect(home).toContain('table.columns.value.map')
-    expect(home).toContain(':columns="table.columns.value"')
+    expect(home).toContain(':columns="tableColumns"')
   })
 
   it('cRUD demo page uses the new CRUD wave components', () => {

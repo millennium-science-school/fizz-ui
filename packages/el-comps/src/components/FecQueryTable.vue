@@ -14,7 +14,7 @@ export default defineComponent({
       required: true,
     },
     querySchema: {
-      type: Array as PropType<FecQuerySchemaItem<Record<string, unknown>>[]>,
+      type: Array as PropType<readonly FecQuerySchemaItem<Record<string, unknown>>[]>,
       required: true,
     },
     queryRules: {
@@ -22,7 +22,7 @@ export default defineComponent({
       default: () => ({}),
     },
     columns: {
-      type: Array as PropType<FecQueryTableColumn<object>[]>,
+      type: Array as PropType<readonly FecQueryTableColumn<object>[]>,
       required: true,
     },
     data: {
