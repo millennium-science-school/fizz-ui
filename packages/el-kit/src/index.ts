@@ -12,6 +12,11 @@
 // export type { TableColumn, UseTableOptions } from './types/table'
 // export type { FormLinkageRule } from './types/form'
 
+export { usePaginationState } from './composables/usePaginationState'
+export type {
+  PaginationState,
+  UsePaginationStateOptions,
+} from './composables/usePaginationState'
 export { useQueryForm } from './composables/useQueryForm'
 export type {
   QueryFormModel,
