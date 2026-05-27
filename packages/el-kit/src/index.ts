@@ -39,6 +39,14 @@ export type {
   QueryStateModel,
   UseQueryStateOptions,
 } from './composables/useQueryState'
+export { useQueryTable } from './composables/useQueryTable'
+export type {
+  MaybePromise,
+  QueryTableRequest,
+  QueryTableResult,
+  QueryTableState,
+  UseQueryTableOptions,
+} from './composables/useQueryTable'
 export { defineTableColumns, useTable } from './composables/useTable'
 export type {
   TableColumn,
