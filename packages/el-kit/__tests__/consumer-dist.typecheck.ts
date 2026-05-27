@@ -11,7 +11,12 @@ import {
   defineFormSchema,
   defineQuerySchema,
   defineTableColumns,
+  useDetailState,
+  useDialogFormState,
+  usePaginationState,
   useQueryForm,
+  useQueryState,
+  useQueryTable,
   useTable,
 } from '@fizz/el-kit'
 import { ref } from 'vue'
@@ -161,3 +166,51 @@ void querySchema
 void invalidFormSchema
 void invalidControlKind
 void statusOptions
+
+// --- New CRUD headless APIs ---
+
+const paginationState = usePaginationState({ pageSize: 20 })
+paginationState.setPage(2)
+paginationState.resetPage()
+
+const queryState = useQueryState<Query>({
+  model: { keyword: '', enabled: false },
+})
+queryState.setField('enabled', true)
+// @ts-expect-error query state should preserve field value types
+queryState.setField('enabled', 'yes')
+
+interface UserForm {
+  name: string
+  age: number
+}
+
+const dialogFormState = useDialogFormState<UserForm, User>({
+  createModel: () => ({ name: '', age: 0 }),
+  toFormModel: user => ({ name: user.name, age: user.age }),
+})
+dialogFormState.openCreate()
+dialogFormState.openEdit({ name: 'Tom', age: 18 })
+
+const detailState = useDetailState<User>()
+detailState.open({ name: 'Tom', age: 18 })
+
+const queryTableState = useQueryTable<User, Query>({
+  columns: helperColumns,
+  query: { keyword: '', enabled: false },
+  fetchList: async request => ({
+    data: [{ name: request.query.keyword || 'Tom', age: 18 }],
+    total: 1,
+  }),
+})
+
+async function exerciseCrudApis() {
+  await queryTableState.submit()
+}
+
+void paginationState
+void queryState
+void dialogFormState
+void detailState
+void queryTableState
+void exerciseCrudApis
