@@ -1,3 +1,4 @@
+import type { QueryTableResult } from '../src'
 import { describe, expect, it, vi } from 'vitest'
 import { defineTableColumns, useQueryTable } from '../src'
 
@@ -110,5 +111,61 @@ describe('useQueryTable', () => {
     })
 
     expect(state.table.loading).toBe(state.loading)
+  })
+
+  it('setPage changes current page and refreshes', async () => {
+    const fetchList = vi.fn(async (req: { query: Query, currentPage: number, pageSize: number }) => ({
+      data: [{ name: 'Tom', age: req.currentPage }],
+      total: 100,
+    }))
+
+    const state = useQueryTable<User, Query>({
+      columns,
+      fetchList,
+      query: { keyword: '' },
+      pageSize: 10,
+    })
+
+    await state.setPage(3)
+
+    expect(state.pagination.currentPage.value).toBe(3)
+    expect(fetchList).toHaveBeenCalledWith({
+      currentPage: 3,
+      pageSize: 10,
+      query: { keyword: '' },
+    })
+    expect(state.table.data.value[0].age).toBe(3)
+  })
+
+  it('ignores stale responses when a newer request supersedes them', async () => {
+    let resolve1!: (v: QueryTableResult<User>) => void
+    let resolve2!: (v: QueryTableResult<User>) => void
+
+    const fetchList = vi.fn()
+      .mockReturnValueOnce(new Promise<QueryTableResult<User>>((res) => { resolve1 = res }))
+      .mockReturnValueOnce(new Promise<QueryTableResult<User>>((res) => { resolve2 = res }))
+
+    const state = useQueryTable<User, Query>({
+      columns,
+      fetchList,
+      query: { keyword: '' },
+    })
+
+    // Start two requests without awaiting the first
+    const p1 = state.refresh()
+    const p2 = state.refresh()
+
+    // Request 2 completes first (faster response)
+    resolve2({ data: [{ name: 'Request2', age: 2 }], total: 2 })
+    await p2
+
+    // Request 1 resolves late (stale)
+    resolve1({ data: [{ name: 'Request1', age: 1 }], total: 1 })
+    await p1
+
+    // Only request 2's data should be visible
+    expect(state.table.data.value[0]?.name).toBe('Request2')
+    expect(state.pagination.total.value).toBe(2)
+    expect(state.loading.value).toBe(false)
   })
 })

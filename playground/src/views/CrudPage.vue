@@ -80,15 +80,16 @@ const formRules = {
 
 const list = useQueryTable<User, Query>({
   columns,
-  fetchList: ({ query }) => {
-    const data = users.value.filter((u) => {
+  fetchList: ({ query, currentPage, pageSize }) => {
+    const filtered = users.value.filter((u) => {
       if (query.keyword && !u.name.includes(query.keyword))
         return false
       if (query.status && u.status !== query.status)
         return false
       return true
     })
-    return { data, total: data.length }
+    const start = (currentPage - 1) * pageSize
+    return { data: filtered.slice(start, start + pageSize), total: filtered.length }
   },
   immediate: true,
   query: { keyword: '', status: '' },
@@ -150,6 +151,8 @@ function handleRowAction(key: string, row: User) {
         submit-text="查询"
         reset-text="重置"
         @update:query="list.query.setModel"
+        @update:current-page="list.setPage"
+        @update:page-size="list.setPageSize"
         @submit="list.submit"
         @reset="list.reset"
         @toolbar-action="(key) => key === 'create' && openCreate()"

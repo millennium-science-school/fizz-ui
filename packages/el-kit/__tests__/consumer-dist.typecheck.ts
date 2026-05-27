@@ -206,6 +206,8 @@ const queryTableState = useQueryTable<User, Query>({
 
 async function exerciseCrudApis() {
   await queryTableState.submit()
+  await queryTableState.setPage(2)
+  await queryTableState.setPageSize(20)
 }
 
 void paginationState

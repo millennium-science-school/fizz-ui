@@ -39,6 +39,8 @@ export interface QueryTableState<Row extends object, Query extends object> {
   submit: () => Promise<void>
   reset: () => Promise<void>
   refresh: () => Promise<void>
+  setPage: (page: number) => Promise<void>
+  setPageSize: (size: number) => Promise<void>
 }
 
 function cloneQuery<Query extends object>(query: Query): Query {
@@ -66,6 +68,8 @@ export function useQueryTable<Row extends object, Query extends object>(
     },
   })
 
+  let requestSeq = 0
+
   async function refresh() {
     if (!options.fetchList) {
       loading.value = false
@@ -73,6 +77,7 @@ export function useQueryTable<Row extends object, Query extends object>(
     }
 
     loading.value = true
+    const seq = ++requestSeq
 
     try {
       const result = await options.fetchList({
@@ -80,11 +85,14 @@ export function useQueryTable<Row extends object, Query extends object>(
         pageSize: pagination.pageSize.value,
         query: cloneQuery(query.model.value),
       })
+      if (seq !== requestSeq)
+        return
       table.setData([...result.data])
       pagination.setTotal(result.total)
     }
     finally {
-      loading.value = false
+      if (seq === requestSeq)
+        loading.value = false
     }
   }
 
@@ -99,6 +107,17 @@ export function useQueryTable<Row extends object, Query extends object>(
     await refresh()
   }
 
+  async function setPage(page: number) {
+    pagination.setPage(page)
+    await refresh()
+  }
+
+  async function setPageSize(size: number) {
+    pagination.setPageSize(size)
+    pagination.resetPage()
+    await refresh()
+  }
+
   const state: QueryTableState<Row, Query> = {
     loading,
     pagination,
@@ -106,6 +125,8 @@ export function useQueryTable<Row extends object, Query extends object>(
     query,
     refresh,
     reset,
+    setPage,
+    setPageSize,
     submit,
     table,
   }
