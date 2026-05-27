@@ -1137,23 +1137,25 @@ export function useQueryTable<Row extends object, Query extends object>(
   const pagination = usePaginationState({
     pageSize: options.pageSize ?? 10,
   })
+  const loading = shallowRef(false)
   const table = useTable<Row>({
     columns: options.columns,
     data: [],
-    loading: false,
-    pagination,
+    loading,
+    pagination: {
+      currentPage: pagination.currentPage,
+      pageSize: pagination.pageSize,
+      total: pagination.total,
+    },
   })
-  const loading = shallowRef(false)
 
   async function refresh() {
     if (!options.fetchList) {
-      table.setLoading(false)
       loading.value = false
       return
     }
 
     loading.value = true
-    table.setLoading(true)
 
     try {
       const result = await options.fetchList({
@@ -1166,7 +1168,6 @@ export function useQueryTable<Row extends object, Query extends object>(
     }
     finally {
       loading.value = false
-      table.setLoading(false)
     }
   }
 

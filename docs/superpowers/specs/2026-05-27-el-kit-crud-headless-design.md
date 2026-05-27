@@ -106,7 +106,7 @@ They should be stable and independently useful:
 
 - `usePaginationState`
 - `useQueryState`
-- `useTableState`
+- `useTable` (existing primitive, aligned with the new design)
 - `useDialogFormState`
 - `useDetailState`
 
@@ -214,21 +214,25 @@ machines.
 ```ts
 export interface TableState<Row extends object> {
   columns: Ref<readonly TableColumn<Row>[]>
-  data: Ref<readonly Row[]>
+  data: Ref<Row[]>
   loading: Ref<boolean>
+  pagination: PaginationState
   setColumns: (columns: readonly TableColumn<Row>[]) => void
-  setData: (data: readonly Row[]) => void
+  setData: (data: Row[]) => void
   setLoading: (loading: boolean) => void
+  setPage: (page: number) => void
+  setPageSize: (pageSize: number) => void
+  setTotal: (total: number) => void
+  resetPage: () => void
 }
 
-export function useTableState<Row extends object>(
-  options: UseTableStateOptions<Row>,
+export function useTable<Row extends object>(
+  options: UseTableOptions<Row>,
 ): TableState<Row>
 ```
 
-The existing `useTable` should be treated as this primitive or renamed through a
-careful compatibility decision. Since the package is still pre-stability, a
-focused rename is acceptable if it makes the API clearer.
+The existing `useTable` is kept as the public primitive name. Its pagination
+handling is refactored to delegate to `usePaginationState` internally.
 
 ### Dialog Form
 
@@ -464,18 +468,11 @@ pnpm check:packages
   primitives directly.
 - C-level facades should wait until real examples show stable repetition.
 
-## Open Decisions For Review
+## Decisions
 
-1. Whether `useTable` should remain the table primitive name or be renamed to
-   `useTableState` with a compatibility export.
-2. Whether `useQueryTable` should own `fetchList` immediately or first support
-   only local/external data with refresh callbacks.
-3. Whether the component directory restructure should happen before or after
-   the first `CrudPage.vue` conversion to kit workflow APIs.
-
-The recommended answers are:
-
-1. Keep `useTable` for now and internally align it with the primitive design.
-2. Let `useQueryTable` support optional `fetchList` from the start.
-3. Convert `CrudPage.vue` first, then do the directory restructure as a
-   mechanical follow-up.
+1. Keep `useTable` as the public primitive name and internally align it with
+   the `usePaginationState` design. No rename or compatibility export needed.
+2. `useQueryTable` supports optional `fetchList` from the start, making it
+   useful for both local data and remote data without a breaking change later.
+3. Convert `CrudPage.vue` first, then do the component directory restructure as
+   a separate mechanical follow-up plan.
