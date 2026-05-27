@@ -25,6 +25,12 @@ export type {
   QueryFormState,
   UseQueryFormOptions,
 } from './composables/useQueryForm'
+export { useQueryState } from './composables/useQueryState'
+export type {
+  QueryState,
+  QueryStateModel,
+  UseQueryStateOptions,
+} from './composables/useQueryState'
 export { defineTableColumns, useTable } from './composables/useTable'
 export type {
   TableColumn,
