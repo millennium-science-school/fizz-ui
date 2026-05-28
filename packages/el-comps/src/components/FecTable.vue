@@ -1,7 +1,7 @@
 <script lang="ts">
 import type { MaybeRefOrGetter, PropType } from 'vue'
-import type { FecActionItem, FecRowAction } from './actionTypes'
-import type { FecPagination, FecTableColumn } from './types'
+import type { FecActionItem, FecRowAction } from './shared/actionTypes'
+import type { FecPagination, FecTableColumn } from './shared/types'
 import {
   FeButton,
   FePagination,

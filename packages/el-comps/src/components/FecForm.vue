@@ -1,9 +1,9 @@
 <script lang="ts">
 import type { PropType } from 'vue'
-import type { FecFormModel, FecFormSchemaItem } from './types'
+import type { FecFormModel, FecFormSchemaItem } from './shared/types'
 import { FeForm } from '@fizz/el-plus'
 import { defineComponent, h, ref } from 'vue'
-import { renderSchemaFields } from './schemaFields'
+import { renderSchemaFields } from './shared/schemaFields'
 
 export default defineComponent({
   name: 'FecForm',

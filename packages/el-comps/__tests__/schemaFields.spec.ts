@@ -1,6 +1,6 @@
 import type { VNode } from 'vue'
 import { describe, expect, it } from 'vitest'
-import { renderSchemaFields } from '../src/components/schemaFields'
+import { renderSchemaFields } from '../src/components/shared/schemaFields'
 
 describe('schemaFields', () => {
   it('renders select options from headless field metadata', () => {

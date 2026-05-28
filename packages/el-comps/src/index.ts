@@ -20,7 +20,7 @@
 // export type { UseFecTableOptions, FecTableColumn } from './types'
 
 import type { AllowedComponentProps, VNodeProps } from 'vue'
-import type { FecDetailProps, FecDialogFormProps, FecDrawerFormProps, FecFormProps, FecQueryFormProps, FecQueryModel, FecQueryTableProps, FecTableProps } from './components/types'
+import type { FecDetailProps, FecDialogFormProps, FecDrawerFormProps, FecFormProps, FecQueryFormProps, FecQueryModel, FecQueryTableProps, FecTableProps } from './components/shared/types'
 import FecDetailImpl from './components/FecDetail.vue'
 import FecDialogFormImpl from './components/FecDialogForm.vue'
 import FecDrawerFormImpl from './components/FecDrawerForm.vue'
@@ -34,13 +34,13 @@ import FecStackImpl from './components/FecStack.vue'
 import FecTableImpl from './components/FecTable.vue'
 import FecToolbarImpl from './components/FecToolbar.vue'
 
-export type { FecActionItem, FecActionType, FecRowAction } from './components/actionTypes'
+export type { FecActionItem, FecActionType, FecRowAction } from './components/shared/actionTypes'
 export {
   defineFecDetailSchema,
   defineFecFormSchema,
   defineFecQuerySchema,
   defineFecTableColumns,
-} from './components/types'
+} from './components/shared/types'
 
 export const FecForm = FecFormImpl as unknown as new <T extends object = any>() => {
   $props: FecFormProps<T> & VNodeProps & AllowedComponentProps & {
@@ -108,7 +108,7 @@ export type {
   FecQueryTableProps,
   FecRenderFieldConfig,
   FecTableProps,
-} from './components/types'
+} from './components/shared/types'
 
 export const FecDetail = FecDetailImpl as unknown as new <T extends object = any>() => {
   $props: FecDetailProps<T> & VNodeProps & AllowedComponentProps
