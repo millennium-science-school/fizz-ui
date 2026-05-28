@@ -41,7 +41,7 @@ vi.mock('@fizz/el-plus', async (importOriginal) => {
 })
 
 // ── Mock FecForm.vue: used by FecDialogForm and FecDrawerForm internally.
-vi.mock('../src/components/FecForm.vue', () => ({
+vi.mock('../src/components/fec-form/FecForm.vue', () => ({
   default: defineComponent({
     name: 'FecForm',
     props: {

@@ -1,10 +1,11 @@
 <script lang="ts">
 import type { MaybeRefOrGetter, PropType } from 'vue'
-import type { FecActionItem, FecRowAction } from './actionTypes'
-import type { FecPagination, FecQueryModel, FecQuerySchemaItem, FecQueryTableColumn } from './types'
+import type { FecPagination } from '../fec-table/props'
+import type { FecActionItem, FecRowAction } from '../shared/actionTypes'
+import type { FecQueryModel, FecQuerySchemaItem, FecQueryTableColumn } from '../shared/types'
 import { defineComponent, h } from 'vue'
-import FecQueryForm from './FecQueryForm.vue'
-import FecTable from './FecTable.vue'
+import FecQueryForm from '../fec-query-form/FecQueryForm.vue'
+import FecTable from '../fec-table/FecTable.vue'
 
 export default defineComponent({
   name: 'FecQueryTable',

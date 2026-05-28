@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { createApp, h, nextTick, ref } from 'vue'
 import { FecTable } from '../src'
-import { renderSchemaFields } from '../src/components/schemaFields'
+import { renderSchemaFields } from '../src/components/shared/schemaFields'
 
 interface User {
   name: string

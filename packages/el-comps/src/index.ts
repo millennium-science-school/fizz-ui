@@ -1,131 +1,47 @@
 // @fizz/el-comps 入口
 // 基于 @fizz/el-kit 的无主题样式结构化组合组件层。
-// 提供 form + table + pagination 等高阶组合，供业务页面直接使用
-//
-// 注意：此包不是严格 headless。它会控制组件嵌套层级和 DOM 结构；
-// 颜色、字体、间距等主题样式由 @fizz/theme 或业务侧通过 CSS 变量提供。
-//
-// 导出规范：
-//   - composables 子目录：useFecTable 等
-//   - components 子目录：FecTable 等渲染组件（由 composable 返回）
-//   - types 子目录：UseFecTableOptions<T> 等公共类型
-//
-// 组件 CSS 类名约定（结构类，无颜色/字体）：
-//   fe-comps-table、fe-comps-form、fe-comps-pagination
-//   结构变量通过 CSS 变量暴露，由 @fizz/theme 赋值：
-//     --fe-form-cols、--fe-form-gap、--fe-table-stripe 等
-//
-// 示例（就绪后取消注释）：
-// export { useFecTable } from './composables/useFecTable'
-// export type { UseFecTableOptions, FecTableColumn } from './types'
+// 提供 form + table + pagination 等高阶组合，供业务页面直接使用。
 
-import type { AllowedComponentProps, VNodeProps } from 'vue'
-import type { FecDetailProps, FecDialogFormProps, FecDrawerFormProps, FecFormProps, FecQueryFormProps, FecQueryModel, FecQueryTableProps, FecTableProps } from './components/types'
-import FecDetailImpl from './components/FecDetail.vue'
-import FecDialogFormImpl from './components/FecDialogForm.vue'
-import FecDrawerFormImpl from './components/FecDrawerForm.vue'
-import FecFormImpl from './components/FecForm.vue'
-import FecPageImpl from './components/FecPage.vue'
-import FecQueryFormImpl from './components/FecQueryForm.vue'
-import FecQueryTableImpl from './components/FecQueryTable.vue'
+export { defineFecDetailSchema, FecDetail } from './components/fec-detail'
+export type {
+  FecDetailProps,
+  FecDetailSchemaItem,
+} from './components/fec-detail'
+export { FecDialogForm } from './components/fec-dialog-form'
+export type { FecDialogFormProps } from './components/fec-dialog-form'
+export { FecDrawerForm } from './components/fec-drawer-form'
+export type { FecDrawerFormProps } from './components/fec-drawer-form'
+export { FecForm } from './components/fec-form'
+export type { FecFormProps } from './components/fec-form'
+export { FecPage } from './components/fec-page'
+export { FecQueryForm } from './components/fec-query-form'
+export type { FecQueryFormProps } from './components/fec-query-form'
+export { FecQueryTable } from './components/fec-query-table'
+export type {
+  FecQueryPagination,
+  FecQueryTableProps,
+} from './components/fec-query-table'
+export { FecSection } from './components/fec-section'
+export { FecStack } from './components/fec-stack'
+export { FecTable } from './components/fec-table'
+export type {
+  FecPagination,
+  FecTableProps,
+} from './components/fec-table'
+export { FecToolbar } from './components/fec-toolbar'
 
-import FecSectionImpl from './components/FecSection.vue'
-import FecStackImpl from './components/FecStack.vue'
-import FecTableImpl from './components/FecTable.vue'
-import FecToolbarImpl from './components/FecToolbar.vue'
-
-export type { FecActionItem, FecActionType, FecRowAction } from './components/actionTypes'
+export type { FecActionItem, FecActionType, FecRowAction } from './components/shared/actionTypes'
 export {
-  defineFecDetailSchema,
   defineFecFormSchema,
   defineFecQuerySchema,
   defineFecTableColumns,
-} from './components/types'
-
-export const FecForm = FecFormImpl as unknown as new <T extends object = any>() => {
-  $props: FecFormProps<T> & VNodeProps & AllowedComponentProps & {
-    'onUpdate:model'?: (...args: any[]) => void
-  }
-}
-export const FecQueryForm = FecQueryFormImpl as unknown as new <T extends object = any>() => {
-  $props: FecQueryFormProps<T> & VNodeProps & AllowedComponentProps & {
-    'onUpdate:model'?: (...args: any[]) => void
-    'onSubmit'?: (...args: any[]) => void
-    'onReset'?: (...args: any[]) => void
-  }
-}
-
-// Typed facades: SFC vite-plugin-dts erases the generic T to `object`.
-// Using the constructor-generic pattern (`new <T>() => { $props: P }`) lets
-// consumers pass explicit type arguments (`<FecTable<User> ...>` in JSX) and
-// preserves row/query-key validation at the component level.
-// The generic defaults stay wide because Vue templates cannot provide explicit
-// generic arguments; strict schema/column checking is provided by defineFec* helpers.
-export const FecTable = FecTableImpl as unknown as new <Row extends object = any>() => {
-  $props: FecTableProps<Row> & VNodeProps & AllowedComponentProps & {
-    'onUpdate:currentPage'?: (...args: any[]) => void
-    'onUpdate:pageSize'?: (...args: any[]) => void
-    'onToolbarAction'?: (...args: any[]) => void
-    'onRowAction'?: (...args: any[]) => void
-    'onSelectionChange'?: (...args: any[]) => void
-  }
-}
-export const FecQueryTable = FecQueryTableImpl as unknown as new <
-  Row extends object = any,
-  Query extends FecQueryModel = any,
->() => {
-  $props: FecQueryTableProps<Row, Query> & VNodeProps & AllowedComponentProps & {
-    'onUpdate:query'?: (...args: any[]) => void
-    'onSubmit'?: (...args: any[]) => void
-    'onReset'?: (...args: any[]) => void
-    'onUpdate:currentPage'?: (...args: any[]) => void
-    'onUpdate:pageSize'?: (...args: any[]) => void
-    'onToolbarAction'?: (...args: any[]) => void
-    'onRowAction'?: (...args: any[]) => void
-    'onSelectionChange'?: (...args: any[]) => void
-  }
-}
-
-export const FecPage = FecPageImpl
-export const FecSection = FecSectionImpl
-export const FecStack = FecStackImpl
-export const FecToolbar = FecToolbarImpl
+} from './components/shared/types'
 export type {
   FecBuiltinFormSchemaItem,
   FecBuiltinQuerySchemaItem,
   FecCustomFormSchemaItem,
   FecCustomQuerySchemaItem,
-  FecDetailProps,
-  FecDetailSchemaItem,
-  FecDialogFormProps,
-  FecDrawerFormProps,
-  FecFormProps,
   FecFormSchemaItem,
-  FecPagination,
-  FecQueryFormProps,
-  FecQueryPagination,
   FecQuerySchemaItem,
-  FecQueryTableProps,
   FecRenderFieldConfig,
-  FecTableProps,
-} from './components/types'
-
-export const FecDetail = FecDetailImpl as unknown as new <T extends object = any>() => {
-  $props: FecDetailProps<T> & VNodeProps & AllowedComponentProps
-}
-export const FecDialogForm = FecDialogFormImpl as unknown as new <T extends object = any>() => {
-  $props: FecDialogFormProps<T> & VNodeProps & AllowedComponentProps & {
-    'onUpdate:modelValue'?: (...args: any[]) => void
-    'onUpdate:model'?: (...args: any[]) => void
-    'onConfirm'?: (...args: any[]) => void
-    'onCancel'?: (...args: any[]) => void
-  }
-}
-export const FecDrawerForm = FecDrawerFormImpl as unknown as new <T extends object = any>() => {
-  $props: FecDrawerFormProps<T> & VNodeProps & AllowedComponentProps & {
-    'onUpdate:modelValue'?: (...args: any[]) => void
-    'onUpdate:model'?: (...args: any[]) => void
-    'onConfirm'?: (...args: any[]) => void
-    'onCancel'?: (...args: any[]) => void
-  }
-}
+} from './components/shared/types'

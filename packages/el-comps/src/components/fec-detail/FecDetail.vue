@@ -1,6 +1,6 @@
 <script lang="ts">
 import type { PropType } from 'vue'
-import type { FecLooseDetailSchemaItem } from './types'
+import type { FecLooseDetailSchemaItem } from './props'
 import { FeDescriptions, FeDescriptionsItem } from '@fizz/el-plus'
 import { defineComponent, h } from 'vue'
 
