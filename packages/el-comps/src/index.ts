@@ -20,16 +20,16 @@
 // export type { UseFecTableOptions, FecTableColumn } from './types'
 
 import type { AllowedComponentProps, VNodeProps } from 'vue'
-import type { FecDetailProps, FecDialogFormProps, FecDrawerFormProps, FecFormProps, FecQueryFormProps, FecQueryModel, FecQueryTableProps, FecTableProps } from './components/shared/types'
+import type { FecDetailProps, FecDialogFormProps, FecDrawerFormProps, FecQueryModel, FecQueryTableProps, FecTableProps } from './components/shared/types'
 import FecDetailImpl from './components/FecDetail.vue'
 import FecDialogFormImpl from './components/FecDialogForm.vue'
 import FecDrawerFormImpl from './components/FecDrawerForm.vue'
-import FecFormImpl from './components/FecForm.vue'
+import { FecForm } from './components/fec-form'
 import { FecPage } from './components/fec-page'
+import { FecQueryForm } from './components/fec-query-form'
 import { FecSection } from './components/fec-section'
 import { FecStack } from './components/fec-stack'
 import { FecToolbar } from './components/fec-toolbar'
-import FecQueryFormImpl from './components/FecQueryForm.vue'
 import FecQueryTableImpl from './components/FecQueryTable.vue'
 
 import FecTableImpl from './components/FecTable.vue'
@@ -42,18 +42,9 @@ export {
   defineFecTableColumns,
 } from './components/shared/types'
 
-export const FecForm = FecFormImpl as unknown as new <T extends object = any>() => {
-  $props: FecFormProps<T> & VNodeProps & AllowedComponentProps & {
-    'onUpdate:model'?: (...args: any[]) => void
-  }
-}
-export const FecQueryForm = FecQueryFormImpl as unknown as new <T extends object = any>() => {
-  $props: FecQueryFormProps<T> & VNodeProps & AllowedComponentProps & {
-    'onUpdate:model'?: (...args: any[]) => void
-    'onSubmit'?: (...args: any[]) => void
-    'onReset'?: (...args: any[]) => void
-  }
-}
+export { FecForm, FecQueryForm }
+export type { FecFormProps } from './components/fec-form'
+export type { FecQueryFormProps } from './components/fec-query-form'
 
 // Typed facades: SFC vite-plugin-dts erases the generic T to `object`.
 // Using the constructor-generic pattern (`new <T>() => { $props: P }`) lets

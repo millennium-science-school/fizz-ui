@@ -3,7 +3,7 @@ import type { PropType } from 'vue'
 import type { FecFormModel, FecFormSchemaItem } from './shared/types'
 import { FeButton, FeDialog } from '@fizz/el-plus'
 import { defineComponent, h, ref } from 'vue'
-import FecForm from './FecForm.vue'
+import FecForm from './fec-form/FecForm.vue'
 
 export default defineComponent({
   name: 'FecDialogForm',
