@@ -1,7 +1,7 @@
 <script lang="ts">
 import type { MaybeRefOrGetter, PropType } from 'vue'
-import type { FecActionItem, FecRowAction } from './shared/actionTypes'
-import type { FecPagination, FecTableColumn } from './shared/types'
+import type { FecActionItem, FecRowAction } from '../shared/actionTypes'
+import type { FecPagination, FecTableColumn } from '../shared/types'
 import {
   FeButton,
   FePagination,
@@ -10,7 +10,7 @@ import {
   vFeLoading,
 } from '@fizz/el-plus'
 import { defineComponent, h, toValue, withDirectives } from 'vue'
-import FecToolbar from './fec-toolbar/FecToolbar.vue'
+import FecToolbar from '../fec-toolbar/FecToolbar.vue'
 import { renderTableColumns } from './tableColumns'
 
 export default defineComponent({
