@@ -19,11 +19,9 @@
 // export { useFecTable } from './composables/useFecTable'
 // export type { UseFecTableOptions, FecTableColumn } from './types'
 
-import type { AllowedComponentProps, VNodeProps } from 'vue'
-import type { FecDetailProps, FecDialogFormProps, FecDrawerFormProps } from './components/shared/types'
-import FecDetailImpl from './components/FecDetail.vue'
-import FecDialogFormImpl from './components/FecDialogForm.vue'
-import FecDrawerFormImpl from './components/FecDrawerForm.vue'
+import { FecDetail } from './components/fec-detail'
+import { FecDialogForm } from './components/fec-dialog-form'
+import { FecDrawerForm } from './components/fec-drawer-form'
 import { FecForm } from './components/fec-form'
 import { FecPage } from './components/fec-page'
 import { FecQueryForm } from './components/fec-query-form'
@@ -34,18 +32,25 @@ import { FecTable } from './components/fec-table'
 import { FecToolbar } from './components/fec-toolbar'
 
 export type { FecActionItem, FecActionType, FecRowAction } from './components/shared/actionTypes'
+export { defineFecDetailSchema } from './components/fec-detail'
 export {
-  defineFecDetailSchema,
   defineFecFormSchema,
   defineFecQuerySchema,
   defineFecTableColumns,
 } from './components/shared/types'
 
+export { FecDetail }
+export type {
+  FecDetailProps,
+  FecDetailSchemaItem,
+} from './components/fec-detail'
+export { FecDialogForm }
+export type { FecDialogFormProps } from './components/fec-dialog-form'
+export { FecDrawerForm }
+export type { FecDrawerFormProps } from './components/fec-drawer-form'
 export { FecForm, FecQueryForm }
 export type { FecFormProps } from './components/fec-form'
 export type { FecQueryFormProps } from './components/fec-query-form'
-
-// Typed facades: SFC vite-plugin-dts erases the generic T to `object`.
 export { FecQueryTable, FecTable }
 export type { FecPagination, FecTableProps } from './components/fec-table'
 export type {
@@ -59,31 +64,7 @@ export type {
   FecBuiltinQuerySchemaItem,
   FecCustomFormSchemaItem,
   FecCustomQuerySchemaItem,
-  FecDetailProps,
-  FecDetailSchemaItem,
-  FecDialogFormProps,
-  FecDrawerFormProps,
   FecFormSchemaItem,
   FecQuerySchemaItem,
   FecRenderFieldConfig,
 } from './components/shared/types'
-
-export const FecDetail = FecDetailImpl as unknown as new <T extends object = any>() => {
-  $props: FecDetailProps<T> & VNodeProps & AllowedComponentProps
-}
-export const FecDialogForm = FecDialogFormImpl as unknown as new <T extends object = any>() => {
-  $props: FecDialogFormProps<T> & VNodeProps & AllowedComponentProps & {
-    'onUpdate:modelValue'?: (...args: any[]) => void
-    'onUpdate:model'?: (...args: any[]) => void
-    'onConfirm'?: (...args: any[]) => void
-    'onCancel'?: (...args: any[]) => void
-  }
-}
-export const FecDrawerForm = FecDrawerFormImpl as unknown as new <T extends object = any>() => {
-  $props: FecDrawerFormProps<T> & VNodeProps & AllowedComponentProps & {
-    'onUpdate:modelValue'?: (...args: any[]) => void
-    'onUpdate:model'?: (...args: any[]) => void
-    'onConfirm'?: (...args: any[]) => void
-    'onCancel'?: (...args: any[]) => void
-  }
-}
