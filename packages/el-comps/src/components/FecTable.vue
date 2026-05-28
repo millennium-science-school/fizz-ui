@@ -10,7 +10,7 @@ import {
   vFeLoading,
 } from '@fizz/el-plus'
 import { defineComponent, h, toValue, withDirectives } from 'vue'
-import FecToolbar from './FecToolbar.vue'
+import FecToolbar from './fec-toolbar/FecToolbar.vue'
 import { renderTableColumns } from './tableColumns'
 
 export default defineComponent({

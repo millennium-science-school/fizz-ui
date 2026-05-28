@@ -1,6 +1,6 @@
 <script lang="ts">
 import type { PropType } from 'vue'
-import type { FecActionItem } from './shared/actionTypes'
+import type { FecActionItem } from '../shared/actionTypes'
 import { FeButton } from '@fizz/el-plus'
 import { defineComponent, h } from 'vue'
 

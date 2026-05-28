@@ -25,14 +25,14 @@ import FecDetailImpl from './components/FecDetail.vue'
 import FecDialogFormImpl from './components/FecDialogForm.vue'
 import FecDrawerFormImpl from './components/FecDrawerForm.vue'
 import FecFormImpl from './components/FecForm.vue'
-import FecPageImpl from './components/FecPage.vue'
+import { FecPage } from './components/fec-page'
+import { FecSection } from './components/fec-section'
+import { FecStack } from './components/fec-stack'
+import { FecToolbar } from './components/fec-toolbar'
 import FecQueryFormImpl from './components/FecQueryForm.vue'
 import FecQueryTableImpl from './components/FecQueryTable.vue'
 
-import FecSectionImpl from './components/FecSection.vue'
-import FecStackImpl from './components/FecStack.vue'
 import FecTableImpl from './components/FecTable.vue'
-import FecToolbarImpl from './components/FecToolbar.vue'
 
 export type { FecActionItem, FecActionType, FecRowAction } from './components/shared/actionTypes'
 export {
@@ -86,10 +86,7 @@ export const FecQueryTable = FecQueryTableImpl as unknown as new <
   }
 }
 
-export const FecPage = FecPageImpl
-export const FecSection = FecSectionImpl
-export const FecStack = FecStackImpl
-export const FecToolbar = FecToolbarImpl
+export { FecPage, FecSection, FecStack, FecToolbar }
 export type {
   FecBuiltinFormSchemaItem,
   FecBuiltinQuerySchemaItem,
