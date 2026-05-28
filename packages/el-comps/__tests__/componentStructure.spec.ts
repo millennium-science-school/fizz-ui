@@ -43,8 +43,8 @@ describe('el-comps component directory structure', () => {
     const entry = readFileSync(resolve(root, 'src/index.ts'), 'utf8')
 
     expect(entry).not.toContain('.vue')
-    expect(entry).toContain("export { FecForm } from './components/fec-form'")
-    expect(entry).toContain("export { FecQueryTable } from './components/fec-query-table'")
-    expect(entry).toContain("from './components/shared/types'")
+    expect(entry).toContain('export { FecForm } from \'./components/fec-form\'')
+    expect(entry).toContain('export { FecQueryTable } from \'./components/fec-query-table\'')
+    expect(entry).toContain('from \'./components/shared/types\'')
   })
 })

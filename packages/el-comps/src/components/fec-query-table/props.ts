@@ -1,12 +1,12 @@
-import type { MaybeRefOrGetter } from 'vue'
 import type { QueryFormRules } from '@fizz/el-kit'
+import type { MaybeRefOrGetter } from 'vue'
+import type { FecPagination } from '../fec-table/props'
 import type { FecActionItem, FecRowAction } from '../shared/actionTypes'
 import type {
   FecQueryModel,
   FecQuerySchemaItem,
   FecQueryTableColumn,
 } from '../shared/types'
-import type { FecPagination } from '../fec-table/props'
 
 export type FecQueryPagination = FecPagination
 

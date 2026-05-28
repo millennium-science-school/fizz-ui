@@ -2,7 +2,7 @@
 // 基于 @fizz/el-kit 的无主题样式结构化组合组件层。
 // 提供 form + table + pagination 等高阶组合，供业务页面直接使用。
 
-export { FecDetail, defineFecDetailSchema } from './components/fec-detail'
+export { defineFecDetailSchema, FecDetail } from './components/fec-detail'
 export type {
   FecDetailProps,
   FecDetailSchemaItem,
@@ -57,4 +57,3 @@ export type {
   FecRenderFieldConfig,
   FecTableColumn,
 } from './components/shared/types'
-

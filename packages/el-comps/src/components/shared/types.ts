@@ -58,4 +58,3 @@ export function defineFecTableColumns<T extends object>(
 ): readonly FecTableColumn<T>[] {
   return columns
 }
-
