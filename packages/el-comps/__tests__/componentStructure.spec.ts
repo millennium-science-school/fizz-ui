@@ -47,4 +47,27 @@ describe('el-comps component directory structure', () => {
     expect(entry).toContain('export { FecQueryTable } from \'./components/fec-query-table\'')
     expect(entry).toContain('from \'./components/shared/types\'')
   })
+
+  it('does not export unplanned layout-prop or utility types from root', () => {
+    const entry = readFileSync(resolve(root, 'src/index.ts'), 'utf8')
+
+    const banned = [
+      'FecPageProps',
+      'FecSectionProps',
+      'FecStackProps',
+      'FecStackDirection',
+      'FecStackGap',
+      'FecToolbarProps',
+      'FecFormModel',
+      'FecQueryModel',
+      'FecTableColumn',
+      'FecQueryTableColumn',
+    ]
+    for (const name of banned) {
+      expect(
+        new RegExp(`\\b${name}\\b`).test(entry),
+        `root index.ts should not export ${name}`,
+      ).toBe(false)
+    }
+  })
 })

@@ -14,7 +14,6 @@ export type { FecDrawerFormProps } from './components/fec-drawer-form'
 export { FecForm } from './components/fec-form'
 export type { FecFormProps } from './components/fec-form'
 export { FecPage } from './components/fec-page'
-export type { FecPageProps } from './components/fec-page'
 export { FecQueryForm } from './components/fec-query-form'
 export type { FecQueryFormProps } from './components/fec-query-form'
 export { FecQueryTable } from './components/fec-query-table'
@@ -23,20 +22,13 @@ export type {
   FecQueryTableProps,
 } from './components/fec-query-table'
 export { FecSection } from './components/fec-section'
-export type { FecSectionProps } from './components/fec-section'
 export { FecStack } from './components/fec-stack'
-export type {
-  FecStackDirection,
-  FecStackGap,
-  FecStackProps,
-} from './components/fec-stack'
 export { FecTable } from './components/fec-table'
 export type {
   FecPagination,
   FecTableProps,
 } from './components/fec-table'
 export { FecToolbar } from './components/fec-toolbar'
-export type { FecToolbarProps } from './components/fec-toolbar'
 
 export type { FecActionItem, FecActionType, FecRowAction } from './components/shared/actionTypes'
 export {
@@ -49,11 +41,7 @@ export type {
   FecBuiltinQuerySchemaItem,
   FecCustomFormSchemaItem,
   FecCustomQuerySchemaItem,
-  FecFormModel,
   FecFormSchemaItem,
-  FecQueryModel,
   FecQuerySchemaItem,
-  FecQueryTableColumn,
   FecRenderFieldConfig,
-  FecTableColumn,
 } from './components/shared/types'

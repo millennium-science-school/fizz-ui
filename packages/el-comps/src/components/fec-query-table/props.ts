@@ -8,7 +8,7 @@ import type {
   FecQueryTableColumn,
 } from '../shared/types'
 
-export type FecQueryPagination = FecPagination
+export interface FecQueryPagination extends FecPagination {}
 
 export interface FecQueryTableProps<Row extends object, Query extends FecQueryModel> {
   query: Query
