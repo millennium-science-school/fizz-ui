@@ -1,6 +1,8 @@
 import type {
   FecActionItem,
   FecDetailProps,
+  FecDetailSectionItem,
+  FecDetailSectionsProps,
   FecDetailSchemaItem,
   FecDialogFormProps,
   FecDrawerFormProps,
@@ -12,7 +14,9 @@ import type {
   FecQueryTableBindings,
   FecQueryTableProps,
   FecRowAction,
+  FecSplitPaneProps,
   FecTableProps,
+  FecTreePanelProps,
 } from '@fizz/el-comps'
 import type { FieldOption, QueryTableState } from '@fizz/el-kit'
 import type { Component } from 'vue'
@@ -22,6 +26,7 @@ import {
   defineFecQuerySchema,
   defineFecTableColumns,
   FecDetail,
+  FecDetailSections,
   FecDialogForm,
   FecDrawerForm,
   FecForm,
@@ -29,9 +34,11 @@ import {
   FecQueryForm,
   FecQueryTable,
   FecSection,
+  FecSplitPane,
   FecStack,
   FecTable,
   FecToolbar,
+  FecTreePanel,
   useFecQueryTableBindings,
 } from '@fizz/el-comps'
 import { ref } from 'vue'
@@ -397,3 +404,72 @@ const formSchemaWithResourceFields = defineFecFormSchema<User>([
 
 void querySchemaWithResourceFields
 void formSchemaWithResourceFields
+
+// ---- FecSplitPane ----
+
+const splitPaneProps: FecSplitPaneProps = {
+  leftCollapsible: true,
+  leftMax: '50%',
+  leftMin: 180,
+  leftSize: 280,
+}
+
+const splitPaneVNode = (
+  <FecSplitPane
+    {...splitPaneProps}
+    {...{
+      'onUpdate:leftSize': (value: string | number) => {
+        void value
+      },
+    }}
+  />
+)
+
+void splitPaneVNode
+
+// ---- FecTreePanel ----
+
+interface ResourceNode {
+  id: string
+  label: string
+  children?: ResourceNode[]
+}
+
+const resourceTreeData: ResourceNode[] = [
+  { id: 'network', label: 'Network' },
+]
+
+const treePanelProps: FecTreePanelProps<ResourceNode> = {
+  data: resourceTreeData,
+  nodeKey: 'id',
+  searchable: true,
+}
+
+const treePanelVNode = (
+  <FecTreePanel<ResourceNode>
+    {...treePanelProps}
+    onNodeClick={(node) => {
+      node.id.toUpperCase()
+    }}
+  />
+)
+
+void treePanelVNode
+
+// ---- FecDetailSections ----
+
+const detailSections: FecDetailSectionItem[] = [
+  { key: 'basic', title: 'Basic' },
+  { key: 'resource', title: 'Resource', description: 'Resource details' },
+]
+
+const detailSectionsProps: FecDetailSectionsProps = {
+  nav: true,
+  sections: detailSections,
+}
+
+const detailSectionsVNode = (
+  <FecDetailSections {...detailSectionsProps} />
+)
+
+void detailSectionsVNode

@@ -22,6 +22,9 @@ describe('el-comps component directory structure', () => {
       'fec-section/FecSection.vue',
       'fec-stack/FecStack.vue',
       'fec-toolbar/FecToolbar.vue',
+      'fec-split-pane/FecSplitPane.vue',
+      'fec-tree-panel/FecTreePanel.vue',
+      'fec-detail-sections/FecDetailSections.vue',
     ]
 
     for (const component of components) {
