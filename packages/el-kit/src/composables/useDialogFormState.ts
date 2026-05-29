@@ -6,6 +6,7 @@ export type DialogFormMode = 'create' | 'edit'
 export interface UseDialogFormStateOptions<Form extends object, Row extends object = Form> {
   createModel: () => Form
   toFormModel?: (record: Row) => Form
+  clone?: (model: Form) => Form
 }
 
 export interface DialogFormState<Form extends object, Row extends object = Form> {
@@ -20,13 +21,10 @@ export interface DialogFormState<Form extends object, Row extends object = Form>
   setModel: (model: Form) => void
 }
 
-function cloneModel<Form extends object>(model: Form): Form {
-  return { ...model }
-}
-
 export function useDialogFormState<Form extends object, Row extends object = Form>(
   options: UseDialogFormStateOptions<Form, Row>,
 ): DialogFormState<Form, Row> {
+  const cloneModel: (m: Form) => Form = options.clone ?? (m => ({ ...m }))
   const visible = shallowRef(false)
   const mode = shallowRef<DialogFormMode>('create')
   const model = shallowRef(options.createModel()) as Ref<Form>

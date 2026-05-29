@@ -2,8 +2,8 @@
 import type { PropType } from 'vue'
 import type { FecTreePanelNodeProps } from './props'
 import { FeButton, FeEmpty, FeInput, FeTree, vFeLoading } from '@fizz/el-plus'
-import { useDebounceFn } from '@vueuse/core'
-import { defineComponent, h, ref, watch, withDirectives } from 'vue'
+import { watchDebounced } from '@vueuse/core'
+import { defineComponent, h, ref, withDirectives } from 'vue'
 
 type TreeNodeRecord = Record<string, unknown>
 
@@ -56,11 +56,7 @@ export default defineComponent({
     const keyword = ref('')
     const treeRef = ref<any>()
 
-    const applyFilter = useDebounceFn((value: string) => {
-      treeRef.value?.filter?.(value)
-    }, props.filterDebounce)
-
-    watch(keyword, value => applyFilter(value))
+    watchDebounced(keyword, value => treeRef.value?.filter?.(value), { debounce: () => props.filterDebounce })
 
     function filterNode(value: string, data: TreeNodeRecord) {
       if (!value)
