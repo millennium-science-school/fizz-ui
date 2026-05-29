@@ -111,3 +111,10 @@ longer exports an `el` namespace bridge.
 The next component expansion wave should prioritize common admin form/query controls that are already supported by `FieldControlKind` semantic names (`select`, `date`, `switch`, and `textarea`) before adding low-frequency widgets. Schema data should use `kind` for built-in controls. Custom Vue components are an `@fizz/el-comps` render escape hatch and should not be moved into `@fizz/el-kit`.
 
 Any visual upgrade to Fizz component styling (new shadows, radius scales, or color tokens) should wait until the component expansion wave is producing stable output. New design tokens must be added to `fizzTokenRegistry` before they appear in any component stylesheet or theme rule.
+
+## Resource Management Layouts
+
+Resource-management pages can use `FecSplitPane`, `FecTreePanel`, and
+`FecDetailSections` for tree-driven workspaces and multi-section detail pages.
+`FecSplitPane` delegates drag behavior to Element Plus splitter through
+`@fizz/el-plus`; Fizz does not implement custom splitter dragging.
