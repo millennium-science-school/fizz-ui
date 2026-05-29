@@ -1,8 +1,8 @@
-import { createApp, h, nextTick, ref } from 'vue'
 import { describe, expect, it } from 'vitest'
+import { createApp, h, nextTick, ref } from 'vue'
 import { FecSplitPane } from '../src'
 
-describe('FecSplitPane', () => {
+describe('fecSplitPane', () => {
   it('renders left and right slots through the splitter facade', async () => {
     const host = document.createElement('div')
     const app = createApp({
@@ -30,7 +30,7 @@ describe('FecSplitPane', () => {
     const app = createApp({
       render() {
         return h(FecSplitPane, {
-          leftSize: size.value,
+          'leftSize': size.value,
           'onUpdate:leftSize': (value: string | number) => {
             size.value = value
           },

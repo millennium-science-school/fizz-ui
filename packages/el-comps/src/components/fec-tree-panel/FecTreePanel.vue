@@ -81,9 +81,9 @@ export default defineComponent({
           ? h('div', { class: 'fe-comps-tree-panel__header' }, [
               props.searchable
                 ? h(FeInput, {
-                    class: 'fe-comps-tree-panel__search',
-                    modelValue: keyword.value,
-                    placeholder: props.searchPlaceholder,
+                    'class': 'fe-comps-tree-panel__search',
+                    'modelValue': keyword.value,
+                    'placeholder': props.searchPlaceholder,
                     'onUpdate:modelValue': (value: string) => {
                       keyword.value = value
                     },

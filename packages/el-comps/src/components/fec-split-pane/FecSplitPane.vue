@@ -79,12 +79,12 @@ export default defineComponent({
           h(
             FeSplitterPanel,
             {
-              class: 'fe-comps-split-pane__left',
-              collapsible: props.leftCollapsible,
-              max: props.leftMax,
-              min: props.leftMin,
-              resizable: props.leftResizable,
-              size: props.leftSize,
+              'class': 'fe-comps-split-pane__left',
+              'collapsible': props.leftCollapsible,
+              'max': props.leftMax,
+              'min': props.leftMin,
+              'resizable': props.leftResizable,
+              'size': props.leftSize,
               'onUpdate:size': (value: FecSplitPaneSize) => emit('update:leftSize', value),
             },
             slots.left,

@@ -1,5 +1,5 @@
-import { createApp, h, nextTick } from 'vue'
 import { describe, expect, it, vi } from 'vitest'
+import { createApp, h, nextTick } from 'vue'
 import { FecTreePanel } from '../src'
 
 interface Node {
@@ -13,7 +13,7 @@ const data: Node[] = [
   { id: 'service', label: 'Service' },
 ]
 
-describe('FecTreePanel', () => {
+describe('fecTreePanel', () => {
   it('renders search input and tree content', async () => {
     const host = document.createElement('div')
     const app = createApp({
@@ -41,9 +41,9 @@ describe('FecTreePanel', () => {
     const app = createApp({
       render() {
         return h(FecTreePanel<Node>, {
-          collapsible: true,
+          'collapsible': true,
           data,
-          nodeKey: 'id',
+          'nodeKey': 'id',
           'onUpdate:collapsed': onUpdateCollapsed,
         })
       },

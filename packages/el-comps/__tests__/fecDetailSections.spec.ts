@@ -1,8 +1,8 @@
-import { createApp, h, nextTick } from 'vue'
 import { describe, expect, it } from 'vitest'
+import { createApp, h, nextTick } from 'vue'
 import { FecDetailSections } from '../src'
 
-describe('FecDetailSections', () => {
+describe('fecDetailSections', () => {
   it('renders section slots and local navigation', async () => {
     const host = document.createElement('div')
     const app = createApp({

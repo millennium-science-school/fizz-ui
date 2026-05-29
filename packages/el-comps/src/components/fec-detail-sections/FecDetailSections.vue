@@ -24,17 +24,15 @@ export default defineComponent({
   setup(props, { slots }) {
     return () =>
       h('div', { class: 'fe-comps-detail-sections' }, [
-        h('div', { class: 'fe-comps-detail-sections__main' },
-          props.sections.map(section =>
-            h(FecSection, {
-              key: section.key,
-              class: 'fe-comps-detail-sections__section',
-              description: section.description,
-              id: sectionId(section.key),
-              title: section.title,
-            }, () => slots[section.key]?.()),
-          ),
-        ),
+        h('div', { class: 'fe-comps-detail-sections__main' }, props.sections.map(section =>
+          h(FecSection, {
+            key: section.key,
+            class: 'fe-comps-detail-sections__section',
+            description: section.description,
+            id: sectionId(section.key),
+            title: section.title,
+          }, () => slots[section.key]?.()),
+        )),
         props.nav
           ? h('aside', { class: 'fe-comps-detail-sections__nav' }, [
               h(FeAnchor, {}, () =>
@@ -44,8 +42,7 @@ export default defineComponent({
                     href: `#${sectionId(section.key)}`,
                     title: section.title,
                   }),
-                ),
-              ),
+                )),
             ])
           : null,
       ])

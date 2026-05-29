@@ -1,9 +1,9 @@
 import type {
   FecActionItem,
   FecDetailProps,
+  FecDetailSchemaItem,
   FecDetailSectionItem,
   FecDetailSectionsProps,
-  FecDetailSchemaItem,
   FecDialogFormProps,
   FecDrawerFormProps,
   FecFormProps,
