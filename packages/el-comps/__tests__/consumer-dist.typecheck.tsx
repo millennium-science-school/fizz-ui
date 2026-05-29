@@ -2,6 +2,8 @@ import type {
   FecActionItem,
   FecDetailProps,
   FecDetailSchemaItem,
+  FecDetailSectionItem,
+  FecDetailSectionsProps,
   FecDialogFormProps,
   FecDrawerFormProps,
   FecFormProps,
@@ -9,11 +11,14 @@ import type {
   FecPagination,
   FecQueryFormProps,
   FecQuerySchemaItem,
+  FecQueryTableBindings,
   FecQueryTableProps,
   FecRowAction,
+  FecSplitPaneProps,
   FecTableProps,
+  FecTreePanelProps,
 } from '@fizz/el-comps'
-import type { FieldOption } from '@fizz/el-kit'
+import type { FieldOption, QueryTableState } from '@fizz/el-kit'
 import type { Component } from 'vue'
 import {
   defineFecDetailSchema,
@@ -21,6 +26,7 @@ import {
   defineFecQuerySchema,
   defineFecTableColumns,
   FecDetail,
+  FecDetailSections,
   FecDialogForm,
   FecDrawerForm,
   FecForm,
@@ -28,9 +34,12 @@ import {
   FecQueryForm,
   FecQueryTable,
   FecSection,
+  FecSplitPane,
   FecStack,
   FecTable,
   FecToolbar,
+  FecTreePanel,
+  useFecQueryTableBindings,
 } from '@fizz/el-comps'
 import { ref } from 'vue'
 
@@ -348,6 +357,28 @@ void removedComponentStringSchema
 void helperFormSchema
 void helperQuerySchema
 void helperColumns
+
+// ---- useFecQueryTableBindings ----
+
+declare const queryTableState: QueryTableState<User, Query>
+
+const queryTableBindings = useFecQueryTableBindings(queryTableState)
+
+// bindings are a ComputedRef — auto-unwrapped as top-level ref in script setup
+// verify structural type is assignable to FecQueryTableBindings
+const _bindings: FecQueryTableBindings<User, Query> = queryTableBindings.value
+
+const bindingsVNode = (
+  <FecQueryTable<User, Query>
+    {...queryTableBindings.value}
+    querySchema={querySchema}
+    toolbarActions={toolbarActions}
+    rowActions={rowActions}
+  />
+)
+
+void _bindings
+void bindingsVNode
 void helperDetailSchema
 void pageVNode
 void formVNode
@@ -359,3 +390,101 @@ void invalidQueryTableJsx
 void detailVNode
 void dialogVNode
 void drawerVNode
+
+// ---- Resource field kinds ----
+
+interface ResourceQuery {
+  keyword: string
+  statusList: string[]
+  createdAt: string[]
+}
+
+interface ResourceForm {
+  name: string
+  tags: string[]
+  expiredAt: string[]
+}
+
+const querySchemaWithResourceFields = defineFecQuerySchema<ResourceQuery>([
+  { prop: 'keyword', label: '关键词', kind: 'input' },
+  { prop: 'statusList', label: '状态', kind: 'multiSelect', options: statusOptions },
+  { prop: 'createdAt', label: '创建时间', kind: 'dateRange' },
+])
+
+const formSchemaWithResourceFields = defineFecFormSchema<ResourceForm>([
+  { prop: 'name', label: '名称', kind: 'input' },
+  { prop: 'tags', label: '标签', kind: 'multiSelect', options: statusOptions },
+  { prop: 'expiredAt', label: '到期时间', kind: 'dateRange' },
+])
+
+void querySchemaWithResourceFields
+void formSchemaWithResourceFields
+
+// ---- FecSplitPane ----
+
+const splitPaneProps: FecSplitPaneProps = {
+  leftCollapsible: true,
+  leftMax: '50%',
+  leftMin: 180,
+  leftSize: 280,
+}
+
+const splitPaneVNode = (
+  <FecSplitPane
+    {...splitPaneProps}
+    {...{
+      'onUpdate:leftSize': (value: string | number) => {
+        void value
+      },
+    }}
+  />
+)
+
+void splitPaneVNode
+
+// ---- FecTreePanel ----
+
+interface ResourceNode {
+  id: string
+  label: string
+  children?: ResourceNode[]
+}
+
+const resourceTreeData: ResourceNode[] = [
+  { id: 'network', label: 'Network' },
+]
+
+const treePanelProps: FecTreePanelProps<ResourceNode> = {
+  data: resourceTreeData,
+  nodeKey: 'id',
+  searchable: true,
+}
+
+const treePanelVNode = (
+  <FecTreePanel<ResourceNode>
+    {...treePanelProps}
+    onNodeClick={(node) => {
+      node.id.toUpperCase()
+    }}
+  />
+)
+
+void treePanelVNode
+
+// ---- FecDetailSections ----
+
+const detailSections: FecDetailSectionItem[] = [
+  { key: 'basic', title: 'Basic' },
+  { key: 'resource', title: 'Resource', description: 'Resource details' },
+]
+
+const detailSectionsProps: FecDetailSectionsProps = {
+  nav: true,
+  sections: detailSections,
+}
+
+const detailSectionsVNode = (
+  <FecDetailSections {...detailSectionsProps} />
+)
+
+void detailSectionsVNode

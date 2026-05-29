@@ -22,6 +22,10 @@ const router = createRouter({
       component: () => import('./views/CompsLabPage.vue'),
     },
     {
+      path: '/resource-layout',
+      component: () => import('./views/ResourceLayoutPage.vue'),
+    },
+    {
       path: '/:pathMatch(.*)*',
       component: () => import('./views/NotFound.vue'),
     },

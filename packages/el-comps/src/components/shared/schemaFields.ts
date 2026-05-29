@@ -35,7 +35,7 @@ function isCustomSchemaField(item: FecSchemaFieldItem): item is FecCustomSchemaF
 }
 
 function renderFieldOptions(item: FecSchemaFieldItem): VNodeChild[] | undefined {
-  if (isCustomSchemaField(item) || item.kind !== 'select') {
+  if (isCustomSchemaField(item) || (item.kind !== 'select' && item.kind !== 'multiSelect')) {
     return undefined
   }
 

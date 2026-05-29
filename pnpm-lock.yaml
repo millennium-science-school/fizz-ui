@@ -137,6 +137,9 @@ importers:
       '@fizz/el-kit':
         specifier: workspace:*
         version: link:../el-kit
+      '@vueuse/core':
+        specifier: 'catalog:'
+        version: 14.3.0(vue@3.5.33(typescript@5.9.3))
     devDependencies:
       '@fizz/el-plus':
         specifier: workspace:*

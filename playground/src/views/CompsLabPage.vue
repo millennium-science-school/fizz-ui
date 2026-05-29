@@ -237,7 +237,7 @@ function simulateLoading() {
         label-width="140px"
         :columns="2"
       />
-      <FecStack direction="horizontal" gap="sm" style="margin-top:12px">
+      <FecStack direction="horizontal" gap="sm" class="feclab-form-actions">
         <span class="feclab-value">当前值：{{ JSON.stringify(formModel) }}</span>
       </FecStack>
     </FecSection>
@@ -257,7 +257,7 @@ function simulateLoading() {
 
     <!-- ── FecTable ───────────────────────────────────────────────── -->
     <FecSection title="FecTable — loading / 分页 / toolbar / row-action">
-      <FecStack direction="horizontal" gap="sm" style="margin-bottom:8px">
+      <FecStack direction="horizontal" gap="sm" class="feclab-toolbar-actions">
         <FeButton @click="simulateLoading">
           模拟 loading (1.5s)
         </FeButton>
@@ -317,7 +317,7 @@ function simulateLoading() {
         <FeButton @click="openDialog('edit')">
           编辑（预填数据）
         </FeButton>
-        <span style="color:#888;font-size:12px">姓名为必填，空提交应被阻断</span>
+        <span class="feclab-hint">姓名为必填，空提交应被阻断</span>
       </FecStack>
     </FecSection>
 
@@ -345,7 +345,7 @@ function simulateLoading() {
     <!-- ── FecStack ───────────────────────────────────────────────── -->
     <FecSection title="FecStack — 方向 / 间距组合">
       <FecStack direction="vertical" gap="md">
-        <div style="background:#f0f4ff;padding:8px;border-radius:4px">
+        <div class="feclab-demo-block feclab-demo-block--blue">
           <strong>vertical + md</strong>
           <FecStack direction="horizontal" gap="xs">
             <span class="feclab-chip">xs</span>
@@ -353,7 +353,7 @@ function simulateLoading() {
             <span class="feclab-chip">演示</span>
           </FecStack>
         </div>
-        <div style="background:#f0fff4;padding:8px;border-radius:4px">
+        <div class="feclab-demo-block feclab-demo-block--green">
           <strong>horizontal + lg</strong>
           <FecStack direction="horizontal" gap="lg">
             <span class="feclab-chip">大</span>
@@ -400,5 +400,25 @@ function simulateLoading() {
   background: #e8f0fe;
   border-radius: 12px;
   font-size: 12px;
+}
+.feclab-form-actions {
+  margin-top: 12px;
+}
+.feclab-toolbar-actions {
+  margin-bottom: 8px;
+}
+.feclab-hint {
+  font-size: 12px;
+  color: #888;
+}
+.feclab-demo-block {
+  padding: 8px;
+  border-radius: 4px;
+}
+.feclab-demo-block--blue {
+  background: #f0f4ff;
+}
+.feclab-demo-block--green {
+  background: #f0fff4;
 }
 </style>

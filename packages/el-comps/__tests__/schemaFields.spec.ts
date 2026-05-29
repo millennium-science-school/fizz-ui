@@ -3,6 +3,42 @@ import { describe, expect, it } from 'vitest'
 import { renderSchemaFields } from '../src/components/shared/schemaFields'
 
 describe('schemaFields', () => {
+  it('renders multi-select options through the select control', () => {
+    const nodes = renderSchemaFields({
+      model: { status: ['enabled'] },
+      onUpdateField: () => {},
+      schema: [
+        {
+          kind: 'multiSelect',
+          label: '状态',
+          options: [
+            { label: '启用', value: 'enabled' },
+            { label: '禁用', value: 'disabled', disabled: true },
+          ],
+          prop: 'status',
+        },
+      ],
+    })
+
+    expect(nodes).toHaveLength(1)
+  })
+
+  it('renders date range fields through the date picker control', () => {
+    const nodes = renderSchemaFields({
+      model: { createdAt: [] },
+      onUpdateField: () => {},
+      schema: [
+        {
+          kind: 'dateRange',
+          label: '创建时间',
+          prop: 'createdAt',
+        },
+      ],
+    })
+
+    expect(nodes).toHaveLength(1)
+  })
+
   it('renders select options from headless field metadata', () => {
     const fields = renderSchemaFields({
       schema: [

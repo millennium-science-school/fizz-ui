@@ -31,6 +31,18 @@ interface Query {
   enabled: boolean
 }
 
+interface ResourceQuery {
+  keyword: string
+  statusList: string[]
+  createdAt: string[]
+}
+
+interface ResourceForm {
+  name: string
+  tags: string[]
+  expiredAt: string[]
+}
+
 const columns: TableColumn<User>[] = [
   { prop: 'name', label: '姓名' },
   { prop: 'age', label: '年龄', align: 'right', minWidth: 120 },
@@ -134,6 +146,21 @@ const helperQuerySchema = defineQuerySchema<Query>([
   { prop: 'keyword', label: '关键词', kind: 'input' },
   { prop: 'enabled', label: '状态', kind: fieldKind, options: statusOptions },
 ])
+
+const querySchemaWithNewKinds = defineQuerySchema<ResourceQuery>([
+  { prop: 'keyword', label: '关键词', kind: 'input' },
+  { prop: 'statusList', label: '状态', kind: 'multiSelect', options: statusOptions },
+  { prop: 'createdAt', label: '创建时间', kind: 'dateRange' },
+])
+
+const formSchemaWithNewKinds = defineFormSchema<ResourceForm>([
+  { prop: 'name', label: '名称', kind: 'input' },
+  { prop: 'tags', label: '标签', kind: 'multiSelect', options: statusOptions },
+  { prop: 'expiredAt', label: '到期时间', kind: 'dateRange' },
+])
+
+void querySchemaWithNewKinds
+void formSchemaWithNewKinds
 
 const invalidFormSchema: FormSchemaItem<User>[] = [
   {
