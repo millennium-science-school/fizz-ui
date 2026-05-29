@@ -25,7 +25,8 @@
     "vue": ">=3.0.0"
   },
   "dependencies": {
-    "@fizz/el-kit": "workspace:*"
+    "@fizz/el-kit": "workspace:*",
+    "@vueuse/core": "catalog:"
   },
   "devDependencies": {
     "@fizz/el-kit": "workspace:*",
