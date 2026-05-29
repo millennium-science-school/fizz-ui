@@ -135,6 +135,20 @@ const helperQuerySchema = defineQuerySchema<Query>([
   { prop: 'enabled', label: '状态', kind: fieldKind, options: statusOptions },
 ])
 
+const querySchemaWithNewKinds = defineQuerySchema<Query>([
+  { prop: 'keyword', label: '关键词', kind: 'input' },
+  { prop: 'enabled', label: '状态', kind: 'multiSelect', options: statusOptions },
+  { prop: 'keyword', label: '日期范围', kind: 'dateRange' },
+])
+
+const formSchemaWithNewKinds = defineFormSchema<User>([
+  { prop: 'name', label: '姓名', kind: 'multiSelect', options: statusOptions },
+  { prop: 'age', label: '日期范围', kind: 'dateRange' },
+])
+
+void querySchemaWithNewKinds
+void formSchemaWithNewKinds
+
 const invalidFormSchema: FormSchemaItem<User>[] = [
   {
     label: '缺失',

@@ -2,7 +2,9 @@ export type FieldControlKind
   = | 'input'
     | 'number'
     | 'select'
+    | 'multiSelect'
     | 'date'
+    | 'dateRange'
     | 'switch'
     | 'textarea'
 

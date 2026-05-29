@@ -37,10 +37,24 @@ export function resolveFecControl(control: FecControl): FecResolvedControl {
     }
   }
 
+  if (control === 'multiSelect') {
+    return {
+      component: FeSelect,
+      props: { multiple: true },
+    }
+  }
+
   if (control === 'date') {
     return {
       component: FeDatePicker,
       props: { type: 'date' },
+    }
+  }
+
+  if (control === 'dateRange') {
+    return {
+      component: FeDatePicker,
+      props: { type: 'daterange' },
     }
   }
 

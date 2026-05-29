@@ -383,3 +383,17 @@ void invalidQueryTableJsx
 void detailVNode
 void dialogVNode
 void drawerVNode
+
+// ---- Resource field kinds ----
+
+const querySchemaWithResourceFields = defineFecQuerySchema<Query>([
+  { prop: 'keyword', label: '关键词', kind: 'input' },
+])
+
+const formSchemaWithResourceFields = defineFecFormSchema<User>([
+  { prop: 'name', label: '状态', kind: 'multiSelect', options: statusOptions },
+  { prop: 'age', label: '时间范围', kind: 'dateRange' },
+])
+
+void querySchemaWithResourceFields
+void formSchemaWithResourceFields
