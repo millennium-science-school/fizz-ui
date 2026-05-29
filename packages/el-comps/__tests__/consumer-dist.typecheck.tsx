@@ -9,11 +9,12 @@ import type {
   FecPagination,
   FecQueryFormProps,
   FecQuerySchemaItem,
+  FecQueryTableBindings,
   FecQueryTableProps,
   FecRowAction,
   FecTableProps,
 } from '@fizz/el-comps'
-import type { FieldOption } from '@fizz/el-kit'
+import type { FieldOption, QueryTableState } from '@fizz/el-kit'
 import type { Component } from 'vue'
 import {
   defineFecDetailSchema,
@@ -31,6 +32,7 @@ import {
   FecStack,
   FecTable,
   FecToolbar,
+  useFecQueryTableBindings,
 } from '@fizz/el-comps'
 import { ref } from 'vue'
 
@@ -348,6 +350,28 @@ void removedComponentStringSchema
 void helperFormSchema
 void helperQuerySchema
 void helperColumns
+
+// ---- useFecQueryTableBindings ----
+
+declare const queryTableState: QueryTableState<User, Query>
+
+const queryTableBindings = useFecQueryTableBindings(queryTableState)
+
+// bindings are a ComputedRef — auto-unwrapped as top-level ref in script setup
+// verify structural type is assignable to FecQueryTableBindings
+const _bindings: FecQueryTableBindings<User, Query> = queryTableBindings.value
+
+const bindingsVNode = (
+  <FecQueryTable<User, Query>
+    {...queryTableBindings.value}
+    querySchema={querySchema}
+    toolbarActions={toolbarActions}
+    rowActions={rowActions}
+  />
+)
+
+void _bindings
+void bindingsVNode
 void helperDetailSchema
 void pageVNode
 void formVNode

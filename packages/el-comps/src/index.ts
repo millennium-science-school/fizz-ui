@@ -16,6 +16,8 @@ export type { FecFormProps } from './components/fec-form'
 export { FecPage } from './components/fec-page'
 export { FecQueryForm } from './components/fec-query-form'
 export type { FecQueryFormProps } from './components/fec-query-form'
+export { useFecQueryTableBindings } from './components/fec-query-table'
+export type { FecQueryTableBindings } from './components/fec-query-table'
 export { FecQueryTable } from './components/fec-query-table'
 export type {
   FecQueryPagination,

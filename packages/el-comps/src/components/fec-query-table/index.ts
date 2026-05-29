@@ -20,4 +20,6 @@ export const FecQueryTable = FecQueryTableImpl as unknown as new <
 }
 
 export type { FecQueryPagination, FecQueryTableProps } from './props'
+export type { FecQueryTableBindings } from './useQueryTableBindings'
+export { useFecQueryTableBindings } from './useQueryTableBindings'
 export default FecQueryTableImpl

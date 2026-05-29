@@ -9,6 +9,7 @@ import {
   FecPage,
   FecQueryTable,
   FecSection,
+  useFecQueryTableBindings,
 } from '@fizz/el-comps'
 import {
   useDetailState,
@@ -101,6 +102,7 @@ const dialog = useDialogFormState<UserForm, User>({
 })
 
 const detail = useDetailState<User>()
+const queryTableBindings = useFecQueryTableBindings(list)
 
 const dialogTitle = computed(() =>
   dialog.mode.value === 'create' ? '新建用户' : '编辑用户',
@@ -137,12 +139,8 @@ function handleRowAction(key: string, row: User) {
   <FecPage title="用户管理" description="示例 CRUD 管理页面">
     <FecSection title="用户列表">
       <FecQueryTable
-        :query="list.query.model.value"
+        v-bind="queryTableBindings"
         :query-schema="querySchema"
-        :columns="list.table.columns.value"
-        :data="list.table.data.value"
-        :loading="list.loading.value"
-        :pagination="list.pagination"
         :toolbar-actions="[{ key: 'create', label: '新建用户', type: 'primary' }]"
         :row-actions="[
           { key: 'edit', label: '编辑' },
@@ -150,11 +148,6 @@ function handleRowAction(key: string, row: User) {
         ]"
         submit-text="查询"
         reset-text="重置"
-        @update:query="list.query.setModel"
-        @update:current-page="list.setPage"
-        @update:page-size="list.setPageSize"
-        @submit="list.submit"
-        @reset="list.reset"
         @toolbar-action="(key) => key === 'create' && openCreate()"
         @row-action="handleRowAction"
       />
@@ -167,7 +160,7 @@ function handleRowAction(key: string, row: User) {
     :title="dialogTitle"
     :schema="formSchema"
     :rules="formRules"
-    @update:model-value="(value) => { if (!value) dialog.close() }"
+    @update:model-value="(value: boolean) => { if (!value) dialog.close() }"
     @update:model="dialog.setModel"
     @confirm="handleConfirm"
     @cancel="dialog.close"
@@ -177,7 +170,7 @@ function handleRowAction(key: string, row: User) {
     :model-value="detail.visible.value"
     title="用户详情"
     width="480px"
-    @update:model-value="(value) => { if (!value) detail.close() }"
+    @update:model-value="(value: boolean) => { if (!value) detail.close() }"
   >
     <FecDetail
       v-if="detail.record.value"
