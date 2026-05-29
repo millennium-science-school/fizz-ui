@@ -113,4 +113,18 @@ describe('playground integration contract', () => {
     expect(lab).toContain('FecDrawerForm')
     expect(lab).toContain('drawerVisible')
   })
+
+  it('resource layout page covers tree split and detail sections', () => {
+    const page = readFileSync(resolve(__dirname, '../src/views/ResourceLayoutPage.vue'), 'utf8')
+    const main = readFileSync(resolve(__dirname, '../src/main.ts'), 'utf8')
+
+    expect(main).toContain('/resource-layout')
+    expect(main).toContain('ResourceLayoutPage.vue')
+
+    expect(page).toContain('FecSplitPane')
+    expect(page).toContain('FecTreePanel')
+    expect(page).toContain('FecDetailSections')
+    expect(page).toContain('multiSelect')
+    expect(page).toContain('dateRange')
+  })
 })
