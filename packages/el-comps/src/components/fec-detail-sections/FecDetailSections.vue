@@ -1,7 +1,6 @@
 <script lang="ts">
 import type { PropType } from 'vue'
 import type { FecDetailSectionItem } from './props'
-import { FeAnchor, FeAnchorLink } from '@fizz/el-plus'
 import { defineComponent, h } from 'vue'
 import FecSection from '../fec-section/FecSection.vue'
 
@@ -34,16 +33,13 @@ export default defineComponent({
           }, () => slots[section.key]?.()),
         )),
         props.nav
-          ? h('aside', { class: 'fe-comps-detail-sections__nav' }, [
-              h(FeAnchor, {}, () =>
-                props.sections.map(section =>
-                  h(FeAnchorLink, {
-                    key: section.key,
-                    href: `#${sectionId(section.key)}`,
-                    title: section.title,
-                  }),
-                )),
-            ])
+          ? h('aside', { class: 'fe-comps-detail-sections__nav' }, props.sections.map(section =>
+              h('a', {
+                key: section.key,
+                class: 'fe-comps-detail-sections__nav-link',
+                href: `#${sectionId(section.key)}`,
+              }, section.title),
+            ))
           : null,
       ])
   },

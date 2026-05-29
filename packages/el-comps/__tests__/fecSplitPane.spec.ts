@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest'
-import { createApp, h, nextTick, ref } from 'vue'
+import { describe, expect, it, vi } from 'vitest'
+import { createApp, h, nextTick } from 'vue'
 import { FecSplitPane } from '../src'
 
 describe('fecSplitPane', () => {
@@ -24,16 +24,14 @@ describe('fecSplitPane', () => {
     app.unmount()
   })
 
-  it('forwards left panel size updates', async () => {
+  it('bridges FeSplitterPanel update:size to update:leftSize', async () => {
+    const onUpdateLeftSize = vi.fn()
     const host = document.createElement('div')
-    const size = ref<string | number>(260)
     const app = createApp({
       render() {
         return h(FecSplitPane, {
-          'leftSize': size.value,
-          'onUpdate:leftSize': (value: string | number) => {
-            size.value = value
-          },
+          'leftSize': 260,
+          'onUpdate:leftSize': onUpdateLeftSize,
         }, {
           default: () => 'Right',
           left: () => 'Left',
@@ -44,8 +42,23 @@ describe('fecSplitPane', () => {
     app.mount(host)
     await nextTick()
 
-    const vnode = app._instance?.subTree
-    expect(vnode).toBeTruthy()
+    // Walk the vnode tree to find the left FeSplitterPanel's onUpdate:size handler
+    // and invoke it directly — this tests the emit bridge without needing real drag events.
+    //
+    // app._instance.subTree      → h(FecSplitPane, ...)  [component vnode]
+    // .component.subTree         → h(FeSplitter, ...)    [FecSplitPane renders FeSplitter]
+    // .children.default()        → [leftPanel, rightPanel]  [FeSplitter slot factory]
+    const fecSplitPaneInstance = app._instance?.subTree?.component
+    const feSplitterVnode = fecSplitPaneInstance?.subTree
+    const slotDefault = (feSplitterVnode?.children as any)?.default
+    const panels: any[] = typeof slotDefault === 'function' ? slotDefault() : []
+    const leftPanel = panels[0]
+    const onUpdateSize = leftPanel?.props?.['onUpdate:size']
+
+    expect(typeof onUpdateSize).toBe('function')
+    onUpdateSize(320)
+
+    expect(onUpdateLeftSize).toHaveBeenCalledWith(320)
 
     app.unmount()
   })

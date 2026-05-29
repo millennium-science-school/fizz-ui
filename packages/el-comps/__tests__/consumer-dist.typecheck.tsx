@@ -393,13 +393,28 @@ void drawerVNode
 
 // ---- Resource field kinds ----
 
-const querySchemaWithResourceFields = defineFecQuerySchema<Query>([
+interface ResourceQuery {
+  keyword: string
+  statusList: string[]
+  createdAt: string[]
+}
+
+interface ResourceForm {
+  name: string
+  tags: string[]
+  expiredAt: string[]
+}
+
+const querySchemaWithResourceFields = defineFecQuerySchema<ResourceQuery>([
   { prop: 'keyword', label: '关键词', kind: 'input' },
+  { prop: 'statusList', label: '状态', kind: 'multiSelect', options: statusOptions },
+  { prop: 'createdAt', label: '创建时间', kind: 'dateRange' },
 ])
 
-const formSchemaWithResourceFields = defineFecFormSchema<User>([
-  { prop: 'name', label: '状态', kind: 'multiSelect', options: statusOptions },
-  { prop: 'age', label: '时间范围', kind: 'dateRange' },
+const formSchemaWithResourceFields = defineFecFormSchema<ResourceForm>([
+  { prop: 'name', label: '名称', kind: 'input' },
+  { prop: 'tags', label: '标签', kind: 'multiSelect', options: statusOptions },
+  { prop: 'expiredAt', label: '到期时间', kind: 'dateRange' },
 ])
 
 void querySchemaWithResourceFields
