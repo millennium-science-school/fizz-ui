@@ -1,26 +1,43 @@
-<script lang="ts">
-import { defineComponent, h } from 'vue'
-
-export default defineComponent({
+<script setup lang="ts">
+defineOptions({
   name: 'FecPage',
-  props: {
-    title: String,
-    description: String,
-  },
-  setup(props, { slots }) {
-    return () =>
-      h('section', { class: 'fe-comps-page' }, [
-        (props.title || props.description || slots.extra)
-          ? h('header', { class: 'fe-comps-page-header' }, [
-              h('div', { class: 'fe-comps-page-heading' }, [
-                props.title ? h('h1', { class: 'fe-comps-page-title' }, props.title) : null,
-                props.description ? h('p', { class: 'fe-comps-page-description' }, props.description) : null,
-              ]),
-              slots.extra ? h('div', { class: 'fe-comps-page-extra' }, slots.extra()) : null,
-            ])
-          : null,
-        h('div', { class: 'fe-comps-page-body' }, slots.default?.()),
-      ])
-  },
+})
+
+defineProps({
+  title: String,
+  description: String,
 })
 </script>
+
+<template>
+  <section class="fe-comps-page">
+    <header
+      v-if="title || description || $slots.extra"
+      class="fe-comps-page-header"
+    >
+      <div class="fe-comps-page-heading">
+        <h1
+          v-if="title"
+          class="fe-comps-page-title"
+        >
+          {{ title }}
+        </h1>
+        <p
+          v-if="description"
+          class="fe-comps-page-description"
+        >
+          {{ description }}
+        </p>
+      </div>
+      <div
+        v-if="$slots.extra"
+        class="fe-comps-page-extra"
+      >
+        <slot name="extra" />
+      </div>
+    </header>
+    <div class="fe-comps-page-body">
+      <slot />
+    </div>
+  </section>
+</template>

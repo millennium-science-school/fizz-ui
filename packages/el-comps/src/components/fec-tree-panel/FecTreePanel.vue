@@ -7,6 +7,10 @@ import { ref } from 'vue'
 
 type TreeNodeRecord = Record<string, unknown>
 
+interface FilterableTreeInstance {
+  filter: (value: string) => void
+}
+
 defineOptions({
   name: 'FecTreePanel',
 })
@@ -56,11 +60,11 @@ const treePanelProps = defineProps({
 
 const emit = defineEmits(['update:collapsed', 'nodeClick'])
 const keyword = ref('')
-const treeRef = ref<any>()
+const treeRef = ref<FilterableTreeInstance>()
 
 watchDebounced(
   keyword,
-  value => treeRef.value?.filter?.(value),
+  value => treeRef.value?.filter(value),
   { debounce: () => treePanelProps.filterDebounce },
 )
 

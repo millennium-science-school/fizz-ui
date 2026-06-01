@@ -1,4 +1,4 @@
-<script lang="ts">
+<script setup lang="ts">
 import type { PropType } from 'vue'
 import type {
   FecSplitPaneCollapseType,
@@ -7,101 +7,90 @@ import type {
   FecSplitPaneSizes,
 } from './props'
 import { FeSplitter, FeSplitterPanel } from '@fizz/el-plus'
-import { defineComponent, h } from 'vue'
 
-export default defineComponent({
+defineOptions({
   name: 'FecSplitPane',
-  props: {
-    layout: {
-      type: String as PropType<FecSplitPaneLayout>,
-      default: 'horizontal',
-    },
-    lazy: {
-      type: Boolean,
-      default: false,
-    },
-    leftSize: {
-      type: [String, Number] as PropType<FecSplitPaneSize>,
-      default: undefined,
-    },
-    leftMin: {
-      type: [String, Number] as PropType<FecSplitPaneSize>,
-      default: undefined,
-    },
-    leftMax: {
-      type: [String, Number] as PropType<FecSplitPaneSize>,
-      default: undefined,
-    },
-    leftResizable: {
-      type: Boolean,
-      default: true,
-    },
-    leftCollapsible: {
-      type: Boolean,
-      default: false,
-    },
-    rightMin: {
-      type: [String, Number] as PropType<FecSplitPaneSize>,
-      default: undefined,
-    },
-    rightMax: {
-      type: [String, Number] as PropType<FecSplitPaneSize>,
-      default: undefined,
-    },
-    rightResizable: {
-      type: Boolean,
-      default: true,
-    },
-    rightCollapsible: {
-      type: Boolean,
-      default: false,
-    },
+})
+
+const splitPaneProps = defineProps({
+  layout: {
+    type: String as PropType<FecSplitPaneLayout>,
+    default: 'horizontal',
   },
-  emits: ['update:leftSize', 'resizeStart', 'resize', 'resizeEnd', 'collapse'],
-  setup(props, { emit, slots }) {
-    return () =>
-      h(
-        FeSplitter,
-        {
-          class: 'fe-comps-split-pane',
-          layout: props.layout,
-          lazy: props.lazy,
-          onCollapse: (index: number, type: FecSplitPaneCollapseType, sizes: FecSplitPaneSizes) =>
-            emit('collapse', index, type, sizes),
-          onResize: (index: number, sizes: FecSplitPaneSizes) =>
-            emit('resize', index, sizes),
-          onResizeEnd: (index: number, sizes: FecSplitPaneSizes) =>
-            emit('resizeEnd', index, sizes),
-          onResizeStart: (index: number, sizes: FecSplitPaneSizes) =>
-            emit('resizeStart', index, sizes),
-        },
-        () => [
-          h(
-            FeSplitterPanel,
-            {
-              'class': 'fe-comps-split-pane__left',
-              'collapsible': props.leftCollapsible,
-              'max': props.leftMax,
-              'min': props.leftMin,
-              'resizable': props.leftResizable,
-              'size': props.leftSize,
-              'onUpdate:size': (value: FecSplitPaneSize) => emit('update:leftSize', value),
-            },
-            slots.left,
-          ),
-          h(
-            FeSplitterPanel,
-            {
-              class: 'fe-comps-split-pane__right',
-              collapsible: props.rightCollapsible,
-              max: props.rightMax,
-              min: props.rightMin,
-              resizable: props.rightResizable,
-            },
-            slots.default,
-          ),
-        ],
-      )
+  lazy: {
+    type: Boolean,
+    default: false,
+  },
+  leftSize: {
+    type: [String, Number] as PropType<FecSplitPaneSize>,
+    default: undefined,
+  },
+  leftMin: {
+    type: [String, Number] as PropType<FecSplitPaneSize>,
+    default: undefined,
+  },
+  leftMax: {
+    type: [String, Number] as PropType<FecSplitPaneSize>,
+    default: undefined,
+  },
+  leftResizable: {
+    type: Boolean,
+    default: true,
+  },
+  leftCollapsible: {
+    type: Boolean,
+    default: false,
+  },
+  rightMin: {
+    type: [String, Number] as PropType<FecSplitPaneSize>,
+    default: undefined,
+  },
+  rightMax: {
+    type: [String, Number] as PropType<FecSplitPaneSize>,
+    default: undefined,
+  },
+  rightResizable: {
+    type: Boolean,
+    default: true,
+  },
+  rightCollapsible: {
+    type: Boolean,
+    default: false,
   },
 })
+
+const emit = defineEmits(['update:leftSize', 'resizeStart', 'resize', 'resizeEnd', 'collapse'])
 </script>
+
+<template>
+  <FeSplitter
+    class="fe-comps-split-pane"
+    :layout="splitPaneProps.layout"
+    :lazy="splitPaneProps.lazy"
+    @collapse="(index: number, type: FecSplitPaneCollapseType, sizes: FecSplitPaneSizes) => emit('collapse', index, type, sizes)"
+    @resize="(index: number, sizes: FecSplitPaneSizes) => emit('resize', index, sizes)"
+    @resize-end="(index: number, sizes: FecSplitPaneSizes) => emit('resizeEnd', index, sizes)"
+    @resize-start="(index: number, sizes: FecSplitPaneSizes) => emit('resizeStart', index, sizes)"
+  >
+    <FeSplitterPanel
+      class="fe-comps-split-pane__left"
+      :collapsible="splitPaneProps.leftCollapsible"
+      :max="splitPaneProps.leftMax"
+      :min="splitPaneProps.leftMin"
+      :resizable="splitPaneProps.leftResizable"
+      :size="splitPaneProps.leftSize"
+      @update:size="(value: FecSplitPaneSize) => emit('update:leftSize', value)"
+    >
+      <slot name="left" />
+    </FeSplitterPanel>
+    <FeSplitterPanel
+      class="fe-comps-split-pane__right"
+      :collapsible="splitPaneProps.rightCollapsible"
+      :max="splitPaneProps.rightMax"
+      :min="splitPaneProps.rightMin"
+      :resizable="splitPaneProps.rightResizable"
+    >
+      <slot />
+    </FeSplitterPanel>
+  </FeSplitter>
+</template>
