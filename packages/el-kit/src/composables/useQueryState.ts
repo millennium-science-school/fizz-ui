@@ -6,6 +6,7 @@ export type QueryStateModel = object
 export interface UseQueryStateOptions<Query extends QueryStateModel> {
   model: MaybeRefOrGetter<Query>
   initialModel?: Query
+  clone?: (model: Query) => Query
 }
 
 export interface QueryState<Query extends QueryStateModel> {
@@ -16,13 +17,10 @@ export interface QueryState<Query extends QueryStateModel> {
   reset: () => void
 }
 
-function cloneModel<Query extends QueryStateModel>(model: Query): Query {
-  return { ...model }
-}
-
 export function useQueryState<Query extends QueryStateModel>(
   options: UseQueryStateOptions<Query>,
 ): QueryState<Query> {
+  const cloneModel: (m: Query) => Query = options.clone ?? (m => ({ ...m }))
   const model = createStateSource('model', options.model)
   const initialModel = cloneModel(options.initialModel ?? model.ref.value)
 

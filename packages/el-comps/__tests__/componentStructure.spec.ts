@@ -42,6 +42,21 @@ describe('el-comps component directory structure', () => {
     expect(exists('src/components/shared/types.ts')).toBe(true)
   })
 
+  it('keeps one sample for each component implementation style', () => {
+    const queryTable = readFileSync(resolve(root, 'src/components/fec-query-table/FecQueryTable.vue'), 'utf8')
+    const treePanel = readFileSync(resolve(root, 'src/components/fec-tree-panel/FecTreePanel.vue'), 'utf8')
+    const table = readFileSync(resolve(root, 'src/components/fec-table/FecTable.vue'), 'utf8')
+
+    expect(queryTable).toContain('<template>')
+    expect(queryTable).not.toContain('return () =>')
+
+    expect(treePanel).toContain('<template>')
+    expect(treePanel).not.toContain('return () =>')
+
+    expect(table).toContain('<template>')
+    expect(table).toContain('function renderTableNode')
+  })
+
   it('keeps package root as an aggregator without direct vue imports', () => {
     const entry = readFileSync(resolve(root, 'src/index.ts'), 'utf8')
 

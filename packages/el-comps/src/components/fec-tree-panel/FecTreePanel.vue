@@ -1,123 +1,136 @@
-<script lang="ts">
+<script setup lang="ts">
 import type { PropType } from 'vue'
 import type { FecTreePanelNodeProps } from './props'
 import { FeButton, FeEmpty, FeInput, FeTree, vFeLoading } from '@fizz/el-plus'
-import { useDebounceFn } from '@vueuse/core'
-import { defineComponent, h, ref, watch, withDirectives } from 'vue'
+import { watchDebounced } from '@vueuse/core'
+import { ref } from 'vue'
 
 type TreeNodeRecord = Record<string, unknown>
 
-export default defineComponent({
+interface FilterableTreeInstance {
+  filter: (value: string) => void
+}
+
+defineOptions({
   name: 'FecTreePanel',
-  props: {
-    data: {
-      type: Array as PropType<readonly TreeNodeRecord[]>,
-      required: true,
-    },
-    nodeKey: {
-      type: String,
-      default: 'id',
-    },
-    props: {
-      type: Object as PropType<FecTreePanelNodeProps>,
-      default: () => ({ label: 'label', children: 'children', disabled: 'disabled', isLeaf: 'isLeaf' }),
-    },
-    searchable: {
-      type: Boolean,
-      default: false,
-    },
-    searchPlaceholder: {
-      type: String,
-      default: '搜索',
-    },
-    filterDebounce: {
-      type: Number,
-      default: 120,
-    },
-    collapsible: {
-      type: Boolean,
-      default: false,
-    },
-    collapsed: {
-      type: Boolean,
-      default: false,
-    },
-    loading: {
-      type: Boolean,
-      default: false,
-    },
-    emptyText: {
-      type: String,
-      default: '暂无数据',
-    },
+})
+
+const treePanelProps = defineProps({
+  data: {
+    type: Array as PropType<readonly TreeNodeRecord[]>,
+    required: true,
   },
-  emits: ['update:collapsed', 'nodeClick'],
-  setup(props, { emit, slots }) {
-    const keyword = ref('')
-    const treeRef = ref<any>()
-
-    const applyFilter = useDebounceFn((value: string) => {
-      treeRef.value?.filter?.(value)
-    }, props.filterDebounce)
-
-    watch(keyword, value => applyFilter(value))
-
-    function filterNode(value: string, data: TreeNodeRecord) {
-      if (!value)
-        return true
-
-      const labelKey = props.props.label ?? 'label'
-      return String(data[labelKey] ?? '').toLowerCase().includes(value.toLowerCase())
-    }
-
-    return () =>
-      h('aside', {
-        class: [
-          'fe-comps-tree-panel',
-          props.collapsed ? 'fe-comps-tree-panel--collapsed' : undefined,
-        ],
-      }, [
-        props.searchable || props.collapsible
-          ? h('div', { class: 'fe-comps-tree-panel__header' }, [
-              props.searchable
-                ? h(FeInput, {
-                    'class': 'fe-comps-tree-panel__search',
-                    'modelValue': keyword.value,
-                    'placeholder': props.searchPlaceholder,
-                    'onUpdate:modelValue': (value: string) => {
-                      keyword.value = value
-                    },
-                  })
-                : null,
-              props.collapsible
-                ? h(FeButton, {
-                    class: 'fe-comps-tree-panel__collapse',
-                    onClick: () => emit('update:collapsed', !props.collapsed),
-                  }, () => props.collapsed ? '展开' : '收起')
-                : null,
-            ])
-          : null,
-        props.collapsed
-          ? null
-          : withDirectives(
-              props.data.length
-                ? h(FeTree, {
-                    ref: treeRef,
-                    class: 'fe-comps-tree-panel__tree',
-                    data: props.data,
-                    filterNodeMethod: filterNode,
-                    nodeKey: props.nodeKey,
-                    props: props.props,
-                    onNodeClick: (node: TreeNodeRecord, treeNode: unknown, component: unknown, event: Event) =>
-                      emit('nodeClick', node, treeNode, component, event),
-                  }, slots)
-                : h(FeEmpty, {
-                    class: 'fe-comps-tree-panel__empty',
-                    description: props.emptyText,
-                  }),
-              [[vFeLoading, props.loading]],
-            ),
-      ])
+  nodeKey: {
+    type: String,
+    default: 'id',
+  },
+  props: {
+    type: Object as PropType<FecTreePanelNodeProps>,
+    default: () => ({ label: 'label', children: 'children', disabled: 'disabled', isLeaf: 'isLeaf' }),
+  },
+  searchable: {
+    type: Boolean,
+    default: false,
+  },
+  searchPlaceholder: {
+    type: String,
+    default: '搜索',
+  },
+  filterDebounce: {
+    type: Number,
+    default: 120,
+  },
+  collapsible: {
+    type: Boolean,
+    default: false,
+  },
+  collapsed: {
+    type: Boolean,
+    default: false,
+  },
+  loading: {
+    type: Boolean,
+    default: false,
+  },
+  emptyText: {
+    type: String,
+    default: '暂无数据',
   },
 })
+
+const emit = defineEmits(['update:collapsed', 'nodeClick'])
+const keyword = ref('')
+const treeRef = ref<FilterableTreeInstance>()
+
+watchDebounced(
+  keyword,
+  value => treeRef.value?.filter(value),
+  { debounce: () => treePanelProps.filterDebounce },
+)
+
+function filterNode(value: string, data: TreeNodeRecord) {
+  if (!value)
+    return true
+
+  const labelKey = treePanelProps.props.label ?? 'label'
+  return String(data[labelKey] ?? '').toLowerCase().includes(value.toLowerCase())
+}
+
+function emitNodeClick(
+  node: TreeNodeRecord,
+  treeNode: unknown,
+  component: unknown,
+  event: Event,
+) {
+  emit('nodeClick', node, treeNode, component, event)
+}
 </script>
+
+<template>
+  <aside
+    class="fe-comps-tree-panel"
+    :class="collapsed ? 'fe-comps-tree-panel--collapsed' : undefined"
+  >
+    <div
+      v-if="searchable || collapsible"
+      class="fe-comps-tree-panel__header"
+    >
+      <FeInput
+        v-if="searchable"
+        v-model="keyword"
+        class="fe-comps-tree-panel__search"
+        :placeholder="searchPlaceholder"
+      />
+      <FeButton
+        v-if="collapsible"
+        class="fe-comps-tree-panel__collapse"
+        @click="emit('update:collapsed', !collapsed)"
+      >
+        {{ collapsed ? '展开' : '收起' }}
+      </FeButton>
+    </div>
+
+    <div
+      v-if="!collapsed"
+      v-fe-loading="loading"
+    >
+      <FeTree
+        v-if="data.length"
+        ref="treeRef"
+        class="fe-comps-tree-panel__tree"
+        :data="data"
+        :filter-node-method="filterNode"
+        :node-key="nodeKey"
+        :props="props"
+        @node-click="emitNodeClick"
+      >
+        <slot />
+      </FeTree>
+      <FeEmpty
+        v-else
+        class="fe-comps-tree-panel__empty"
+        :description="emptyText"
+      />
+    </div>
+  </aside>
+</template>

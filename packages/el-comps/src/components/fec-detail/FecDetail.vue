@@ -1,51 +1,54 @@
-<script lang="ts">
+<script setup lang="ts">
 import type { PropType } from 'vue'
 import type { FecLooseDetailSchemaItem } from './props'
 import { FeDescriptions, FeDescriptionsItem } from '@fizz/el-plus'
-import { defineComponent, h } from 'vue'
 
-export default defineComponent({
+defineOptions({
   name: 'FecDetail',
-  props: {
-    record: {
-      type: Object as PropType<Record<string, unknown>>,
-      required: true,
-    },
-    schema: {
-      type: Array as PropType<readonly FecLooseDetailSchemaItem[]>,
-      required: true,
-    },
-    columns: {
-      type: Number as PropType<1 | 2 | 3 | 4>,
-      default: 2,
-    },
-    emptyText: {
-      type: String,
-      default: '-',
-    },
-  },
-  setup(props) {
-    return () =>
-      h(
-        FeDescriptions,
-        {
-          class: 'fe-comps-detail',
-          column: props.columns,
-          border: true,
-        },
-        () =>
-          props.schema.map((item) => {
-            const raw = props.record[item.prop]
-            const formatted = item.formatter
-              ? item.formatter(raw, props.record)
-              : raw
-            const display = formatted === null || formatted === undefined || formatted === ''
-              ? props.emptyText
-              : String(formatted)
+})
 
-            return h(FeDescriptionsItem, { key: item.prop, label: item.label }, () => display)
-          }),
-      )
+const detailProps = defineProps({
+  record: {
+    type: Object as PropType<Record<string, unknown>>,
+    required: true,
+  },
+  schema: {
+    type: Array as PropType<readonly FecLooseDetailSchemaItem[]>,
+    required: true,
+  },
+  columns: {
+    type: Number as PropType<1 | 2 | 3 | 4>,
+    default: 2,
+  },
+  emptyText: {
+    type: String,
+    default: '-',
   },
 })
+
+function displayValue(item: FecLooseDetailSchemaItem): string {
+  const raw = detailProps.record[item.prop]
+  const formatted = item.formatter
+    ? item.formatter(raw, detailProps.record)
+    : raw
+  return formatted === null || formatted === undefined || formatted === ''
+    ? detailProps.emptyText
+    : String(formatted)
+}
 </script>
+
+<template>
+  <FeDescriptions
+    class="fe-comps-detail"
+    :column="columns"
+    border
+  >
+    <FeDescriptionsItem
+      v-for="item in schema"
+      :key="item.prop"
+      :label="item.label"
+    >
+      {{ displayValue(item) }}
+    </FeDescriptionsItem>
+  </FeDescriptions>
+</template>

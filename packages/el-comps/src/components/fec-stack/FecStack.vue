@@ -1,41 +1,50 @@
-<script lang="ts">
-import type { PropType } from 'vue'
-import { computed, defineComponent, h } from 'vue'
+<script setup lang="ts">
+import type { CSSProperties, PropType } from 'vue'
+import type { FecStackDirection, FecStackGap } from './props'
+import { computed } from 'vue'
 
-const GAP_MAP: Record<string, string> = {
+defineOptions({
+  name: 'FecStack',
+})
+
+const stackProps = defineProps({
+  direction: {
+    type: String as PropType<FecStackDirection>,
+    default: 'vertical',
+  },
+  gap: {
+    type: String as PropType<FecStackGap>,
+    default: 'md',
+  },
+})
+
+const GAP_MAP: Record<FecStackGap, string> = {
+  none: '0',
   xs: '4px',
   sm: '8px',
   md: '16px',
   lg: '24px',
 }
 
-export default defineComponent({
-  name: 'FecStack',
-  props: {
-    direction: {
-      type: String as PropType<'vertical' | 'horizontal'>,
-      default: 'vertical',
-    },
-    gap: {
-      type: String as PropType<'xs' | 'sm' | 'md' | 'lg'>,
-      default: 'md',
-    },
-  },
-  setup(props, { slots }) {
-    const classes = computed(() => [
-      'fe-comps-stack',
-      `fe-comps-stack--${props.direction}`,
-      `fe-comps-stack--gap-${props.gap}`,
-    ])
+const classes = computed(() => [
+  'fe-comps-stack',
+  `fe-comps-stack--${stackProps.direction}`,
+  `fe-comps-stack--gap-${stackProps.gap}`,
+])
 
-    const style = computed(() => ({
-      display: 'flex',
-      flexDirection: props.direction === 'horizontal' ? 'row' : 'column',
-      flexWrap: props.direction === 'horizontal' ? 'wrap' : 'nowrap',
-      gap: GAP_MAP[props.gap] ?? '16px',
-    }))
-
-    return () => h('div', { class: classes.value, style: style.value }, slots.default?.())
-  },
-})
+const style = computed((): CSSProperties => ({
+  display: 'flex',
+  flexDirection: stackProps.direction === 'horizontal' ? 'row' : 'column',
+  flexWrap: stackProps.direction === 'horizontal' ? 'wrap' : 'nowrap',
+  gap: GAP_MAP[stackProps.gap] ?? GAP_MAP.md,
+}))
 </script>
+
+<template>
+  <div
+    :class="classes"
+    :style="style"
+  >
+    <slot />
+  </div>
+</template>
