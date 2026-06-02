@@ -40,6 +40,12 @@ application intentionally wants Tailwind 4-compatible utility semantics.
 for button, input/select, table, dialog, and service surfaces. Application-level
 brand overrides should still live in the consuming app after the package styles.
 
+Composite CRUD and resource-management surfaces use `fe-comps-*` structural
+classes. Import `@fizz/theme/styles` alongside `@fizz/el-plus/styles` so
+`FecPage`, `FecSection`, `FecQueryTable`, `FecSplitPane`, `FecTreePanel`, and
+`FecDetailSections` receive the shared composite spacing, borders, and surface
+tokens.
+
 ## Advanced SCSS Path
 
 ```scss

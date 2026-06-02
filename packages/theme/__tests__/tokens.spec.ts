@@ -75,6 +75,13 @@ describe('theme token generation', () => {
     expect(css).toContain('--fe-comps-form-cols:')
     expect(css).toContain('--fe-comps-form-gap:')
     expect(css).toContain('--fe-comps-table-header-bg:')
+    expect(css).toContain('--fe-comps-page-gap:')
+    expect(css).toContain('--fe-comps-section-padding:')
+    expect(css).toContain('--fe-comps-query-table-gap:')
+    expect(css).toContain('--fe-comps-toolbar-gap:')
+    expect(css).toContain('--fe-comps-split-pane-gap:')
+    expect(css).toContain('--fe-comps-tree-panel-padding:')
+    expect(css).toContain('--fe-comps-detail-sections-gap:')
     expect(css).not.toContain('--fe-color-primary:')
     expect(css).not.toContain('--fe-color-primary-hover:')
     expect(css).not.toContain('--fe-color-primary-active:')
@@ -89,6 +96,15 @@ describe('theme token generation', () => {
     expect(css).toContain('.fe-dialog')
     expect(css).toContain('.fe-message')
     expect(css).toContain('.fe-loading')
+    expect(css).toContain('.fe-comps-page')
+    expect(css).toContain('.fe-comps-section')
+    expect(css).toContain('.fe-comps-query-table')
+    expect(css).toContain('.fe-comps-toolbar')
+    expect(css).toContain('.fe-comps-table-wrap')
+    expect(css).toContain('.fe-comps-split-pane')
+    expect(css).toContain('.fe-comps-tree-panel')
+    expect(css).toContain('.fe-comps-detail-sections')
+    expect(css).toContain('.fe-comps-detail')
   })
 
   it('emits service selectors for fizz service classes', () => {
@@ -170,6 +186,12 @@ describe('theme token generation', () => {
 
     expect(ruleVars).toContain('--fe-fizz-button-radius')
     expect(ruleVars).toContain('--fe-comps-table-header-bg')
+    expect(ruleVars).toContain('--fe-comps-page-gap')
+    expect(ruleVars).toContain('--fe-comps-section-padding')
+    expect(ruleVars).toContain('--fe-comps-query-table-gap')
+    expect(ruleVars).toContain('--fe-comps-tree-panel-padding')
+    expect(ruleVars).toContain('--fe-comps-detail-gap')
+    expect(ruleVars).toContain('--fe-comps-detail-sections-gap')
 
     for (const cssVar of ruleVars) {
       if (cssVar.startsWith('--fe-fizz-') || cssVar.startsWith('--fe-comps-')) {

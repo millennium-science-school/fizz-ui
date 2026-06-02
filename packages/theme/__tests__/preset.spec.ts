@@ -17,6 +17,15 @@ describe('fizzPreset', () => {
     expect(preset.safelist).toContain('fe-comps-form')
     expect(preset.safelist).toContain('fe-comps-table')
     expect(preset.safelist).toContain('fe-comps-pagination')
+    expect(preset.safelist).toContain('fe-comps-page')
+    expect(preset.safelist).toContain('fe-comps-section')
+    expect(preset.safelist).toContain('fe-comps-query-table')
+    expect(preset.safelist).toContain('fe-comps-toolbar')
+    expect(preset.safelist).toContain('fe-comps-table-wrap')
+    expect(preset.safelist).toContain('fe-comps-split-pane')
+    expect(preset.safelist).toContain('fe-comps-tree-panel')
+    expect(preset.safelist).toContain('fe-comps-detail')
+    expect(preset.safelist).toContain('fe-comps-detail-sections')
   })
 
   it('uses Element Plus variable names for Element Plus shortcuts', () => {

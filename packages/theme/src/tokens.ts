@@ -44,6 +44,27 @@ export interface FizzThemeVars {
   '--fe-comps-table-radius': string
   '--fe-comps-table-header-bg': string
   '--fe-comps-pagination-margin-top': string
+  '--fe-comps-page-gap': string
+  '--fe-comps-section-gap': string
+  '--fe-comps-section-padding': string
+  '--fe-comps-section-bg': string
+  '--fe-comps-section-border-color': string
+  '--fe-comps-section-radius': string
+  '--fe-comps-section-shadow': string
+  '--fe-comps-query-table-gap': string
+  '--fe-comps-toolbar-gap': string
+  '--fe-comps-toolbar-margin-bottom': string
+  '--fe-comps-table-wrap-gap': string
+  '--fe-comps-split-pane-gap': string
+  '--fe-comps-tree-panel-padding': string
+  '--fe-comps-tree-panel-header-gap': string
+  '--fe-comps-tree-panel-border-color': string
+  '--fe-comps-tree-panel-bg': string
+  '--fe-comps-detail-gap': string
+  '--fe-comps-detail-sections-gap': string
+  '--fe-comps-detail-nav-width': string
+  '--fe-comps-detail-nav-gap': string
+  '--fe-comps-detail-nav-link-padding': string
 }
 
 export interface ThemeTokens {

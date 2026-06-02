@@ -29,8 +29,17 @@ export function fizzPreset(): Preset {
     safelist: [
       'fe-btn',
       'fe-comps-form',
+      'fe-comps-page',
+      'fe-comps-section',
+      'fe-comps-query-table',
+      'fe-comps-toolbar',
+      'fe-comps-table-wrap',
       'fe-comps-table',
       'fe-comps-pagination',
+      'fe-comps-split-pane',
+      'fe-comps-tree-panel',
+      'fe-comps-detail',
+      'fe-comps-detail-sections',
     ],
 
     // ── 预飞行：从 tokens.ts 生成 CSS 变量 ───────────────────────────────

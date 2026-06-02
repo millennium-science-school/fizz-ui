@@ -98,6 +98,17 @@ The current minimum verification confirms:
 - Theme CSS rules may reference registered `--fe-fizz-*` and `--fe-comps-*` variables.
 - Theme CSS rules may reference only explicitly allowed Element Plus variables.
 
+## Composite Surface Theme Rules
+
+Composite component styling is owned by `@fizz/theme` through registered
+`--fe-comps-*` variables and selectors for stable `fe-comps-*` classes.
+
+Theme rules may style structural classes such as `fe-comps-page`,
+`fe-comps-section`, `fe-comps-query-table`, `fe-comps-tree-panel`, and
+`fe-comps-detail-sections`, but they must only reference registered Fizz-owned
+variables or explicitly allowed Element Plus variables. Do not place reusable
+CRUD/resource surface polish in playground-only CSS.
+
 ## Theme Infrastructure Boundary
 
 The token registry (`packages/theme/src/token-registry.ts`) is the single source of truth for Fizz-owned CSS variables.
